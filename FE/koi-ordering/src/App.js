@@ -12,7 +12,7 @@ function App() {
       <Header />
       <Routes>
         {/* Đường dẫn mặc định Login */}
-        <Route path="/" element={<Login />} />
+        <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         
