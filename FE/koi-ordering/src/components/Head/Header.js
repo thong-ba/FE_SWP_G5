@@ -170,7 +170,7 @@ const Header = () => {
             </div>
             <nav className="navigation">
                 <ul>
-                    <li><a href="/">Home</a></li>
+                    <li><a href="/home">Home</a></li>
                     <li 
                         onMouseEnter={handleMouseEnter} 
                         onMouseLeave={handleMouseLeave}
@@ -195,3 +195,57 @@ const Header = () => {
 };
 
 export default Header;
+
+
+// import React, { useState } from 'react';
+// import './Header.css';
+
+// const Header = ({ isLoggedIn, userName }) => {
+//     const [showDropdown, setShowDropdown] = useState(false);
+
+//     const handleMouseEnter = () => setShowDropdown(true);
+//     const handleMouseLeave = () => setShowDropdown(false);
+
+//     return (
+//         <header className="header">
+//             <div className="logo-container">
+//                 <img src="koi-login.png" alt="Logo" className="logo-image" />
+//                 <h1 className="logo">Koi Ordering</h1>
+//             </div>
+
+//             <nav className="navigation">
+//                 <ul>
+//                     <li><a href="/home">Home</a></li>
+//                     <li onMouseEnter={handleMouseEnter} onMouseLeave={handleMouseLeave}>
+//                         <a href="/services">Services</a>
+//                         {showDropdown && (
+//                             <ul className="dropdown">
+//                                 <li><a href="/service1">Service 1</a></li>
+//                                 <li><a href="/service2">Service 2</a></li>
+//                             </ul>
+//                         )}
+//                     </li>
+//                     <li><a href="/track-order">Track Order</a></li>
+//                     <li><a href="/policies">Policies</a></li>
+//                     <li><a href="/support">Support</a></li>
+//                     {/* Kiểm tra trạng thái đăng nhập */}
+//                     {isLoggedIn ? (
+//                         <>
+//                             <li className="user-icon">
+//                                 <div className="circle-icon">{userName[0]}</div>
+//                             </li>
+//                             <li><a href="/logout" className="logout-btn">Logout</a></li>
+//                         </>
+//                     ) : (
+//                         <>
+//                             <li><a href="/register">Register</a></li>
+//                             <li><a href="/login">Login</a></li>
+//                         </>
+//                     )}
+//                 </ul>
+//             </nav>
+//         </header>
+//     );
+// };
+
+// export default Header;

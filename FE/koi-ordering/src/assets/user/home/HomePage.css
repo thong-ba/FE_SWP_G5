@@ -1,0 +1,66 @@
+.homepage {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+  }
+  
+  /* Cá koi section */
+  .koi-info {
+    margin-bottom: 40px;
+  }
+  
+  .koi-info h2 {
+    font-size: 28px;
+    color: #f26a6a;
+  }
+  
+  .koi-info p {
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .koi-info ul {
+    list-style: square inside;
+    margin: 10px 0;
+  }
+  
+  .koi-info li {
+    margin-bottom: 5px;
+  }
+  
+  .koi-image {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+    margin: 20px auto;
+    border-radius: 8px;
+  }
+  
+  /* Vận chuyển section */
+  .shipping-info h2 {
+    font-size: 28px;
+    color: #4caf50;
+  }
+  
+  .shipping-info p {
+    font-size: 16px;
+    color: #333;
+  }
+  
+  .shipping-info ul {
+    list-style: circle inside;
+    margin: 10px 0;
+  }
+  
+  .shipping-info li {
+    margin-bottom: 5px;
+  }
+  
+  .shipping-image {
+    width: 100%;
+    max-width: 600px;
+    display: block;
+    margin: 20px auto;
+    border-radius: 8px;
+  }
+  
