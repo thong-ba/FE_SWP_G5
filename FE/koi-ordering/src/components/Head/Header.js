@@ -171,8 +171,8 @@ const Header = () => {
             <nav className="navigation">
                 <ul>
                     <li><a href="/home">Home</a></li>
-                    <li 
-                        onMouseEnter={handleMouseEnter} 
+                    <li
+                        onMouseEnter={handleMouseEnter}
                         onMouseLeave={handleMouseLeave}
                     >
                         <a href="/services">Services</a>
@@ -184,7 +184,7 @@ const Header = () => {
                         )}
                     </li>
                     <li><a href="/track-order">Track Order</a></li>
-                    <li><a href="/policies">Policies</a></li>
+                    <li><a href="/abouts">About Koi Fish</a></li>
                     <li><a href="/support">Support</a></li>
                     <li><a href="/register">Register</a></li>
                     <li><a href="/login">Login</a></li>
