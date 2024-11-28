@@ -21,7 +21,7 @@ const Footer = () => {
                 <div className="footer-section">
                     <h3  >Contact Us</h3>
                     <p>Email: support@koiordering.com</p>
-                    <p>Phone: +123 456 7890</p>
+                    <p>Phone: 0909.888.6368</p>
                 </div>
                 <div className="footer-section">
                     <h3 >Follow Us</h3>

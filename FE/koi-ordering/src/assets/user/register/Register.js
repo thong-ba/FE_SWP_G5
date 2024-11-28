@@ -25,7 +25,7 @@
 
 import React, { useState } from 'react';
 import './Register.css';
-import axios from 'axios'; // Nếu bạn sử dụng axios
+import axios from 'axios';
 
 function Register() {
     const [fistName, setFirstName] = useState('');
@@ -71,7 +71,7 @@ function Register() {
 
     return (
         <div className="register-container">
-            <h2>Register Page</h2>
+            <h2 className='tittle' >Register Page</h2>
             <form onSubmit={handleSubmit}>
                 <input
                     type="email"
