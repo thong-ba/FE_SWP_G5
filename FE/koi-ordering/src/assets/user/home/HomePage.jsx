@@ -1,8 +1,6 @@
 import React, { useEffect, useRef } from "react";
 import { useNavigate } from "react-router-dom";
-import Header from "../../../components/Head/Header";
 import "./HomePage.css"
-import Footer from "../../../components/Foot/Footer"
 import { faTruck, faClock, faShieldAlt } from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 

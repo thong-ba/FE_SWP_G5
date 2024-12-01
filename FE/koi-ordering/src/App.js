@@ -6,6 +6,7 @@ import Login from './assets/user/login/Login';
 import Register from './assets/user/register/Register';
 import HomePage from './assets/user/home/HomePage';
 import BookingOrder from './assets/user/bookingorder/BookingOrder';
+import Manager from './assets/manager/Manager';
 
 function App() {
   return (
@@ -18,6 +19,8 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/bookingorder" element={<BookingOrder />} />
+        <Route path="/manager" element={<Manager />} />
+
       </Routes>
       <Footer />
     </div>
