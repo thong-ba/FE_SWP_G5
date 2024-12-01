@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 // import ProfilePage from '../profilepage';
 // import TransportService from './transportservice';
 import AccountManagement from './accounts/AccountManager.jsx';
-import AddtionalService from './additionalservices/AdditionalServices.jsx'
+import AddtionalService from './additionalservices/AdditionalServices.jsx';
+import ProfilePage from '../user/profile/profile.jsx';
 // import ManageRoute from './manageroute';
 // import Analytics from './analytics';
 import './Manager.css';
@@ -23,8 +24,8 @@ function Manager() {
 
   const renderContent = () => {
     switch (activeComponent) {
-      // case 'profile':
-      //   return <ProfilePage />;
+      case 'profile':
+        return <ProfilePage />;
       // case 'transportService':
       //   return <TransportService onDetailClick={handleDetailClick} />;
       case 'accountManagement': // New case for account management
