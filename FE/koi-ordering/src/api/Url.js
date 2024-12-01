@@ -7,7 +7,7 @@ const getJwtToken = () => {
 const headers = {
   "Content-Type": "application/json",
   // Add headers such as Authorization if required
-  // 'Authorization': 'Bearer your-token',
+  'Authorization': `Bearer ${getJwtToken()}`, // Updated to use the actual token
 };
 
 
