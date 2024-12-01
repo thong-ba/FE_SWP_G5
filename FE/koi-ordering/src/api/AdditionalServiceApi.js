@@ -33,9 +33,9 @@ export const UpdateAdditionalService = async (id, data) => {
   }
 };
 
-export async function addAdditionalService(additionalServiceData) {
+export async function CreateAdditionalService(additionalServiceData) {
   try {
-    const response = await axios.post(baseAccountUrl, additionalServiceData, headers); // Send POST request
+    const response = await axios.post(`${baseAccountUrl}`, additionalServiceData, headers); // Send POST request
     return response.data; // Return the added additionalServiceData data
   } catch (error) {
     console.error('Error adding Additional Service Data:', error);
