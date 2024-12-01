@@ -2,16 +2,16 @@ import React, { useState } from 'react';
 // import ProfilePage from '../profilepage';
 // import TransportService from './transportservice';
 import AccountManagement from './accounts/AccountManager.jsx';
-// import AdditionalserviceManagement from './manageaddtionalservice.jsx';
+import AddtionalService from './additionalservices/AdditionalServices.jsx'
 // import ManageRoute from './manageroute';
 // import Analytics from './analytics';
 import './Manager.css';
 import { Modal } from 'antd'; // Import Modal from antd
 function Manager() {
   const [activeComponent, setActiveComponent] = useState('profile');
-  // const [selectedTransportId, setSelectedTransportId] = useState(null);
+  // const [selectedTransportId,   setSelectedTransportId] = useState(null);
   const [selectedAccountId, setSelectedAccountId] = useState(null); // New state for selected account
-  // const [selectedAdditionalServiceId, setSelectedAdditionalServiceId] = useState(null); // New state for selected account
+  const [selectedAdditionalServiceId, setSelectedAdditionalServiceId] = useState(null); // New state for selected account
   // const [selectedRouteId, setSelectedRouteId] = useState(null); // New state for selected route 
 
   const handleAccountClick = (accountId) => { // Updated function for account management
@@ -29,8 +29,8 @@ function Manager() {
       //   return <TransportService onDetailClick={handleDetailClick} />;
       case 'accountManagement': // New case for account management
         return <AccountManagement selectedAccountId={selectedAccountId} />;
-      // case 'additionalserviceManagement': // Updated case for additional service management
-      //   return <AdditionalserviceManagement selectedAdditionalServiceId={selectedAdditionalServiceId} />; // Pass the selected ID to the component
+      case 'additionalserviceManagement': // Updated case for additional service management
+        return <AddtionalService selectedAdditionalServiceId={selectedAdditionalServiceId} />; // Pass the selected ID to the component
       // case 'manageRoute':
       //   return <ManageRoute />;
       // case 'analytics':

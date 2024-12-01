@@ -3,6 +3,9 @@ import { Button, Table, Modal, Form, Input, Checkbox } from 'antd';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { GetAllAccount, UpdateProfile } from '../../../api/AccountApi';
+import { getJwtToken } from '../../../api/Url';
+
+const token = getJwtToken();
 
 function AccountManager() {
   const [data, setData] = useState([]);
