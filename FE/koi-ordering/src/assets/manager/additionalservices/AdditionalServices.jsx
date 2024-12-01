@@ -3,7 +3,7 @@ import { Button, Table, Modal, Form, Input, Select } from 'antd';
 import { toast, ToastContainer } from 'react-toastify';
 import axios from 'axios';
 import 'react-toastify/dist/ReactToastify.css';
-import { GetAllAdditionalService, UpdateAdditionalService, } from '../../../api/AdditionalServiceApi';
+import { GetAllAdditionalService, UpdateAdditionalService, CreateAdditionalService } from '../../../api/AdditionalServiceApi';
 
 
 
@@ -45,25 +45,14 @@ function ManageAdditionalService() {
 
   const handleCreate = async (values) => {
     try {
-      const response = await axios.post(
-        'http://26.61.210.173:3001/api/transport/create-additional-service',
-        {
-          name: values.name,
-          forTransportType: values.forTransportType,
-          description: values.description,
-          price: values.price
-        },
-        {
-          headers: {
-            Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`
-          }
-        }
-      );
+      const response = await CreateAdditionalService(values);
 
-      if (response.data) {
+      if (response) {
         toast.success("Additional service added successfully");
         fetchData();
         setShowForm(false);
+      } else {
+        toast.error("Failed to add additional service");
       }
     } catch (error) {
       console.error("Error adding additional service:", error);
