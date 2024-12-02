@@ -6,6 +6,7 @@ import Login from './assets/user/login/Login';
 import Register from './assets/user/register/Register';
 import HomePage from './assets/user/home/HomePage';
 import BookingOrder from './assets/user/bookingorder/BookingOrder';
+import Payment from './assets/user/payment/Payment';
 import Manager from './assets/manager/Manager';
 
 function App() {
@@ -22,7 +23,7 @@ function App() {
         <Route path="/register" element={<Register />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/bookingorder" element={<BookingOrder />} />
-
+        <Route path="/payment" element={<Payment />} />
 
         {/* Đường dẫn mặc định Manager */}
         <Route path="/manager" element={<Manager />} />
