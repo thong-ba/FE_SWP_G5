@@ -15,10 +15,16 @@ function App() {
       <Routes>
         {/* Đường dẫn mặc định HomePage */}
         <Route path="/" element={<HomePage />} />
+
+
+        {/* Đường dẫn mặc định User */}
         <Route path="/login" element={<Login />} />
         <Route path="/register" element={<Register />} />
         <Route path="/home" element={<HomePage />} />
         <Route path="/bookingorder" element={<BookingOrder />} />
+
+
+        {/* Đường dẫn mặc định Manager */}
         <Route path="/manager" element={<Manager />} />
 
       </Routes>
