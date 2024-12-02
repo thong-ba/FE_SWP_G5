@@ -1,0 +1,113 @@
+/* Reset default styles */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+  
+  /* Set the font family for the whole page */
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    color: #333;
+    line-height: 1.6;
+    margin: 0;
+    padding: 0;
+  }
+  
+  /* Style for the header */
+  header {
+    background-color: #0078D4; /* Blue color for header */
+    padding: 15px;
+    text-align: center;
+    color: white;
+  }
+  
+  header nav ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  header nav ul li {
+    display: inline;
+    margin-right: 20px;
+  }
+  
+  header nav ul li a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  
+  header nav ul li a:hover {
+    text-decoration: underline;
+  }
+  
+  /* Style for the footer */
+  footer {
+    background-color: #333;
+    color: white;
+    text-align: center;
+    padding: 10px 0;
+    /* position: fixed; */
+    bottom: auto;
+    width: 100%;
+  }
+  
+  /* Container for the main content */
+  .body-container {
+    padding: 20px;
+    min-height: 80vh; /* Ensure content doesn't overlap with footer */
+  }
+  
+  /* Style for links */
+  a {
+    text-decoration: none;
+    color: inherit;
+  }
+  
+  /* Basic form styling */
+  input[type="text"],
+  input[type="password"],
+  input[type="email"],
+  button {
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    width: 100%;
+  }
+  
+  button {
+    background-color: #0078D4;
+    color: white;
+    cursor: pointer;
+  }
+  
+  button:hover {
+    background-color: #005f8c;
+  }
+  
+  /* Basic container for centering elements */
+  .container {
+    width: 80%;
+    margin: 0 auto;
+  }
+  
+  h1, h2, h3 {
+    color: #333;
+  }
+  
+  /* Responsive design */
+  @media (max-width: 768px) {
+    header nav ul {
+      text-align: center;
+    }
+  
+    header nav ul li {
+      display: block;
+      margin: 5px 0;
+    }
+  }
+
+  
