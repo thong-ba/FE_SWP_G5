@@ -1,61 +1,48 @@
-/* .layout {
-    display: flex;
-    flex-direction: column;
-    height: 100vh;
-  }
-  
-  .header {
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
-  }
-  
-  .content {
-    flex: 1;
-    padding: 20px;
-  }
-  
-  .footer {
-    background-color: #007bff;
-    color: white;
-    padding: 10px;
-    text-align: center;
-  }
-   */
-
-
-
-/* Đảm bảo toàn bộ HTML và body có chiều cao đầy đủ */
+/* Reset toàn bộ margin và padding */
 html, body {
   height: 100%;
   margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
 }
 
-/* Bao bọc toàn bộ trang */
+/* Bố cục tổng cho toàn trang */
 .page-container {
   display: flex;
   flex-direction: column;
-  min-height: 100vh; /* Đảm bảo bao phủ toàn màn hình */
+  min-height: 100vh;
 }
 
-/* Nội dung chính, đẩy footer xuống */
+/* Nội dung giữa header và footer */
 .content {
-  flex: 1; /* Chiếm khoảng trống giữa header và footer */
+  flex: 1;
+  padding: 20px;
+  background-color: #f9f9f9; /* Nền sáng nhẹ */
+}
+
+/* Styling cho header */
+.header {
+  background-color: rgb(146, 68, 146);
+  color: white;
+  padding: 20px;
+  text-align: center;
+}
+
+/* Styling cho footer */
+.footer {
+  background-color: rgb(146, 68, 146);
+  color: white;
+  text-align: center;
   padding: 20px;
 }
 
-/* Header và footer cơ bản
-.header {
-  background-color: #007bff;
+/* Liên kết trong footer */
+.footer a {
   color: white;
-  padding: 10px;
-  text-align: center;
+  text-decoration: none;
+  transition: color 0.3s;
 }
 
-.footer {
-  background-color: #007bff;
-  color: white;
-  padding: 10px;
-  text-align: center;
-  bottom: auto;
-} */
+.footer a:hover {
+  color: #ffa500;
+}
