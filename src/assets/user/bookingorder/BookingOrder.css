@@ -1,21 +1,12 @@
-
-/*
-////////////////////////////////////////////////////////// */
-
-
-
-
-
-
-
 .booking-order-container {
     display: flex;
     justify-content: space-between;
     padding: 20px;
-}
+} 
+
 
 .form-container {
-    flex: 0.45; 
+    flex: 0.6; 
     margin-right: 20px;
 }
 
@@ -78,28 +69,20 @@
 
 /* Bản đồ */
 .map-container {
-    flex: 0.55; /* Chiều rộng của bản đồ */
-    height: 500px;
+    flex: 0.4; 
+    height: 150vh;
     position: relative;
 }
 
 .map-container h2 {
     text-align: center;
     font-size: 18px;
+    margin-bottom: 10px;
 }
 
-/* Điều chỉnh chiều cao bản đồ cho thiết bị di động */
-@media (max-width: 768px) {
-    .map-container {
-        height: 300px;
-    }
-
-    .form-container {
-        margin-right: 0;
-        flex: 1;
-    }
-
-    .booking-order-container {
-        flex-direction: column;
-    }
+.total-cost {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+    margin: 20px 0;
 }
