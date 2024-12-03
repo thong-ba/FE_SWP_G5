@@ -1,7 +1,7 @@
-
-
 import React, { useState, useEffect } from 'react';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
+import { LatLngLiteral } from 'leaflet';
+import 'leaflet/dist/leaflet.css'; // Add Leaflet CSS for map styling
 import './BookingOrder.css';
 
 const BookingOrder = () => {
@@ -9,14 +9,22 @@ const BookingOrder = () => {
         fullName: '',
         phone: '',
         email: '',
-        address: ''
+        city: '',
+        district: '',
+        ward: '',
+        street: '',
+        houseNumber: ''
     });
 
     const [receiverInfo, setReceiverInfo] = useState({
         fullName: '',
         phone: '',
         email: '',
-        address: ''
+        city: '',
+        district: '',
+        ward: '',
+        street: '',
+        houseNumber: ''
     });
 
     const [koiInfo, setKoiInfo] = useState({
@@ -42,12 +50,12 @@ const BookingOrder = () => {
     };
 
     useEffect(() => {
-        // Tính chi phí cá
+        // Calculate koi cost
         let koiCost = koiInfo.type === 'quantity'
             ? koiInfo.quantity * 1000000
             : koiInfo.weight * 1000000;
 
-        // Tính chi phí vận chuyển
+        // Calculate shipping cost
         let shippingRate = shippingInfo === 'express' ? 0.3 
                         : shippingInfo === 'fast' ? 0.25 
                         : 0.15;
@@ -58,72 +66,82 @@ const BookingOrder = () => {
 
     const handleSubmit = (e) => {
         e.preventDefault();
-        alert(`Tổng chi phí là: ${totalCost.toLocaleString('vi-VN')} VND`);
-        window.location.href = '/payment'; // Chuyển hướng trang thanh toán
+        alert(`Total cost is: ${totalCost.toLocaleString('vi-VN')} VND`);
+        window.location.href = '/payment'; // Redirect to payment page
     };
 
     return (
         <div className="booking-order-container">
             <div className="form-container">
-                <h2>Thông Tin Người Giao Hàng</h2>
+                <h2>Sender Information</h2>
                 <form onSubmit={handleSubmit}>
-                    <input type="text" name="fullName" placeholder="Họ và Tên" value={senderInfo.fullName} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
-                    <input type="text" name="phone" placeholder="Số Điện Thoại" value={senderInfo.phone} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
+                    <input type="text" name="fullName" placeholder="Full Name" value={senderInfo.fullName} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
+                    <input type="text" name="phone" placeholder="Phone Number" value={senderInfo.phone} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
                     <input type="email" name="email" placeholder="Email" value={senderInfo.email} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
-                    <input type="text" name="address" placeholder="Địa Chỉ" value={senderInfo.address} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
+                    <input type='text' name="city" placeholder='City' value={senderInfo.city} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
+                    <input type='text' name="district" placeholder='District' value={senderInfo.district} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
+                    <input type='text' name="ward" placeholder='Ward' value={senderInfo.ward} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
+                    <input type='text' name="street" placeholder='Street' value={senderInfo.street} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
+                    <input type='text' name="houseNumber" placeholder='House Number' value={senderInfo.houseNumber} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
+                    
 
-                    <h2>Thông Tin Người Nhận Hàng</h2>
-                    <input type="text" name="fullName" placeholder="Họ và Tên" value={receiverInfo.fullName} onChange={(e) => handleInputChange(e, setReceiverInfo)} required />
-                    <input type="text" name="phone" placeholder="Số Điện Thoại" value={receiverInfo.phone} onChange={(e) => handleInputChange(e, setReceiverInfo)} required />
+                    <h2>Receiver Information</h2>
+                    <input type="text" name="fullName" placeholder="Full Name" value={receiverInfo.fullName} onChange={(e) => handleInputChange(e, setReceiverInfo)} required />
+                    <input type="text" name="phone" placeholder="Phone Number" value={receiverInfo.phone} onChange={(e) => handleInputChange(e, setReceiverInfo)} required />
                     <input type="email" name="email" placeholder="Email" value={receiverInfo.email} onChange={(e) => handleInputChange(e, setReceiverInfo)} required />
-                    <input type="text" name="address" placeholder="Địa Chỉ" value={receiverInfo.address} onChange={(e) => handleInputChange(e, setReceiverInfo)} required />
-
-                    <h2>Thông Tin Về Cá Koi</h2>
-                    <input type="text" name="koiName" placeholder="Tên Cá" value={koiInfo.koiName} onChange={(e) => handleInputChange(e, setKoiInfo)} required />
+                    <input type='text' name="city" placeholder='City' value={receiverInfo.city} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
+                    <input type='text' name="district" placeholder='District' value={receiverInfo.district} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
+                    <input type='text' name="ward" placeholder='Ward' value={receiverInfo.ward} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
+                    <input type='text' name="street" placeholder='Street' value={receiverInfo.street} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
+                    <input type='text' name="houseNumber" placeholder='House Number' value={receiverInfo.houseNumber} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
+                    
+                    <h2>Koi Fish Information</h2>
+                    <input type="text" name="koiName" placeholder="Koi Fish Name" value={koiInfo.koiName} onChange={(e) => handleInputChange(e, setKoiInfo)} required />
                     <input type="file" name="koiImage" onChange={handleImageChange} required />
 
                     <div className="option-buttons">
                         <div className={`option-button ${koiInfo.type === 'quantity' ? 'selected' : ''}`} onClick={() => setKoiInfo({ ...koiInfo, type: 'quantity', quantity: 0, weight: 0 })}>
-                            Theo số lượng (con)
+                            By Quantity (fish)
                         </div>
                         <div className={`option-button ${koiInfo.type === 'weight' ? 'selected' : ''}`} onClick={() => setKoiInfo({ ...koiInfo, type: 'weight', quantity: 0, weight: 0 })}>
-                            Theo khối lượng (kg)
+                            By Weight (kg)
                         </div>
                     </div>
 
                     {koiInfo.type === 'quantity' ? (
-                        <input type="number" name="quantity" placeholder="Số Lượng (con)" value={koiInfo.quantity} onChange={(e) => handleInputChange(e, setKoiInfo)} min="1" required />
+                        <input type="number" name="quantity" placeholder="Quantity (pieces)" value={koiInfo.quantity} onChange={(e) => handleInputChange(e, setKoiInfo)} min="1" required />
                     ) : (
-                        <input type="number" name="weight" placeholder="Khối Lượng (kg)" value={koiInfo.weight} onChange={(e) => handleInputChange(e, setKoiInfo)} step="0.1" min="0.1" required />
+                        <input type="number" name="weight" placeholder="Weight (kg)" value={koiInfo.weight} onChange={(e) => handleInputChange(e, setKoiInfo)} step="0.1" min="0.1" required />
                     )}
 
-                    <h2>Thông Tin Vận Chuyển</h2>
+                    <h2>Shipping Information</h2>
                     <div className="option-buttons">
                         {['express', 'fast', 'standard'].map(option => (
                             <div key={option} className={`option-button ${shippingInfo === option ? 'selected' : ''}`} onClick={() => setShippingInfo(option)}>
-                                {option === 'express' ? 'Hỏa tốc (1-2 ngày)' : option === 'fast' ? 'Nhanh (3-4 ngày)' : 'Tiêu chuẩn (4-7 ngày)'}
+                                {option === 'express' ? 'Express (1-2 days)' : option === 'fast' ? 'Fast (3-4 days)' : 'Standard (4-7 days)'}
                             </div>
                         ))}
                     </div>
 
-                    <h2>Tổng Chi Phí</h2>
-                    <p className="total-cost">Tổng chi phí: {totalCost.toLocaleString('vi-VN')} VND</p>
+                    <h2>Total Cost</h2>
+                    <p className="total-cost">Total Cost: {totalCost.toLocaleString('vi-VN')} VND</p>
 
-                    <button type="submit">Đặt Hàng</button>
+                    <button type="submit">Place Order</button>
                 </form>
             </div>
 
             <div className="map-container">
-                <h2>Bản Đồ Việt Nam</h2>
-                <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
-                    <GoogleMap
-                        mapContainerStyle={{ height: "100%", width: "100%" }}
-                        center={mapCenter}
-                        zoom={6}
-                    >
-                        <Marker position={mapCenter} />
-                    </GoogleMap>
-                </LoadScript>
+                <h2>Map of Vietnam</h2>
+                <MapContainer center={mapCenter} zoom={6} style={{ height: '100%', width: '100%' }}>
+                    <TileLayer
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
+                    <Marker position={mapCenter}>
+                        <Popup>
+                            Center of Vietnam.
+                        </Popup>
+                    </Marker>
+                </MapContainer>
             </div>
         </div>
     );
