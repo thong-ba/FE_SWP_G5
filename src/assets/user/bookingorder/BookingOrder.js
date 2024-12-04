@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
-import { LatLngLiteral } from 'leaflet';
+import { MapContainer, TileLayer } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css'; // Add Leaflet CSS for map styling
 import './BookingOrder.css';
 
@@ -38,7 +37,8 @@ const BookingOrder = () => {
     const [shippingInfo, setShippingInfo] = useState('standard'); 
     const [totalCost, setTotalCost] = useState(0);
 
-    const [mapCenter] = useState({ lat: 14.0583, lng: 108.2772 });
+    // Cập nhật vị trí mặc định là TP.HCM
+    const [mapCenter] = useState({ lat: 10.8231, lng: 106.6297 });
 
     const handleInputChange = (e, setInfo) => {
         const { name, value } = e.target;
@@ -50,12 +50,12 @@ const BookingOrder = () => {
     };
 
     useEffect(() => {
-        // Calculate koi cost
+        // Tính toán chi phí koi
         let koiCost = koiInfo.type === 'quantity'
             ? koiInfo.quantity * 1000000
             : koiInfo.weight * 1000000;
 
-        // Calculate shipping cost
+        // Tính toán chi phí vận chuyển
         let shippingRate = shippingInfo === 'express' ? 0.3 
                         : shippingInfo === 'fast' ? 0.25 
                         : 0.15;
@@ -83,7 +83,6 @@ const BookingOrder = () => {
                     <input type='text' name="ward" placeholder='Ward' value={senderInfo.ward} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
                     <input type='text' name="street" placeholder='Street' value={senderInfo.street} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
                     <input type='text' name="houseNumber" placeholder='House Number' value={senderInfo.houseNumber} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
-                    
 
                     <h2>Receiver Information</h2>
                     <input type="text" name="fullName" placeholder="Full Name" value={receiverInfo.fullName} onChange={(e) => handleInputChange(e, setReceiverInfo)} required />
@@ -94,7 +93,7 @@ const BookingOrder = () => {
                     <input type='text' name="ward" placeholder='Ward' value={receiverInfo.ward} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
                     <input type='text' name="street" placeholder='Street' value={receiverInfo.street} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
                     <input type='text' name="houseNumber" placeholder='House Number' value={receiverInfo.houseNumber} onChange={(e) => handleInputChange(e, setSenderInfo)} required />
-                    
+
                     <h2>Koi Fish Information</h2>
                     <input type="text" name="koiName" placeholder="Koi Fish Name" value={koiInfo.koiName} onChange={(e) => handleInputChange(e, setKoiInfo)} required />
                     <input type="file" name="koiImage" onChange={handleImageChange} required />
@@ -132,15 +131,10 @@ const BookingOrder = () => {
 
             <div className="map-container">
                 <h2>Map of Vietnam</h2>
-                <MapContainer center={mapCenter} zoom={6} style={{ height: '100%', width: '100%' }}>
+                <MapContainer center={mapCenter} zoom={10} style={{ height: '100%', width: '100%' }}>
                     <TileLayer
                         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                     />
-                    <Marker position={mapCenter}>
-                        <Popup>
-                            Center of Vietnam.
-                        </Popup>
-                    </Marker>
                 </MapContainer>
             </div>
         </div>

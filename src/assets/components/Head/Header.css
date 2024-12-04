@@ -1,3 +1,4 @@
+/* Các style chung cho header */
 .header {
     display: flex;
     justify-content: space-between;
@@ -5,41 +6,59 @@
     padding: 20px;
     background-color: rgb(146, 68, 146);
     color: white;
-}
-
-.logo-container {
+  }
+  
+  /* Cập nhật kích thước logo và avatar */
+  .logo-container {
     display: flex;
     align-items: center;
-}
-
-.logo-image {
-    width: 40px; /* Kích thước hình đại diện */
-    height: 40px; /* Kích thước hình đại diện */
+  }
+  
+  .logo-image {
+    width: 30px; /* Giảm kích thước hình đại diện */
+    height: 30px; /* Giảm kích thước hình đại diện */
     margin-right: 10px; /* Khoảng cách giữa hình đại diện và tên web */
-}
+  }
 
-.logo {
+  
+  .logo {
     font-size: 24px;
     color: white;
-}
-
-.navigation ul {
+    display: contents;    
+  }
+  
+  /* Điều chỉnh kích thước avatar */
+  .user-avatar {
+    width: 25px;  /* Kích thước avatar thu nhỏ */
+    height: 25px; /* Kích thước avatar thu nhỏ */
+    border-radius: 50%; /* Đảm bảo avatar có dạng tròn */
+    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+    margin-right: 10px; /* Khoảng cách giữa avatar và các mục khác */
+  }
+  
+  /* Các style cho navigation */
+  .navigation ul {
     list-style-type: none;
     display: flex;
     gap: 50px;
-}
-
-.navigation a {
+  }
+  
+  .navigation a {
     color: white;
     text-decoration: none;
     transition: color 0.3s;
-}
-
-.navigation a:hover {
+  }
+  
+  .navigation a:hover {
     color: #ffa500; /* Màu sắc khi hover */
-}
-
-.dropdown {
+  }
+  
+  /* Các style cho dropdown */
+  .services {
+    position: relative;
+  }
+  
+  .dropdown {
     position: absolute;
     background-color: rgb(201, 87, 201);
     list-style-type: none;
@@ -47,16 +66,26 @@
     margin: 0;
     border-radius: 5px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-}
-
-.dropdown li {
+    display: none;
+  }
+  
+  .services:hover .dropdown {
+    display: block;
+  }
+  
+  .dropdown li {
     margin: 5px 0;
-}
-
-.dropdown a {
+  }
+  
+  .dropdown a {
     color: white;
-}
-
-.dropdown a:hover {
+  }
+  
+  .dropdown a:hover {
     color: #ffa500; /* Màu sắc khi hover trong dropdown */
-}
+  }
+  
+  .logout-button
+  {
+    display: contents;
+  }
