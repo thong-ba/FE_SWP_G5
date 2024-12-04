@@ -70,7 +70,8 @@
   }
   
   .services:hover .dropdown {
-    display: block;
+    display: flex;
+    width: max-content;
   }
   
   .dropdown li {
