@@ -74,7 +74,34 @@ button:hover {
 
 .map-container {
     flex: 1;
-    height: 500px;
+    height: 650px;
     border-radius: 8px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+.cost-info {
+    margin-top: 20px;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.cost-info p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.cost-info strong {
+    font-weight: bold;
+    color: #333;
+}
+
+.cost-info p:last-child {
+    font-size: 18px;
+    font-weight: bold;
+    color: #e74c3c;
+}
+
+.cost-info p {
+    color: #555;
 }

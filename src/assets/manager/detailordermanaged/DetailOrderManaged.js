@@ -26,30 +26,30 @@ function DetailOrderManaged() {
         {/* Column Left - Sender Info */}
         <div className="column">
           <h2>Thông tin khách gửi</h2>
-          <p><strong>Họ và tên:</strong> {customerInfo.sender.name}</p>
-          <p><strong>Số điện thoại:</strong> {customerInfo.sender.phone}</p>
-          <p><strong>Email:</strong> {customerInfo.sender.email}</p>
-          <p><strong>Địa chỉ:</strong> {customerInfo.sender.address}</p>
+          <p className= "p-detail" ><strong>Họ và tên:</strong> {customerInfo.sender.name}</p>
+          <p className= "p-detail"  ><strong>Số điện thoại:</strong> {customerInfo.sender.phone}</p>
+          <p className="p-detail" ><strong>Email:</strong> {customerInfo.sender.email}</p>
+          <p className="p-detail" ><strong>Địa chỉ:</strong> {customerInfo.sender.address}</p>
         </div>
 
         {/* Column Middle - Receiver Info */}
         <div className="column">
           <h2>Thông tin khách nhận</h2>
-          <p><strong>Họ và tên:</strong> {customerInfo.receiver.name}</p>
-          <p><strong>Số điện thoại:</strong> {customerInfo.receiver.phone}</p>
-          <p><strong>Email:</strong> {customerInfo.receiver.email}</p>
-          <p><strong>Địa chỉ:</strong> {customerInfo.receiver.address}</p>
+          <p className="p-detail" ><strong>Họ và tên:</strong> {customerInfo.receiver.name}</p>
+          <p className="p-detail" ><strong>Số điện thoại:</strong> {customerInfo.receiver.phone}</p>
+          <p className="p-detail"><strong>Email:</strong> {customerInfo.receiver.email}</p>
+          <p className="p-detail"><strong>Địa chỉ:</strong> {customerInfo.receiver.address}</p>
         </div>
 
         {/* Column Right - Order Details */}
         <div className="column">
           <h2>Chi tiết đơn hàng</h2>
-          <p><strong>Mã đơn hàng:</strong> {orderDetails.code}</p>
-          <p><strong>Tên đơn hàng:</strong> {orderDetails.name}</p>
-          <p><strong>Khối lượng:</strong> {orderDetails.weight}</p>
-          <p><strong>Tiền đơn hàng:</strong> {orderDetails.price}</p>
-          <p><strong>Hình thức vận chuyển:</strong> {orderDetails.shippingType}</p>
-          <p><strong>Tổng tiền:</strong> {orderDetails.total}</p>
+          <p className="p-detail"><strong>Mã đơn hàng:</strong> {orderDetails.code}</p>
+          <p className="p-detail"><strong>Tên đơn hàng:</strong> {orderDetails.name}</p>
+          <p className="p-detail"><strong>Khối lượng:</strong> {orderDetails.weight}</p>
+          <p className="p-detail"><strong>Tiền đơn hàng:</strong> {orderDetails.price}</p>
+          <p className="p-detail"><strong>Hình thức vận chuyển:</strong> {orderDetails.shippingType}</p>
+          <p className="p-detail"><strong>Tổng tiền:</strong> {orderDetails.total}</p>
           <label>
             <strong>Tài xế nhận hàng:</strong>
             <select
