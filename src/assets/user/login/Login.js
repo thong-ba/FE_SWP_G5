@@ -2,8 +2,9 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
+import { jwtDecode } from 'jwt-decode';
 
-function Login({ setIsLoggedIn }) {
+function Login({ setIsLoggedIn, setUser }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -21,10 +22,18 @@ function Login({ setIsLoggedIn }) {
       if (response.data.isSuccess) {
         const token = response.data.result; // Token trả về từ API
         localStorage.setItem('token', token); // Lưu token vào localStorage
-        
+
+        const decode = jwtDecode(token);
+        console.log("Decode JWT: ", decode);
+
         setMessage('Login successful!');
         setIsLoggedIn(true); // Cập nhật trạng thái đăng nhập
-        setTimeout(() => navigate('/home'), 1000); // Chuyển hướng sau 1 giây
+        if (decode.Role === "Manager") {
+          setTimeout(() => navigate("/manager/maindex"), 1000);
+        } 
+        else {
+          setTimeout(() => navigate('/home'), 1000); // Chuyển hướng sau 1 giây
+        }
       } else {
         setMessage('Login failed: ' + (response.data.errorMessage || 'Unknown error'));
       }

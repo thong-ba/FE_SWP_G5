@@ -10,13 +10,16 @@ function Maindex() {
       <h1 className="maindex-title">Manager Dashboard</h1>
       <div className="button-group">
         <button className="manage-button" onClick={() => navigate('/manager/ordermanaged')}>
-          Quản lý đơn đặt hàng
+          Order Management
         </button>
-        <button className="manage-button" onClick={() => navigate('/manager/warehouse-staff')}>
-          Quản lý nhân viên kho
+        <button className="manage-button" onClick={() => navigate('/manager/transportmanaged')}>
+          Transport Management
         </button>
-        <button className="manage-button" onClick={() => navigate('/manager/drivers')}>
-          Quản lý tài xế vận chuyển
+        <button className="manage-button" onClick={() => navigate('/manager/drivermanaged')}>
+          Driver Management
+        </button>
+        <button className="manage-button" onClick={() => navigate('/manager/routemanaged')}>
+          Route Management
         </button>
       </div>
     </div>
