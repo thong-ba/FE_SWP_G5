@@ -62,8 +62,8 @@ const BookingOrder = () => {
         const dLat = (lat2 - lat1) * Math.PI / 180;
         const dLon = (lon2 - lon1) * Math.PI / 180;
         const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
-                  Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
-                  Math.sin(dLon / 2) * Math.sin(dLon / 2);
+            Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
+            Math.sin(dLon / 2) * Math.sin(dLon / 2);
         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
         const distance = R * c; // Distance in km
         return distance;
@@ -75,13 +75,17 @@ const BookingOrder = () => {
             if (senderInfo.address && receiverInfo.address) {
                 const senderCoords = await geocodeAddress(senderInfo.address);
                 const receiverCoords = await geocodeAddress(receiverInfo.address);
+
+                console.log('Sender Coordinates:', senderCoords); // Kiểm tra tọa độ người gửi
+                console.log('Receiver Coordinates:', receiverCoords); // Kiểm tra tọa độ người nhận
+
                 if (senderCoords) setSenderCoordinates(senderCoords);
                 if (receiverCoords) setReceiverCoordinates(receiverCoords);
 
                 // Tính toán khoảng cách giữa sender và receiver
                 if (senderCoords && receiverCoords) {
                     const distance = calculateDistance(
-                        senderCoords[0], senderCoords[1], 
+                        senderCoords[0], senderCoords[1],
                         receiverCoords[0], receiverCoords[1]
                     );
                     setDistance(distance);
@@ -90,6 +94,7 @@ const BookingOrder = () => {
         };
         fetchCoordinates();
     }, [senderInfo.address, receiverInfo.address]);
+
 
     // Cập nhật giá trị tiền vận chuyển khi thay đổi hình thức vận chuyển
     useEffect(() => {
@@ -223,6 +228,7 @@ const BookingOrder = () => {
                     {senderCoordinates && <Marker position={senderCoordinates} />}
                     {receiverCoordinates && <Marker position={receiverCoordinates} />}
                 </MapContainer>
+
             </div>
         </div>
     );
