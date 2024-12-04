@@ -3,8 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
 
-
-function Login() {
+function Login({ setIsLoggedIn }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
@@ -16,16 +15,21 @@ function Login() {
     try {
       const response = await axios.post('https://localhost:7046/api/Auth/login', {
         userEmail: email,
-        password: password
+        password: password,
       });
 
       if (response.data.isSuccess) {
+        const token = response.data.result; // Token trả về từ API
+        localStorage.setItem('token', token); // Lưu token vào localStorage
+        
         setMessage('Login successful!');
-        setTimeout(() => navigate('/home'), 1000); // Redirect after 1 second
+        setIsLoggedIn(true); // Cập nhật trạng thái đăng nhập
+        setTimeout(() => navigate('/home'), 1000); // Chuyển hướng sau 1 giây
       } else {
-        setMessage('Login failed: ' + response.data.errorMessage);
+        setMessage('Login failed: ' + (response.data.errorMessage || 'Unknown error'));
       }
     } catch (error) {
+      console.error(error);
       setMessage('Error: Unable to connect to server.');
     }
   };
