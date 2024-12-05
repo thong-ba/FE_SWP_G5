@@ -1,0 +1,43 @@
+.service-container {
+  font-family: 'Noto Sans', system-ui, sans-serif;
+  background-color: #f4f4f4;
+  padding: 40px;
+}
+
+.service-title {
+  font-size: 36px;
+  text-align: center;
+  color: #333;
+  margin-bottom: 40px;
+}
+
+.service-section {
+  margin-bottom: 30px;
+}
+
+.service-subtitle {
+  font-size: 28px;
+  color: #008080;
+  margin-bottom: 20px;
+}
+
+.service-description {
+  font-size: 18px;
+  color: #333;
+  line-height: 1.6;
+  text-align: justify;
+}
+
+.service-image {
+  width: 100%;
+  max-width: 600px;
+  height: auto;
+  margin-top: 20px;
+  border-radius: 10px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.service-container .service-section img {
+  display: block;
+  margin: 0 auto;
+}

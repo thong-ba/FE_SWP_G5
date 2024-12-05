@@ -19,7 +19,7 @@ const Header = ({ isLoggedIn, handleLogout }) => {
         <ul className="nav-list">
           <li className="nav-item"><Link to="/home">Home</Link></li>
           <li className="nav-item services" onMouseEnter={toggleDropdown} onMouseLeave={toggleDropdown}>
-            <Link to="/services">Services</Link>
+            <Link to="/service">Services</Link>
             {isDropdownOpen && (
               <ul className="dropdown">
                 <li className="dropdown-item"><Link to="/bookingorder">Booking Order</Link></li>

@@ -8,6 +8,9 @@ import Login from './assets/user/login/Login';
 import Register from './assets/user/register/Register';
 import BookingOrder from './assets/user/bookingorder/BookingOrder';
 import Payment from './assets/user/payment/Payment';
+import Service from './assets/user/services/Service';
+
+
 import Manager from './assets/manager/dashboard/Manager';
 import Staff from './assets/staff/dashboard/Staff';
 
@@ -49,6 +52,7 @@ function App() {
       <Route path="/register" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Register /></LayoutUtils>} />
       <Route path="/bookingorder" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><BookingOrder /></LayoutUtils>} />
       <Route path="/payment" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Payment /></LayoutUtils>} />
+      <Route path="/service" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Service /></LayoutUtils>} />
 
 
       <Route path="/staff" element={<Staff />} />
