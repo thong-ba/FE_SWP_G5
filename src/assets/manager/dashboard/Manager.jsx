@@ -101,7 +101,7 @@ function Manager() {
             </li>
           </ul>
         </div>
-        <div className="content">
+        <div className="content-manager">
           {renderContent()}
         </div>
       </div>
