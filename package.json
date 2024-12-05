@@ -12,6 +12,7 @@
     "@testing-library/jest-dom": "^5.14.1",
     "@testing-library/react": "^13.0.0",
     "@testing-library/user-event": "^13.2.1",
+    "antd": "^5.22.3",
     "axios": "^1.7.8",
     "leaflet": "^1.9.4",
     "react": "^18.3.1",
@@ -19,6 +20,7 @@
     "react-leaflet": "^4.2.1",
     "react-router-dom": "6",
     "react-scripts": "5.0.1",
+    "react-toastify": "^10.0.6",
     "uuid": "^11.0.3",
     "web-vitals": "^2.1.0"
   },

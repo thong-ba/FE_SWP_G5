@@ -50,9 +50,7 @@ import Login from './assets/user/login/Login';
 import Register from './assets/user/register/Register';
 import BookingOrder from './assets/user/bookingorder/BookingOrder';
 import Payment from './assets/user/payment/Payment';
-import Maindex from './assets/manager/maindex/Maindex';
-import OrderManaged from './assets/manager/ordersmanaged/OrderManaged';
-import DetailOrderManaged from './assets/manager/detailordermanaged/DetailOrderManaged';
+import Manager from './assets/manager/dashboard/Manager'
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -77,9 +75,9 @@ function App() {
       <Route path="/register" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Register /></LayoutUtils>} />
       <Route path="/bookingorder" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><BookingOrder /></LayoutUtils>} />
       <Route path="/payment" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Payment /></LayoutUtils>} />
-      <Route path="/manager/maindex" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Maindex /></LayoutUtils>} />
-      <Route path="/manager/ordermanaged" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><OrderManaged /></LayoutUtils>} />
-      <Route path="/manager/detailorder" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><DetailOrderManaged /></LayoutUtils>} />
+      <Route path="/manager" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Manager /></LayoutUtils>} />
+
+
     </Routes>
   );
 }
