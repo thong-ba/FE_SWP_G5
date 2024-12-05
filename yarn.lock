@@ -5162,11 +5162,7 @@ fs.realpath@^1.0.0:
 
 fsevents@^2.3.2, fsevents@~2.3.2:
   version "2.3.3"
-<<<<<<< HEAD
-  resolved "https://registry.npmjs.org/fsevents/-/fsevents-2.3.3.tgz"
-=======
   resolved "https://registry.yarnpkg.com/fsevents/-/fsevents-2.3.3.tgz#cac6407785d03675a2a5e1a5305c697b347d90d6"
->>>>>>> 7815e6464d008269cfa0e70911bf7cfcf81fc94d
   integrity sha512-5xoDfX+fL7faATnagmWPpbFtwh/R77WmMMqqHGS65C3vvB0YHrgF+B1YmZ3441tMj5n63k0212XNoJwzlhffQw==
 
 function-bind@^1.1.2:
@@ -6710,9 +6706,8 @@ klona@^2.0.4, klona@^2.0.5:
   resolved "https://registry.npmjs.org/klona/-/klona-2.0.6.tgz"
   integrity sha512-dhG34DXATL5hSxJbIexCft8FChFXtmskoZYnoPWjXQuebWYCNkVeV3KkGegCK9CP1oswI/vQibS2GY7Em/sJJA==
 
-"koi-ordering@file:":
+"koi-ordering@file:.":
   version "0.1.0"
-  resolved "file:"
   dependencies:
     "@fortawesome/fontawesome-svg-core" "^6.7.1"
     "@fortawesome/free-brands-svg-icons" "^6.7.1"
@@ -6725,7 +6720,7 @@ klona@^2.0.4, klona@^2.0.5:
     "@testing-library/user-event" "^13.2.1"
     antd "^5.22.3"
     axios "^1.7.8"
-    koi-ordering "file:"
+    koi-ordering "file:C:/Users/huy/AppData/Local/Yarn/Cache/v6/npm-koi-ordering-0.1.0-7f27aad9-8a44-4aec-a173-2ac211490e86-1733398516822/node_modules/koi-ordering"
     leaflet "^1.9.4"
     react "^18.3.1"
     react-dom "^18.3.1"
