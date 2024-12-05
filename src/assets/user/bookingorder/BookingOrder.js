@@ -2,9 +2,8 @@
 // import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 // import L from 'leaflet';
 // import 'leaflet/dist/leaflet.css';
-// import './BookingOrder.css';
+// import styles from './BookingOrder.module.css'; // Importing CSS module
 
-// // Cấu hình lại icon cho marker
 // delete L.Icon.Default.prototype._getIconUrl;
 // L.Icon.Default.mergeOptions({
 //     iconRetinaUrl: require('leaflet/dist/images/marker-icon-2x.png'),
@@ -20,8 +19,10 @@
 //     const [selectedProducts, setSelectedProducts] = useState([]);
 //     const [senderCoordinates, setSenderCoordinates] = useState(null);
 //     const [receiverCoordinates, setReceiverCoordinates] = useState(null);
-//     const [distance, setDistance] = useState(null);  // Thêm trạng thái lưu trữ tổng số km
-//     const [shippingCost, setShippingCost] = useState(null);  // Thêm trạng thái lưu trữ số tiền vận chuyển
+//     const [distance, setDistance] = useState(null);
+//     const [shippingCost, setShippingCost] = useState(null);
+//     const [totalFishCost, setTotalFishCost] = useState(0);
+//     const [totalAmount, setTotalAmount] = useState(0);
 
 //     const handleInputChange = (e, setInfo) => {
 //         const { name, value } = e.target;
@@ -38,7 +39,6 @@
 //         }
 //     };
 
-//     // Geocoding function using Nominatim API
 //     const geocodeAddress = async (address) => {
 //         const url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(address)}`;
 //         try {
@@ -56,33 +56,27 @@
 //         }
 //     };
 
-//     // Tính toán khoảng cách giữa 2 điểm (đơn giản bằng Haversine Formula hoặc API sau này)
 //     const calculateDistance = (lat1, lon1, lat2, lon2) => {
-//         const R = 6371; // Radius of Earth in km
+//         const R = 6371;
 //         const dLat = (lat2 - lat1) * Math.PI / 180;
 //         const dLon = (lon2 - lon1) * Math.PI / 180;
 //         const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
 //             Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) *
 //             Math.sin(dLon / 2) * Math.sin(dLon / 2);
 //         const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
-//         const distance = R * c; // Distance in km
+//         const distance = R * c;
 //         return distance;
 //     };
 
-//     // Cập nhật tọa độ và tính toán khoảng cách
 //     useEffect(() => {
 //         const fetchCoordinates = async () => {
 //             if (senderInfo.address && receiverInfo.address) {
 //                 const senderCoords = await geocodeAddress(senderInfo.address);
 //                 const receiverCoords = await geocodeAddress(receiverInfo.address);
 
-//                 console.log('Sender Coordinates:', senderCoords); // Kiểm tra tọa độ người gửi
-//                 console.log('Receiver Coordinates:', receiverCoords); // Kiểm tra tọa độ người nhận
-
 //                 if (senderCoords) setSenderCoordinates(senderCoords);
 //                 if (receiverCoords) setReceiverCoordinates(receiverCoords);
 
-//                 // Tính toán khoảng cách giữa sender và receiver
 //                 if (senderCoords && receiverCoords) {
 //                     const distance = calculateDistance(
 //                         senderCoords[0], senderCoords[1],
@@ -95,28 +89,33 @@
 //         fetchCoordinates();
 //     }, [senderInfo.address, receiverInfo.address]);
 
-
-//     // Cập nhật giá trị tiền vận chuyển khi thay đổi hình thức vận chuyển
 //     useEffect(() => {
 //         if (distance !== null && shippingType) {
 //             let cost = 0;
-//             // Giả lập giá trị tiền vận chuyển theo loại hình thức
 //             if (shippingType === 'express') {
-//                 cost = distance * 2; // Giả sử 2 VND/km
+//                 cost = distance * 2;
 //             } else if (shippingType === 'fast') {
-//                 cost = distance * 1.5; // Giả sử 1.5 VND/km
+//                 cost = distance * 1.5;
 //             } else if (shippingType === 'standard') {
-//                 cost = distance * 1; // Giả sử 1 VND/km
+//                 cost = distance * 1;
 //             }
 //             setShippingCost(cost);
 //         }
 //     }, [shippingType, distance]);
 
+//     useEffect(() => {
+//         setTotalFishCost(selectedProducts.length * 100000); // 100000 VND per fish
+//     }, [selectedProducts]);
+
+//     useEffect(() => {
+//         setTotalAmount(totalFishCost + (shippingCost || 0));
+//     }, [totalFishCost, shippingCost]);
+
 //     return (
-//         <div className="booking-order-container">
-//             <div className="form-container">
+//         <div className={styles.bookingOrderContainer}>
+//             <div className={styles.formContainer}>
 //                 {step === 1 && (
-//                     <div className="step">
+//                     <div className={styles.step}>
 //                         <h2>Sender Information</h2>
 //                         <input
 //                             type="text"
@@ -166,23 +165,23 @@
 //                 )}
 
 //                 {step === 2 && (
-//                     <div className="step">
+//                     <div className={styles.step}>
 //                         <h2>Shipping Options</h2>
-//                         <div className="option-buttons">
+//                         <div className={styles.optionButtons}>
 //                             <div
-//                                 className={`option-button ${shippingType === 'express' ? 'selected' : ''}`}
+//                                 className={`${styles.optionButton} ${shippingType === 'express' ? styles.selected : ''}`}
 //                                 onClick={() => setShippingType('express')}
 //                             >
 //                                 Hoả tốc
 //                             </div>
 //                             <div
-//                                 className={`option-button ${shippingType === 'fast' ? 'selected' : ''}`}
+//                                 className={`${styles.optionButton} ${shippingType === 'fast' ? styles.selected : ''}`}
 //                                 onClick={() => setShippingType('fast')}
 //                             >
 //                                 Nhanh
 //                             </div>
 //                             <div
-//                                 className={`option-button ${shippingType === 'standard' ? 'selected' : ''}`}
+//                                 className={`${styles.optionButton} ${shippingType === 'standard' ? styles.selected : ''}`}
 //                                 onClick={() => setShippingType('standard')}
 //                             >
 //                                 Tiêu chuẩn
@@ -190,7 +189,7 @@
 //                         </div>
 
 //                         {distance !== null && shippingCost !== null && (
-//                             <div className="shipping-info">
+//                             <div className={styles.shippingInfo}>
 //                                 <p><strong>Tổng số km:</strong> {distance.toFixed(2)} km</p>
 //                                 <p><strong>Số tiền vận chuyển:</strong> {shippingCost.toFixed(2)} VND</p>
 //                             </div>
@@ -199,7 +198,7 @@
 //                 )}
 
 //                 {step === 3 && (
-//                     <div className="step">
+//                     <div className={styles.step}>
 //                         <h2>Add Products</h2>
 //                         <select onChange={handleAddProduct}>
 //                             <option value="">Select a product</option>
@@ -212,23 +211,33 @@
 //                                 <li key={index}>{product}</li>
 //                             ))}
 //                         </ul>
+
+//                         <div className={styles.costInfo}>
+//                             <p><strong>Tiền cá:</strong> {totalFishCost.toLocaleString()} VND</p>
+//                             <p><strong>Tiền ship:</strong> {shippingCost ? shippingCost.toLocaleString() : 0} VND</p>
+//                             <p><strong>Tổng thanh toán:</strong> {totalAmount.toLocaleString()} VND</p>
+//                         </div>
+
+//                         <button onClick={() => alert('Thanh toán thành công!')}>Thanh toán</button>
 //                     </div>
 //                 )}
 
-//                 <div className="button-group">
+//                 <div className={styles.buttonGroup}>
 //                     {step > 1 && <button onClick={handlePrevStep}>Back</button>}
 //                     {step < 3 && <button onClick={handleNextStep}>Next</button>}
 //                 </div>
 //             </div>
 
-//             {/* Bản đồ luôn hiển thị ở bên phải */}
-//             <div className="map-container">
-//                 <MapContainer center={[10.8231, 106.6297]} zoom={10} style={{ height: '100%', width: '100%' }}>
+//             <div className={styles.mapContainer}>
+//                 <MapContainer center={[10.8231, 106.6297]} zoom={12} style={{ height: '80vh' }}>
 //                     <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
-//                     {senderCoordinates && <Marker position={senderCoordinates} />}
-//                     {receiverCoordinates && <Marker position={receiverCoordinates} />}
+//                     {senderCoordinates && (
+//                         <Marker position={senderCoordinates} />
+//                     )}
+//                     {receiverCoordinates && (
+//                         <Marker position={receiverCoordinates} />
+//                     )}
 //                 </MapContainer>
-
 //             </div>
 //         </div>
 //     );
@@ -239,18 +248,11 @@
 
 
 
-
-
-
-
-
-
-
 import React, { useState, useEffect } from 'react';
 import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
-import './BookingOrder.css';
+import styles from './BookingOrder.module.css'; // Importing CSS module
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -260,7 +262,7 @@ L.Icon.Default.mergeOptions({
 });
 
 const BookingOrder = () => {
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(1); // Start with Step 1
     const [senderInfo, setSenderInfo] = useState({ fullName: '', phone: '', address: '' });
     const [receiverInfo, setReceiverInfo] = useState({ fullName: '', phone: '', address: '' });
     const [shippingType, setShippingType] = useState('');
@@ -305,7 +307,7 @@ const BookingOrder = () => {
     };
 
     const calculateDistance = (lat1, lon1, lat2, lon2) => {
-        const R = 6371;
+        const R = 6371; // Radius of the Earth in km
         const dLat = (lat2 - lat1) * Math.PI / 180;
         const dLon = (lon2 - lon1) * Math.PI / 180;
         const a = Math.sin(dLat / 2) * Math.sin(dLat / 2) +
@@ -360,10 +362,11 @@ const BookingOrder = () => {
     }, [totalFishCost, shippingCost]);
 
     return (
-        <div className="booking-order-container">
-            <div className="form-container">
+        <div className={styles.bookingOrderContainer}>
+            <div className={styles.formContainer}>
+                {/* Step 1: Sender, Receiver, and Shipping */}
                 {step === 1 && (
-                    <div className="step">
+                    <div className={styles.step}>
                         <h2>Sender Information</h2>
                         <input
                             type="text"
@@ -409,27 +412,24 @@ const BookingOrder = () => {
                             value={receiverInfo.address}
                             onChange={(e) => handleInputChange(e, setReceiverInfo)}
                         />
-                    </div>
-                )}
 
-                {step === 2 && (
-                    <div className="step">
+                        {/* Shipping Type Selection */}
                         <h2>Shipping Options</h2>
-                        <div className="option-buttons">
+                        <div className={styles.optionButtons}>
                             <div
-                                className={`option-button ${shippingType === 'express' ? 'selected' : ''}`}
+                                className={`${styles.optionButton} ${shippingType === 'express' ? styles.selected : ''}`}
                                 onClick={() => setShippingType('express')}
                             >
                                 Hoả tốc
                             </div>
                             <div
-                                className={`option-button ${shippingType === 'fast' ? 'selected' : ''}`}
+                                className={`${styles.optionButton} ${shippingType === 'fast' ? styles.selected : ''}`}
                                 onClick={() => setShippingType('fast')}
                             >
                                 Nhanh
                             </div>
                             <div
-                                className={`option-button ${shippingType === 'standard' ? 'selected' : ''}`}
+                                className={`${styles.optionButton} ${shippingType === 'standard' ? styles.selected : ''}`}
                                 onClick={() => setShippingType('standard')}
                             >
                                 Tiêu chuẩn
@@ -437,7 +437,7 @@ const BookingOrder = () => {
                         </div>
 
                         {distance !== null && shippingCost !== null && (
-                            <div className="shipping-info">
+                            <div className={styles.shippingInfo}>
                                 <p><strong>Tổng số km:</strong> {distance.toFixed(2)} km</p>
                                 <p><strong>Số tiền vận chuyển:</strong> {shippingCost.toFixed(2)} VND</p>
                             </div>
@@ -445,40 +445,45 @@ const BookingOrder = () => {
                     </div>
                 )}
 
-                {step === 3 && (
-                    <div className="step">
-                        <h2>Add Products</h2>
-                        <select onChange={handleAddProduct}>
+                {/* Step 2: Add Products */}
+                {step === 2 && (
+                    <div className={styles.addProductsStep}>
+                        <h2 className={styles.addProductsTitle}>Add Products</h2>
+                        <select className={styles.productSelect} onChange={handleAddProduct}>
                             <option value="">Select a product</option>
                             <option value="Koi 1">Koi 1</option>
                             <option value="Koi 2">Koi 2</option>
                             <option value="Koi 3">Koi 3</option>
                         </select>
-                        <ul>
+                        <ul className={styles.productList}>
                             {selectedProducts.map((product, index) => (
-                                <li key={index}>{product}</li>
+                                <li key={index} className={styles.productListItem}>{product}</li>
                             ))}
                         </ul>
 
-                        <div className="cost-info">
-                            <p><strong>Tiền cá:</strong> {totalFishCost.toLocaleString()} VND</p>
-                            <p><strong>Tiền ship:</strong> {shippingCost ? shippingCost.toLocaleString() : 0} VND</p>
-                            <p><strong>Tổng thanh toán:</strong> {totalAmount.toLocaleString()} VND</p>
+                        <div className={styles.costInfo}>
+                            <p><strong>Tổng tiền cá koi:</strong> {totalFishCost.toFixed(2)} VND</p>
+                            <p><strong>Tổng tiền vận chuyển:</strong> {shippingCost ? shippingCost.toFixed(2) : 0} VND</p>
+                            <p><strong>Tổng số tiền:</strong> {totalAmount.toFixed(2)} VND</p>
                         </div>
-
-                        <button onClick={() => alert('Thanh toán thành công!')}>Thanh toán</button>
                     </div>
                 )}
 
-                <div className="button-group">
+
+                {/* Navigation */}
+                <div className={styles.navigationButtons}>
                     {step > 1 && <button onClick={handlePrevStep}>Back</button>}
-                    {step < 3 && <button onClick={handleNextStep}>Next</button>}
+                    {step < 2 && <button onClick={handleNextStep}>Next</button>}
+                    {step === 2 && <button>Submit</button>}
                 </div>
             </div>
 
-            <div className="map-container">
-                <MapContainer center={[10.8231, 106.6297]} zoom={12} style={{ height: '100%', width: '100%' }}>
-                    <TileLayer url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png" />
+            {/* Map Section */}
+            <div className={styles.mapContainer}>
+                <MapContainer center={senderCoordinates || [10.8231, 106.6297]} zoom={12} style={{ width: '100%', height: '80vh' }}>
+                    <TileLayer
+                        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                    />
                     {senderCoordinates && <Marker position={senderCoordinates} />}
                     {receiverCoordinates && <Marker position={receiverCoordinates} />}
                 </MapContainer>
