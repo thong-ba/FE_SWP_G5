@@ -54,7 +54,11 @@ function TransportService() {
 
   const openEditModal = (record) => {
     setFormData(record);
-    form.setFieldsValue(record);
+    form.setFieldsValue({
+      ...record,
+      transportType: record.transportType, // Explicitly set hidden fields
+      id: record.id,
+    });
     setShowForm(true);
   };
   const handleCreate = async (values) => {
@@ -90,6 +94,7 @@ function TransportService() {
   };
 
   const handleEdit = async (values) => {
+    console.log("Validated Payload:", values);
     try {
 
       const response = await UpdateTransportService(values);
@@ -358,13 +363,15 @@ function TransportService() {
                 <Select.Option value={false}>Inactive</Select.Option>
               </Select>
             </Form.Item>
-            <Form.Item name="transportServiceId" style={{ display: 'none' }}>
+            <Form.Item name="id" style={{ display: 'none' }}>
               <Input type="hidden" />
             </Form.Item>
             <Form.Item
               label="From Province"
               name="fromProvince"
-              rules={[{ required: true, message: 'Please select the province!' }]}
+              rules={[
+                { required: transportType === 'Domestic' || transportType === 'International', message: 'Please select the province!' }
+              ]}
               style={{ display: transportType === 'Domestic' || transportType === 'International' ? 'block' : 'none' }}
             >
               <Select placeholder="Select From Province">
@@ -379,7 +386,9 @@ function TransportService() {
             <Form.Item
               label="To Province"
               name="toProvince"
-              rules={[{ required: true, message: 'Please select the province!' }]}
+              rules={[
+                { required: transportType === 'Domestic' || transportType === 'International', message: 'Please select the province!' }
+              ]}
               style={{ display: transportType === 'Domestic' || transportType === 'International' ? 'block' : 'none' }}
             >
               <Select placeholder="Select To Province">

@@ -20,8 +20,8 @@ function Login({ setIsLoggedIn }) {
 
       if (response.data.isSuccess) {
         const token = response.data.result; // Token trả về từ API
-        localStorage.setItem('token', token); // Lưu token vào localStorage
-        
+        sessionStorage.setItem('token', token); // Lưu token vào sessionStorage
+
         setMessage('Login successful!');
         setIsLoggedIn(true); // Cập nhật trạng thái đăng nhập
         setTimeout(() => navigate('/home'), 1000); // Chuyển hướng sau 1 giây

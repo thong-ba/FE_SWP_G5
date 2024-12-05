@@ -17,6 +17,37 @@ export const GetAllTransportService = async () => {
   }
 };
 
+export const GetAllLocalTransportService = async () => {
+  try {
+    const response = await axios.get(`${baseLocalUrl}/Local`, headers);
+    return response.data;
+
+  } catch (error) {
+    console.error('Error get Transport Service:', error);
+    throw new Error("Error get Transport Service: " + error.message);
+  }
+};
+export const GetAllDomesticTransportService = async () => {
+  try {
+    const response = await axios.get(`${baseLocalUrl}/Domestic`, headers);
+    return response.data;
+
+  } catch (error) {
+    console.error('Error get Transport Service:', error);
+    throw new Error("Error get Transport Service: " + error.message);
+  }
+};
+export const GetAllInternationalTransportService = async () => {
+  try {
+    const response = await axios.get(`${baseLocalUrl}/International`, headers);
+    return response.data;
+
+  } catch (error) {
+    console.error('Error get Transport Service:', error);
+    throw new Error("Error get Transport Service: " + error.message);
+  }
+};
+
 // Create a reusable function to update an account
 export const UpdateTransportService = async (data) => {
   try {
@@ -41,33 +72,6 @@ export const CreateTransportService = async (transportType, transportServiceData
     throw error; // Rethrow the error for handling in the calling function
   }
 };
-// export async function CreateTransportLocalService(transportServiceData) {
-//   try {
-//     const response = await axios.post(`${baseAccountUrl}/AddTransportLocalService`, transportServiceData, headers); // Send POST request
-//     return response.data; // Return the added additionalServiceData data
-//   } catch (error) {
-//     console.error('Error adding Transport Service Data:', error);
-//     throw error; // Rethrow the error for handling in the calling function
-//   }
-// }
-// export async function CreateTransportDomesticService(transportServiceData) {
-//   try {
-//     const response = await axios.post(`${baseAccountUrl}/AddTransportDomesticService`, transportServiceData, headers); // Send POST request
-//     return response.data; // Return the added additionalServiceData data
-//   } catch (error) {
-//     console.error('Error adding Transport Service Data:', error);
-//     throw error; // Rethrow the error for handling in the calling function
-//   }
-// }
-// export async function CreateTransportInternationalService(transportServiceData) {
-//   try {
-//     const response = await axios.post(`${baseAccountUrl}/AddTransportInternationalService`, transportServiceData, headers); // Send POST request
-//     return response.data; // Return the added additionalServiceData data
-//   } catch (error) {
-//     console.error('Error adding Transport Service Data:', error);
-//     throw error; // Rethrow the error for handling in the calling function
-//   }
-// }
 
 // src/api/TransportServiceApi.js
 export const DeleteTransportService = async (id) => {

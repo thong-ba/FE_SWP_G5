@@ -87,12 +87,19 @@ function Manager() {
             <li>
               <button onClick={() => {
                 Modal.confirm({
+                  className: 'custom-modal', // Custom modal class
                   title: 'Confirm Logout',
                   content: 'Are you sure you want to log out?',
                   onOk() {
                     // Call the logout logic directly
                     sessionStorage.clear(); // Clear session storage
                     window.location.href = '/login'; // Change '/login' to your desired redirect URL
+                  },
+                  okButtonProps: {
+                    className: 'custom-ok-button', // Custom class for OK button
+                  },
+                  cancelButtonProps: {
+                    className: 'custom-cancel-button', // Custom class for Cancel button
                   },
                 });
               }} className={activeComponent === 'logout' ? 'active' : ''}>
