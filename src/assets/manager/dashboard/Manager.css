@@ -52,7 +52,7 @@
   background-color: rgba(32, 13, 3, 0.2);
 }
 
-.content {
+.content-manager {
   flex-grow: 1;
   padding: 40px;
   background-color: #fff;
