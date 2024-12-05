@@ -1,0 +1,152 @@
+.staff-container {
+  display: flex;
+  min-height: 100vh;
+  padding: 50px;
+  font-family: "Noto Sans Variable", system-ui, sans-serif;
+  background-color: #f4f4f4;
+}
+
+.staff-sidebar {
+  width: 250px;
+  background-color: #8aacc8;
+  padding: 20px;
+  border-right: 1px solid #d0d0d0;
+}
+
+.staff-sidebar h3 {
+  font-size: 20px;
+  color: #fff;
+  margin-bottom: 20px;
+}
+
+.staff-sidebar ul {
+  list-style: none;
+  padding: 0;
+}
+
+.staff-sidebar ul li {
+  margin-bottom: 15px;
+}
+
+.staff-sidebar ul li button {
+  display: block;
+  width: 100%;
+  padding: 10px 20px;
+  background-color: transparent;
+  border: none;
+  color: #fff;
+  text-align: left;
+  cursor: pointer;
+  border-radius: 5px;
+  transition: background-color 0.3s ease;
+}
+
+.staff-sidebar ul li button.active,
+.staff-sidebar ul li button:hover {
+  background-color: #5d99c6;
+}
+
+.staff-content {
+  flex-grow: 1;
+  padding: 40px;
+  background-color: #fff;
+  border-radius: 10px;
+  margin-left: 20px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.staff-content h2 {
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+.staff-content p {
+  font-size: 16px;
+  margin-bottom: 10px;
+}
+
+/* Bảng đơn hàng */
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.order-table th,
+.order-table td {
+  border: 1px solid #ddd;
+  padding: 12px;
+  text-align: center;
+}
+
+.order-table th {
+  background-color: #f4f4f4;
+  font-weight: bold;
+}
+
+.order-table tr:nth-child(even) {
+  background-color: #f9f9f9;
+}
+
+.order-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.order-table td button {
+  padding: 5px 10px;
+  margin: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.order-table td .btn-detail {
+  background-color: #5bc0de;
+  color: white;
+}
+
+.order-table td .btn-confirm {
+  background-color: #5cb85c;
+  color: white;
+}
+
+.order-table td .btn-cancel {
+  background-color: #d9534f;
+  color: white;
+}
+
+/* Thêm hiệu ứng cho nút khi hover */
+.order-table td button:hover {
+  opacity: 0.8;
+}
+
+/* Thông tin cá nhân */
+.personal-info-container {
+  display: flex;
+  align-items: flex-start;
+  gap: 40px;
+  padding: 20px;
+}
+
+.personal-info-image img {
+  width: 200px;
+  height: 200px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 2px solid #ccc;
+}
+
+.personal-info-details {
+  flex: 1;
+}
+
+.personal-info-details h2 {
+  margin-bottom: 15px;
+}
+
+.personal-info-details p {
+  margin: 8px 0;
+  font-size: 16px;
+  text-align: justify;
+}
