@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
+import { loginUser } from '../../../api/AuthApi';
 
 function Login({ setIsLoggedIn }) {
   const [email, setEmail] = useState('');
@@ -12,25 +13,12 @@ function Login({ setIsLoggedIn }) {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    try {
-      const response = await axios.post('https://localhost:7046/api/Auth/login', {
-        userEmail: email,
-        password: password,
-      });
+    const { success, message } = await loginUser(email, password);
 
-      if (response.data.isSuccess) {
-        const token = response.data.result; // Token trả về từ API
-        sessionStorage.setItem('token', token); // Lưu token vào sessionStorage
-
-        setMessage('Login successful!');
-        setIsLoggedIn(true); // Cập nhật trạng thái đăng nhập
-        setTimeout(() => navigate('/home'), 1000); // Chuyển hướng sau 1 giây
-      } else {
-        setMessage('Login failed: ' + (response.data.errorMessage || 'Unknown error'));
-      }
-    } catch (error) {
-      console.error(error);
-      setMessage('Error: Unable to connect to server.');
+    setMessage(message);
+    if (success) {
+      setIsLoggedIn(true); // Update login status
+      setTimeout(() => navigate('/home'), 1000); // Redirect after 1 second
     }
   };
 
