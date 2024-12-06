@@ -1,0 +1,12 @@
+/* Add this to your CSS file */
+.card-hover {
+  background-color: rgb(180, 113, 180);
+  transition: transform 0.2s, box-shadow 0.2s; /* Smooth transition for transform and shadow */
+}
+
+.card-hover:hover {
+  transform: scale(1.05); /* Scale up the card slightly */
+  box-shadow  : 0 4px 20px rgba(0, 0, 0, 0.2); /* Add a shadow effect */
+  background-color: rgb(146, 68, 146);
+  color: aliceblue; 
+}
