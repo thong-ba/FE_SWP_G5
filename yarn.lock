@@ -6679,6 +6679,11 @@ jsonpointer@^5.0.0:
     object.assign "^4.1.4"
     object.values "^1.1.6"
 
+jwt-decode@^4.0.0:
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-4.0.0.tgz#2270352425fd413785b2faf11f6e755c5151bd4b"
+  integrity sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==
+
 kdbush@^4.0.2:
   version "4.0.2"
   resolved "https://registry.npmjs.org/kdbush/-/kdbush-4.0.2.tgz"
@@ -6720,7 +6725,7 @@ klona@^2.0.4, klona@^2.0.5:
     "@testing-library/user-event" "^13.2.1"
     antd "^5.22.3"
     axios "^1.7.8"
-    koi-ordering "file:C:/Users/huy/AppData/Local/Yarn/Cache/v6/npm-koi-ordering-0.1.0-7f27aad9-8a44-4aec-a173-2ac211490e86-1733398516822/node_modules/koi-ordering"
+    koi-ordering "file:../../../../../AppData/Local/Yarn/Cache/v6/npm-koi-ordering-0.1.0-5e3b96e9-08f2-4897-b8cb-8e4daa3374c7-1733720842332/node_modules/koi-ordering"
     leaflet "^1.9.4"
     react "^18.3.1"
     react-dom "^18.3.1"
