@@ -52,12 +52,16 @@ function App() {
       setIsLoggedIn(true);
       setUserRole(decoded.Role || null);
 
-      // Điều hướng ngay sau khi đăng nhập
       if (decoded.Role === 'Manager') {
         navigate('/manager');
-      } else if (decoded.Role === 'Staff') {
+      } else if (decoded.Role === 'SalesStaff' ) {
         navigate('/staff');
-      } else {
+      } else if(decoded.Role === 'DeliveringStaff')
+      {
+        navigate('/staff');
+      }
+      
+      else {
         navigate('/home');
       }
     } catch (error) {
@@ -177,7 +181,7 @@ function App() {
       <Route
         path="/staff"
         element={
-          userRole === 'Staff' ? (
+          userRole === 'DeliveringStaff' ? (
             <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
               <Staff />
             </LayoutUtils>

@@ -53,7 +53,7 @@ function Login({ onLogin }) {
       </form>
       {message && <div className="message-box">{message}</div>}
       <p>
-        Don't have an account? <a href="/register">Register here</a>
+        Don't have an account? <a href="/register" className="register-link-text" >Register here</a>
       </p>
     </div>
   );
