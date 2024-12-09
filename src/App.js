@@ -70,11 +70,171 @@
 
 
 
+// import React, { useState, useEffect } from 'react';
+// import { Routes, Route, Navigate } from 'react-router-dom';
+// import LayoutUtils from './assets/utils/LayoutUtils';
+// import { jwtDecode } from 'jwt-decode'; // Không thêm dấu ngoặc nhọn.
+// // Sử dụng thư viện để decode token
+// import axios from 'axios';
+
+// import HomePage from './assets/user/home/HomePage';
+// import Login from './assets/user/login/Login';
+// import Register from './assets/user/register/Register';
+// import BookingOrder from './assets/user/bookingorder/BookingOrder';
+// import Payment from './assets/user/payment/Payment';
+// import Service from './assets/user/services/Service';
+// import UserInfo from './assets/user/userinfo/UserInfo';
+// import VerifyAccount from './assets/user/verify/VerifyAccount';
+
+// import Manager from './assets/manager/dashboard/Manager';
+// import Staff from './assets/staff/dashboard/Staff';
+
+// function App() {
+//   const [isLoggedIn, setIsLoggedIn] = useState(false);
+//   const [userRole, setUserRole] = useState(null); // Lưu vai trò người dùng
+
+//   useEffect(() => {
+//     const checkToken = () => {
+//       const token = sessionStorage.getItem('token');
+//       if (token) {
+//         try {
+//           const decoded = jwtDecode(token); // Decode token
+//           const currentTime = Math.floor(Date.now() / 1000);
+
+//           if (decoded.exp > currentTime) {
+//             setIsLoggedIn(true);
+//             setUserRole(decoded.Role || null); // Lấy vai trò từ token
+//           } else {
+//             sessionStorage.removeItem('token');
+//             setIsLoggedIn(false);
+//           }
+//         } catch (error) {
+//           console.error('Token decoding failed:', error);
+//           sessionStorage.removeItem('token');
+//           setIsLoggedIn(false);
+//         }
+//       }
+//     };
+
+//     checkToken();
+//   }, []);
+
+//   const handleLogout = () => {
+//     sessionStorage.removeItem('token');
+//     setIsLoggedIn(false);
+//     setUserRole(null);
+//   };
+
+//   return (
+//     <Routes>
+//       <Route
+//         path="/"
+//         element={
+//           <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+//             <HomePage />
+//           </LayoutUtils>
+//         }
+//       />
+//       <Route
+//         path="/home"
+//         element={
+//           <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+//             <HomePage />
+//           </LayoutUtils>
+//         }
+//       />
+//       <Route
+//         path="/login"
+//         element={
+//           isLoggedIn ? (
+//             <Navigate to="/home" />
+//           ) : (
+//             <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+//               <Login setIsLoggedIn={setIsLoggedIn} />
+//             </LayoutUtils>
+//           )
+//         }
+//       />
+//       <Route
+//         path="/register"
+//         element={
+//           <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+//             <Register />
+//           </LayoutUtils>
+//         }
+//       />
+//       <Route
+//         path="/bookingorder"
+//         element={
+//           isLoggedIn ? (
+//             <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+//               <BookingOrder />
+//             </LayoutUtils>
+//           ) : (
+//             <Navigate to="/login" />
+//           )
+//         }
+//       />
+//       <Route
+//         path="/payment"
+//         element={
+//           isLoggedIn ? (
+//             <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+//               <Payment />
+//             </LayoutUtils>
+//           ) : (
+//             <Navigate to="/login" />
+//           )
+//         }
+//       />
+//       <Route
+//         path="/service"
+//         element={
+//           <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+//             <Service />
+//           </LayoutUtils>
+//         }
+//       />
+//       <Route
+//         path="/userinfo"
+//         element={
+//           <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+//             <UserInfo />
+//           </LayoutUtils>
+//         }
+//       />
+//       <Route
+//         path="/verify/:userId"
+//         element={
+//           <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+//             <VerifyAccount setIsLoggedIn={setIsLoggedIn} />
+//           </LayoutUtils>
+//         }
+//       />
+
+//       {/* Routes cho manager và staff */}
+//       {userRole === 'Manager' && (
+//         <Route path="/manager" element={<Manager />} />
+//       )}
+//       {userRole === 'Staff' && <Route path="/staff" element={<Staff />} />}
+
+//       {/* Redirect nếu không phù hợp */}
+//       <Route path="*" element={<Navigate to="/home" />} />
+//     </Routes>
+//   );
+// }
+
+// export default App;
+
+
+
+
+
+
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LayoutUtils from './assets/utils/LayoutUtils';
-import { jwtDecode } from 'jwt-decode'; // Không thêm dấu ngoặc nhọn.
-// Sử dụng thư viện để decode token
+import {jwtDecode} from 'jwt-decode'; // Không thêm dấu ngoặc nhọn.
 import axios from 'axios';
 
 import HomePage from './assets/user/home/HomePage';
@@ -93,6 +253,7 @@ function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState(null); // Lưu vai trò người dùng
 
+  // Kiểm tra token khi tải ứng dụng
   useEffect(() => {
     const checkToken = () => {
       const token = sessionStorage.getItem('token');
@@ -119,14 +280,16 @@ function App() {
     checkToken();
   }, []);
 
+  // Xử lý đăng xuất
   const handleLogout = () => {
-    sessionStorage.removeItem('token');
-    setIsLoggedIn(false);
-    setUserRole(null);
+    sessionStorage.removeItem('token'); // Xóa token
+    setIsLoggedIn(false); // Cập nhật trạng thái đăng xuất
+    setUserRole(null); // Xóa vai trò người dùng
   };
 
   return (
     <Routes>
+      {/* Trang chủ */}
       <Route
         path="/"
         element={
@@ -143,6 +306,8 @@ function App() {
           </LayoutUtils>
         }
       />
+
+      {/* Trang đăng nhập */}
       <Route
         path="/login"
         element={
@@ -155,6 +320,8 @@ function App() {
           )
         }
       />
+
+      {/* Trang đăng ký */}
       <Route
         path="/register"
         element={
@@ -163,6 +330,8 @@ function App() {
           </LayoutUtils>
         }
       />
+
+      {/* Trang đặt hàng */}
       <Route
         path="/bookingorder"
         element={
@@ -175,6 +344,8 @@ function App() {
           )
         }
       />
+
+      {/* Trang thanh toán */}
       <Route
         path="/payment"
         element={
@@ -187,6 +358,8 @@ function App() {
           )
         }
       />
+
+      {/* Trang dịch vụ */}
       <Route
         path="/service"
         element={
@@ -195,6 +368,8 @@ function App() {
           </LayoutUtils>
         }
       />
+
+      {/* Trang thông tin người dùng */}
       <Route
         path="/userinfo"
         element={
@@ -203,6 +378,8 @@ function App() {
           </LayoutUtils>
         }
       />
+
+      {/* Trang xác minh tài khoản */}
       <Route
         path="/verify/:userId"
         element={
@@ -214,9 +391,25 @@ function App() {
 
       {/* Routes cho manager và staff */}
       {userRole === 'Manager' && (
-        <Route path="/manager" element={<Manager />} />
+        <Route
+          path="/manager"
+          element={
+            <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+              <Manager />
+            </LayoutUtils>
+          }
+        />
       )}
-      {userRole === 'Staff' && <Route path="/staff" element={<Staff />} />}
+      {userRole === 'Staff' && (
+        <Route
+          path="/staff"
+          element={
+            <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+              <Staff />
+            </LayoutUtils>
+          }
+        />
+      )}
 
       {/* Redirect nếu không phù hợp */}
       <Route path="*" element={<Navigate to="/home" />} />
