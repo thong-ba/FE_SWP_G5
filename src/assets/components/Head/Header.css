@@ -73,13 +73,14 @@
 }
 
 .services:hover .dropdown {
-  display: block;
+  display: flex;
 }
 
 .dropdown-item a {
   color: white;
-  display: block;
-  padding: 8px 12px;
+  display: flex;
+  padding: auto;
+  width: 120px;
   transition: background-color 0.3s ease-in-out;
 }
 

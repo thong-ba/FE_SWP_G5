@@ -10,6 +10,8 @@ import BookingOrder from './assets/user/bookingorder/BookingOrder';
 import Payment from './assets/user/payment/Payment';
 import Service from './assets/user/services/Service';
 import UserInfo from './assets/user/userinfo/UserInfo';
+import TrackOrder from './assets/user/trackorder/TrackOrder';
+
 import VerifyAccount from './assets/user/verify/VerifyAccount';
 
 import Manager from './assets/manager/dashboard/Manager';
@@ -122,6 +124,18 @@ function App() {
           )
         }
       />
+      <Route
+        path="/trackorder"
+        element={
+          isLoggedIn ? (
+            <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+              <TrackOrder />
+            </LayoutUtils>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
        <Route
         path="/payment"
         element={
@@ -146,6 +160,7 @@ function App() {
           </LayoutUtils>
         }
       />
+      
       <Route
         path="/manager"
         element={
@@ -158,7 +173,7 @@ function App() {
           )
         }
       />
-      
+
       <Route
         path="/staff"
         element={

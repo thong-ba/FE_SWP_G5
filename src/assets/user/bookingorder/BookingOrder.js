@@ -176,19 +176,19 @@ const BookingOrder = () => {
                                 className={`${styles.optionButton} ${shippingType === 'express' ? styles.selected : ''}`}
                                 onClick={() => setShippingType('express')}
                             >
-                                Hoả tốc
+                                EXPRESS
                             </div>
                             <div
                                 className={`${styles.optionButton} ${shippingType === 'fast' ? styles.selected : ''}`}
                                 onClick={() => setShippingType('fast')}
                             >
-                                Nhanh
+                                FAST
                             </div>
                             <div
                                 className={`${styles.optionButton} ${shippingType === 'standard' ? styles.selected : ''}`}
                                 onClick={() => setShippingType('standard')}
                             >
-                                Tiêu chuẩn
+                                STANDARD
                             </div>
                         </div>
 

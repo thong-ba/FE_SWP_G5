@@ -42,7 +42,7 @@ const Header = ({ isLoggedIn, handleLogout }) => {
               </ul>
             )}
           </li>
-          <li className="nav-item"><Link to="/track-order">Track Order</Link></li>
+          <li className="nav-item"><Link to="/trackorder">Track Order</Link></li>
           <li className="nav-item"><Link to="/abouts">About Koi Fish</Link></li>
           <li className="nav-item"><Link to="/support">Support</Link></li>
 
