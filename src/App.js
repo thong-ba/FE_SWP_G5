@@ -89,32 +89,43 @@ import VerifyAccount from './assets/user/verify/VerifyAccount';
 import Manager from './assets/manager/dashboard/Manager';
 import Staff from './assets/staff/dashboard/Staff';
 
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState(null); // Lưu vai trò người dùng
 
   useEffect(() => {
     const checkToken = () => {
-      const token = sessionStorage.getItem('token');
+      const token = sessionStorage.getItem("token");
       if (token) {
         try {
-          const decoded = jwtDecode(token); // Decode token
+          const decoded = jwtDecode(token);
+          console.log("Decoded token:", decoded);
           const currentTime = Math.floor(Date.now() / 1000);
 
           if (decoded.exp > currentTime) {
             setIsLoggedIn(true);
-            setUserRole(decoded.Role || null); // Lấy vai trò từ token
+
+            // Dynamically find the Role key
+            const roleKey = Object.keys(decoded).find((key) =>
+              key.toLowerCase().includes("role")
+            );
+            setUserRole(decoded[roleKey] || null);
+
+            console.log("User Role:", decoded[roleKey] || null);
           } else {
-            sessionStorage.removeItem('token');
+            sessionStorage.removeItem("token");
             setIsLoggedIn(false);
           }
         } catch (error) {
-          console.error('Token decoding failed:', error);
-          sessionStorage.removeItem('token');
+          console.error("Token decoding failed:", error);
+          sessionStorage.removeItem("token");
           setIsLoggedIn(false);
         }
       }
     };
+
+
 
     checkToken();
   }, []);
@@ -126,6 +137,7 @@ function App() {
   };
 
   return (
+
     <Routes>
       <Route
         path="/"
@@ -147,10 +159,14 @@ function App() {
         path="/login"
         element={
           isLoggedIn ? (
-            <Navigate to="/home" />
+            userRole === "Manager" ? (
+              <Navigate to="/manager" />
+            ) : (
+              <Navigate to="/home" />
+            )
           ) : (
             <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
-              <Login setIsLoggedIn={setIsLoggedIn} />
+              <Login setIsLoggedIn={setIsLoggedIn} setUserRole={setUserRole} />
             </LayoutUtils>
           )
         }
@@ -213,9 +229,19 @@ function App() {
       />
 
       {/* Routes cho manager và staff */}
-      {userRole === 'Manager' && (
-        <Route path="/manager" element={<Manager />} />
-      )}
+      <Route
+        path="/manager"
+        element={
+          isLoggedIn && userRole === "Manager" ? (
+            <Manager />
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+
+
+
       {userRole === 'Staff' && <Route path="/staff" element={<Staff />} />}
 
       {/* Redirect nếu không phù hợp */}

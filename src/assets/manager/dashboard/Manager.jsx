@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import TransportService from '../transportservice/TransportService.jsx';
 import AccountManagement from '../accountmanage/AccountManager.jsx';
 import AddtionalService from '../additionalservice/AdditionalService.jsx'
+import OrderManagement from '../order/OrderManagement.jsx'
 // import ManageRoute from './manageroute';
 // import Analytics from './analytics';
 import './Manager.css';
@@ -13,6 +14,7 @@ function Manager() {
   const [selectedAccountId, setSelectedAccountId] = useState(null); // New state for selected account
   const [selectedAdditionalServiceId, setSelectedAdditionalServiceId] = useState(null); // New state for selected account
   // const [selectedRouteId, setSelectedRouteId] = useState(null); // New state for selected route 
+  const [selectedOrderId, setSelectedOrderId] = useState(null);
 
   const handleAccountClick = (accountId) => { // Updated function for account management
     setSelectedAccountId(accountId);
@@ -36,6 +38,8 @@ function Manager() {
         return <AddtionalService selectedAdditionalServiceId={selectedAdditionalServiceId} />; // Pass the selected ID to the component
       // case 'manageRoute':
       //   return <ManageRoute />;
+      case 'orderManagement':
+        return <OrderManagement selectedOrderId={selectedAccountId} />
       // case 'analytics':
       //   return <Analytics />;
       default:
@@ -62,6 +66,11 @@ function Manager() {
             <li>
               <button onClick={() => setActiveComponent('profile')} className={activeComponent === 'profile' ? 'active' : ''}>
                 Profile
+              </button>
+            </li>
+            <li>
+              <button onClick={() => setActiveComponent('orderManagement')} className={activeComponent === 'orderManagement' ? 'active' : ''}>
+                Manage Orders
               </button>
             </li>
             <li>
