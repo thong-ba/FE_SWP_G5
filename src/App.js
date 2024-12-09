@@ -1,6 +1,80 @@
+// import React, { useState, useEffect } from 'react';
+// import { Routes, Route } from 'react-router-dom';
+// import LayoutUtils from './assets/utils/LayoutUtils';
+// import axios from 'axios';
+
+// import HomePage from './assets/user/home/HomePage';
+// import Login from './assets/user/login/Login';
+// import Register from './assets/user/register/Register';
+// import BookingOrder from './assets/user/bookingorder/BookingOrder';
+// import Payment from './assets/user/payment/Payment';
+// import Service from './assets/user/services/Service';
+// import VerifyAccount from './assets/user/verify/VerifyAccount';
+
+// import Manager from './assets/manager/dashboard/Manager';
+// import Staff from './assets/staff/dashboard/Staff';
+
+// function App() {
+//   const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+//   useEffect(() => {
+//     const checkToken = async () => {
+//       const token = sessionStorage.getItem('token');
+//       if (token) {
+//         try {
+//           const response = await axios.post('https://localhost:7046/api/Auth/verify-token', { token });
+
+//           if (response.data.isValid) {
+//             setIsLoggedIn(true);
+//           } else {
+//             sessionStorage.removeItem('token');
+//           }
+//         } catch (error) {
+//           console.error('Token verification failed:', error);
+//           sessionStorage.removeItem('token');
+//         }
+//       }
+//     };
+
+//     checkToken();
+//   }, []);
+
+//   const handleLogout = () => {
+//     sessionStorage.removeItem('token');
+//     setIsLoggedIn(false);
+//   };
+
+//   return (
+//     <Routes>
+//       <Route path="/" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
+//       <Route path="/home" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
+//       <Route path="/login" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Login setIsLoggedIn={setIsLoggedIn} /></LayoutUtils>} />
+//       <Route path="/register" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Register /></LayoutUtils>} />
+//       <Route path="/bookingorder" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><BookingOrder /></LayoutUtils>} />
+//       <Route path="/payment" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Payment /></LayoutUtils>} />
+//       <Route path="/service" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Service /></LayoutUtils>} />
+//       <Route path="/verify/:userId" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><VerifyAccount setIsLoggedIn={setIsLoggedIn} /></LayoutUtils>} />
+
+
+
+//       <Route path="/staff" element={<Staff />} />
+//       <Route path="/manager" element={<Manager />} />
+//     </Routes>
+//   );
+// }
+
+// export default App;
+
+
+
+
+
+
 import React, { useState, useEffect } from 'react';
-import { Routes, Route } from 'react-router-dom';
+import { Routes, Route, Navigate } from 'react-router-dom';
 import LayoutUtils from './assets/utils/LayoutUtils';
+import { jwtDecode } from 'jwt-decode'; // Không thêm dấu ngoặc nhọn.
+// Sử dụng thư viện để decode token
 import axios from 'axios';
 
 import HomePage from './assets/user/home/HomePage';
@@ -9,6 +83,8 @@ import Register from './assets/user/register/Register';
 import BookingOrder from './assets/user/bookingorder/BookingOrder';
 import Payment from './assets/user/payment/Payment';
 import Service from './assets/user/services/Service';
+import UserInfo from './assets/user/userinfo/UserInfo';
+import VerifyAccount from './assets/user/verify/VerifyAccount';
 
 import MapView from './assets/driver/currentlocation/MapView';
 
@@ -17,6 +93,7 @@ import Staff from './assets/staff/dashboard/Staff';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const [userRole, setUserRole] = useState(null); // Lưu vai trò người dùng
   const [location, setLocation] = useState({
     latitude: null,
     longitude: null,
@@ -88,20 +165,24 @@ function App() {
     }, []);
 
   useEffect(() => {
-    const checkToken = async () => {
-      const token = localStorage.getItem('token');
+    const checkToken = () => {
+      const token = sessionStorage.getItem('token');
       if (token) {
         try {
-          const response = await axios.post('https://localhost:7046/api/Auth/verify-token', { token });
+          const decoded = jwtDecode(token); // Decode token
+          const currentTime = Math.floor(Date.now() / 1000);
 
-          if (response.data.isValid) {
+          if (decoded.exp > currentTime) {
             setIsLoggedIn(true);
+            setUserRole(decoded.Role || null); // Lấy vai trò từ token
           } else {
-            localStorage.removeItem('token');
+            sessionStorage.removeItem('token');
+            setIsLoggedIn(false);
           }
         } catch (error) {
-          console.error('Token verification failed:', error);
-          localStorage.removeItem('token');
+          console.error('Token decoding failed:', error);
+          sessionStorage.removeItem('token');
+          setIsLoggedIn(false);
         }
       }
     };
@@ -110,12 +191,106 @@ function App() {
   }, []);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     setIsLoggedIn(false);
+    setUserRole(null);
   };
 
   return (
     <Routes>
+      <Route
+        path="/"
+        element={
+          <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+            <HomePage />
+          </LayoutUtils>
+        }
+      />
+      <Route
+        path="/home"
+        element={
+          <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+            <HomePage />
+          </LayoutUtils>
+        }
+      />
+      <Route
+        path="/login"
+        element={
+          isLoggedIn ? (
+            <Navigate to="/home" />
+          ) : (
+            <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+              <Login setIsLoggedIn={setIsLoggedIn} />
+            </LayoutUtils>
+          )
+        }
+      />
+      <Route
+        path="/register"
+        element={
+          <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+            <Register />
+          </LayoutUtils>
+        }
+      />
+      <Route
+        path="/bookingorder"
+        element={
+          isLoggedIn ? (
+            <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+              <BookingOrder />
+            </LayoutUtils>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+      <Route
+        path="/payment"
+        element={
+          isLoggedIn ? (
+            <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+              <Payment />
+            </LayoutUtils>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+      <Route
+        path="/service"
+        element={
+          <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+            <Service />
+          </LayoutUtils>
+        }
+      />
+      <Route
+        path="/userinfo"
+        element={
+          <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+            <UserInfo />
+          </LayoutUtils>
+        }
+      />
+      <Route
+        path="/verify/:userId"
+        element={
+          <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+            <VerifyAccount setIsLoggedIn={setIsLoggedIn} />
+          </LayoutUtils>
+        }
+      />
+
+      {/* Routes cho manager và staff */}
+      {userRole === 'Manager' && (
+        <Route path="/manager" element={<Manager />} />
+      )}
+      {userRole === 'Staff' && <Route path="/staff" element={<Staff />} />}
+
+      {/* Redirect nếu không phù hợp */}
+      <Route path="*" element={<Navigate to="/home" />} />
       <Route path="/" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
       <Route path="/home" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
       <Route path="/login" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Login setIsLoggedIn={setIsLoggedIn} /></LayoutUtils>} />

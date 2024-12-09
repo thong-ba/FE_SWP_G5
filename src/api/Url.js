@@ -1,5 +1,6 @@
 const Url = "https://67040f16ab8a8f892732c8b7.mockapi.io/";
 const localUrl = "https://localhost:7046/api";
+const ngrokUrl = "https://bd85-115-73-106-242.ngrok-free.app/api";
 const getJwtToken = () => {
   const token = sessionStorage.getItem("accessToken")
   return token
@@ -12,4 +13,4 @@ const headers = {
 };
 
 
-export { headers, Url, getJwtToken, localUrl };
+export { headers, Url, getJwtToken, localUrl, ngrokUrl };
