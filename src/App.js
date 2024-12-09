@@ -190,6 +190,18 @@ function App() {
           )
         }
       />
+      <Route
+        path="/staff"
+        element={
+          userRole === 'SalesStaff' ? (
+            <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+              <Staff />
+            </LayoutUtils>
+          ) : (
+            <Navigate to="/home" />
+          )
+        }
+      />
       <Route path="*" element={<Navigate to="/home" />} />
     </Routes>
   );
