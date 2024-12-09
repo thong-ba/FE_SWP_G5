@@ -1,10 +1,25 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Modal, Form, Input, Switch, Select, Card } from 'antd';
+import { Button, Table, Modal, Form, Input, Switch, Select, Card, Dropdown } from 'antd';
 import { toast, ToastContainer } from 'react-toastify';
 import './TransportService.css'
 import 'react-toastify/dist/ReactToastify.css';
-import { GetAllTransportService, CreateTransportDomesticService, CreateTransportInternationalService, CreateTransportLocalService, UpdateTransportService, DeleteTransportService } from '../../../api/TransportServiceApi';
+import { GetAllTransportService, CreateTransportService, UpdateTransportService, DeleteTransportService } from '../../../api/TransportServiceApi';
 
+const vietnamProvinces = [
+  "An Giang", "Bà Rịa - Vũng Tàu", "Bạc Liêu", "Bắc Giang", "Bắc Kạn",
+  "Bắc Ninh", "Bến Tre", "Bình Dương", "Bình Định", "Bình Phước",
+  "Bình Thuận", "Cà Mau", "Cần Thơ", "Cao Bằng", "Đà Nẵng",
+  "Đắk Lắk", "Đắk Nông", "Điện Biên", "Đồng Nai", "Đồng Tháp",
+  "Gia Lai", "Hà Giang", "Hà Nam", "Hà Nội", "Hà Tĩnh",
+  "Hải Dương", "Hải Phòng", "Hậu Giang", "Hòa Bình", "Hưng Yên",
+  "Khánh Hòa", "Kiên Giang", "Kon Tum", "Lai Châu", "Lâm Đồng",
+  "Lạng Sơn", "Lào Cai", "Long An", "Nam Định", "Nghệ An",
+  "Ninh Bình", "Ninh Thuận", "Phú Thọ", "Phú Yên", "Quảng Bình",
+  "Quảng Nam", "Quảng Ngãi", "Quảng Ninh", "Quảng Trị", "Sóc Trăng",
+  "Sơn La", "Tây Ninh", "Thái Bình", "Thái Nguyên", "Thanh Hóa",
+  "Thừa Thiên Huế", "Tiền Giang", "TP Hồ Chí Minh", "Trà Vinh", "Tuyên Quang",
+  "Vĩnh Long", "Vĩnh Phúc", "Yên Bái"
+];
 
 
 
@@ -15,6 +30,7 @@ function TransportService() {
   const [loading, setLoading] = useState(true);
   const [form] = Form.useForm();
   const [showTransportOptions, setShowTransportOptions] = useState(false);
+  const [transportType, setTransportType] = useState(null);
 
   // Move fetchData outside useEffect so it can be reused
   const fetchData = async () => {
@@ -38,38 +54,31 @@ function TransportService() {
 
   const openEditModal = (record) => {
     setFormData(record);
-    form.setFieldsValue(record);
+    form.setFieldsValue({
+      ...record,
+      transportType: record.transportType, // Explicitly set hidden fields
+      id: record.id,
+    });
     setShowForm(true);
   };
   const handleCreate = async (values) => {
     try {
-      let response;
+      const { transportType, ...rest } = values; // Exclude transportType from the body
+      const response = await CreateTransportService(transportType, rest);
 
-      // Determine the service type and call the appropriate function
-      switch (values.transportType) {
-        case 'Local':
-          response = await CreateTransportLocalService(values);
-          break;
-        case 'Domestic':
-          response = await CreateTransportDomesticService(values);
-          break;
-        case 'International':
-          response = await CreateTransportInternationalService(values);
-          break;
-        default:
-          throw new Error("Invalid service type");
-      }
-
-      if (response.success) {
-        toast.success(`${values.transportType} transport service added successfully`);
-        fetchData(); // Refetch data to reflect changes
-        setShowForm(false); // Close the form modal
+      if (response.data.isSuccess) {
+        toast.success(`${transportType} transport service added successfully`);
+        fetchData(); // Refresh data
+        setShowForm(false); // Close form modal
+      } else {
+        toast.error(response.data.message);
       }
     } catch (error) {
       console.error("Error adding transport service:", error);
       toast.error("Failed to add transport service");
     }
   };
+
   const handleDelete = async (id) => {
     try {
       const response = await DeleteTransportService(id);
@@ -85,6 +94,7 @@ function TransportService() {
   };
 
   const handleEdit = async (values) => {
+    console.log("Validated Payload:", values);
     try {
 
       const response = await UpdateTransportService(values);
@@ -135,14 +145,13 @@ function TransportService() {
   //   }
   // };
 
-  const handleTransportSelect = (transportType) => {
-    console.log("Selected Transport Type:", transportType);
+  const handleTransportSelect = (type) => {
+    setTransportType(type);
+    form.setFieldsValue({ transportType: type });
     setShowTransportOptions(false);
-
-    if (transportType === 'Local') {
-      setShowForm(true);
-    }
+    setShowForm(true);
   };
+
 
   const transportOptions = [
     { title: 'Local Transport', type: 'Local' },
@@ -178,7 +187,22 @@ function TransportService() {
     {
       title: 'Status',
       dataIndex: 'isActive',
-      render: (isActive) => (isActive ? 'Active' : 'Inactive'), // Render based on isActive value
+      render: (isActive) => (
+        <Button
+          type="primary"
+          style={{
+            backgroundColor: isActive ? '#4CAF50' : 'rgba(76, 175, 80, 0.5)', // Green for active, semi-transparent for inactive
+            color: isActive ? 'white' : 'rgba(255, 255, 255, 0.5)', // White text for active, semi-transparent for inactive
+            border: `2px solid ${isActive ? '#4CAF50' : 'rgba(76, 175, 80, 0.5)'}`, // Add solid border with color
+            opacity: isActive ? 1 : 0.2, // Decrease opacity for inactive
+            cursor: 'default', // Change cursor to default
+          }}
+          size="small" // Small button size
+          disabled // Disable button to prevent interaction
+        >
+          {isActive ? 'Active' : 'Inactive'}
+        </Button>
+      ),
     },
     // render: (text, record) => (
     //   <Button
@@ -199,12 +223,20 @@ function TransportService() {
         <>
           <Button onClick={() => openEditModal(record)}>Edit</Button>
           <Button
-            danger
+            className='delete-button' // Apply the delete-button class
             onClick={() => {
               Modal.confirm({
+                className: 'custom-modal', // Custom modal class
                 title: 'Confirm Deletion',
                 content: 'Are you sure you want to delete this transport service?',
                 onOk: () => handleDelete(record.id),
+
+                okButtonProps: {
+                  className: 'custom-ok-button', // Custom class for OK button
+                },
+                cancelButtonProps: {
+                  className: 'custom-cancel-button', // Custom class for Cancel button
+                },
               });
             }}
           >
@@ -228,7 +260,7 @@ function TransportService() {
         </button>
         <Modal
           title={<div style={{ textAlign: 'center', marginBottom: 30, fontSize: 30 }}>Select Transport Type</div>} // Center the modal title
-          visible={showTransportOptions}
+          open={showTransportOptions}
           onCancel={() => setShowTransportOptions(false)}
           footer={null}
           width={1000}
@@ -283,6 +315,13 @@ function TransportService() {
             >
               <Input />
             </Form.Item>
+            {/* <Form.Item
+              label="Service Name"
+              name="name"
+              rules={formData ? [] : [{ required: true, message: 'Please input service name!' }]}
+            >
+              <Dropdown />
+            </Form.Item> */}
             <Form.Item
               label="Description"
               name="description"
@@ -304,6 +343,9 @@ function TransportService() {
             >
               <Input type="number" />
             </Form.Item>
+            <Form.Item name="transportType" style={{ display: 'none' }}> {/* Hidden field for transportType */}
+              <Input type="hidden" />
+            </Form.Item>
             <Form.Item
               label="Price per Amount"
               name="pricePerAmount"
@@ -311,9 +353,53 @@ function TransportService() {
             >
               <Input type="number" />
             </Form.Item>
-            <Form.Item name="transportServiceId" style={{ display: 'none' }}>
+            <Form.Item
+              label="Status"
+              name="isActive"
+              rules={[{ required: true, message: 'Please select the status!' }]}
+            >
+              <Select placeholder="Select Status">
+                <Select.Option value={true}>Active</Select.Option>
+                <Select.Option value={false}>Inactive</Select.Option>
+              </Select>
+            </Form.Item>
+            <Form.Item name="id" style={{ display: 'none' }}>
               <Input type="hidden" />
             </Form.Item>
+            <Form.Item
+              label="From Province"
+              name="fromProvince"
+              rules={[
+                { required: transportType === 'Domestic' || transportType === 'International', message: 'Please select the province!' }
+              ]}
+              style={{ display: transportType === 'Domestic' || transportType === 'International' ? 'block' : 'none' }}
+            >
+              <Select placeholder="Select From Province">
+                {vietnamProvinces.map((province) => (
+                  <Select.Option key={province} value={province}>
+                    {province}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+
+            <Form.Item
+              label="To Province"
+              name="toProvince"
+              rules={[
+                { required: transportType === 'Domestic' || transportType === 'International', message: 'Please select the province!' }
+              ]}
+              style={{ display: transportType === 'Domestic' || transportType === 'International' ? 'block' : 'none' }}
+            >
+              <Select placeholder="Select To Province">
+                {vietnamProvinces.map((province) => (
+                  <Select.Option key={province} value={province}>
+                    {province}
+                  </Select.Option>
+                ))}
+              </Select>
+            </Form.Item>
+
             <Form.Item>
               <Button type="primary" htmlType="submit" style={{ backgroundColor: '#ff7700', borderColor: '#ff7700' }}>
                 Save

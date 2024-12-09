@@ -6706,6 +6706,31 @@ klona@^2.0.4, klona@^2.0.5:
   resolved "https://registry.npmjs.org/klona/-/klona-2.0.6.tgz"
   integrity sha512-dhG34DXATL5hSxJbIexCft8FChFXtmskoZYnoPWjXQuebWYCNkVeV3KkGegCK9CP1oswI/vQibS2GY7Em/sJJA==
 
+"koi-ordering@file:.":
+  version "0.1.0"
+  dependencies:
+    "@fortawesome/fontawesome-svg-core" "^6.7.1"
+    "@fortawesome/free-brands-svg-icons" "^6.7.1"
+    "@fortawesome/free-regular-svg-icons" "^6.7.1"
+    "@fortawesome/free-solid-svg-icons" "^6.7.1"
+    "@fortawesome/react-fontawesome" "^0.2.2"
+    "@react-google-maps/api" "^2.20.3"
+    "@testing-library/jest-dom" "^5.14.1"
+    "@testing-library/react" "^13.0.0"
+    "@testing-library/user-event" "^13.2.1"
+    antd "^5.22.3"
+    axios "^1.7.8"
+    koi-ordering "file:C:/Users/huy/AppData/Local/Yarn/Cache/v6/npm-koi-ordering-0.1.0-7f27aad9-8a44-4aec-a173-2ac211490e86-1733398516822/node_modules/koi-ordering"
+    leaflet "^1.9.4"
+    react "^18.3.1"
+    react-dom "^18.3.1"
+    react-leaflet "^4.2.1"
+    react-router-dom "6"
+    react-scripts "5.0.1"
+    react-toastify "^10.0.6"
+    uuid "^11.0.3"
+    web-vitals "^2.1.0"
+
 language-subtag-registry@^0.3.20:
   version "0.3.23"
   resolved "https://registry.npmjs.org/language-subtag-registry/-/language-subtag-registry-0.3.23.tgz"
