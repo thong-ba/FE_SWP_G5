@@ -61,13 +61,16 @@ function App() {
             const id = navigator.geolocation.watchPosition(
             // navigator.geolocation.getCurrentPosition(
                 (position) => {
+                  // if (position.coords.accuracy < 50) {
                     setLocation({
                         latitude: position.coords.latitude,
                         longitude: position.coords.longitude,
                         accuracy: position.coords.accuracy,
                     });
-                    console.log("Vị trí:", position.coords.latitude, position.coords.longitude);
-                    console.log("Độ chính xác", position.coords.accuracy, "m");
+                  // } 
+                  // else {
+                  //   console.warn("Location accuracy too low: ", position.coords.accuracy);
+                  // }
                 },
                 (error) => {
                     console.error("Error getting location: ", error);
@@ -75,7 +78,7 @@ function App() {
                 {
                   enableHighAccuracy: true, // Yêu cầu độ chính xác cao
                   maximumAge: 0,            // Không sử dụng vị trí cũ
-                  timeout: 5000
+                  timeout: 10000
                 }
             );
             return () => navigator.geolocation.clearWatch(id);
@@ -120,8 +123,7 @@ function App() {
       <Route path="/bookingorder" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><BookingOrder /></LayoutUtils>} />
       <Route path="/payment" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Payment /></LayoutUtils>} />
       <Route path="/service" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Service /></LayoutUtils>} />
-
-
+      
       <Route path="/staff" element={<Staff />} />
       <Route path="/manager" element={<Manager />} />
       <Route path="/driver" element={<MapView location={location} />} />

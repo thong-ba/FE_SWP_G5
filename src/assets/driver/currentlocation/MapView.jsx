@@ -1,14 +1,16 @@
 import { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 
-function MapView({ location, driverId }) {
+function MapView({ location }) {
     const [mapLocation, setMapLocation] = useState({
         latitude: null,
         longitude: null,
     });
 
+    const driverId = localStorage.getItem('driverId');
+    
     useEffect(() => {
-        if (location || typeof location.latitude === "number" || typeof location.longitude === "number") {
+        if (location && typeof location.latitude === "number" && typeof location.longitude === "number") {
             setMapLocation({
                 latitude: location.latitude,
                 longitude: location.longitude,
@@ -20,7 +22,7 @@ function MapView({ location, driverId }) {
     const updateDriverLocation = async (driverId, latitude, longitude) => {
         try {
             const response = await fetch(`https://localhost:7046/api/Location/${driverId}`, {
-                method: "POST",
+                method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
                 },
@@ -50,7 +52,10 @@ function MapView({ location, driverId }) {
             center={[mapLocation.latitude, mapLocation.longitude]}
             zoom={13}
             style={{ height: "400px", width: "100%" }}
-            whenCreated={(map) => map.invalidateSize()}
+            whenCreated={(map) => {
+                map.invalidateSize();
+                map.setView([mapLocation.latitude, mapLocation.longitude], 13)
+            }}
         >
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
