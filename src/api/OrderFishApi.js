@@ -1,58 +1,73 @@
-import { getJwtToken, Url, headers, localUrl } from "./Url";
 import axios from "axios";
 
+// Base URL for OrderFish API
+const baseOrderFishUrl = "http://localhost:5141/api/OrderFish";
 
-const baseAccountUrl = `${Url}/OrderFish`;
-const baseLocalUrl =   `${localUrl}/OrderFish`;
-
-
+// Get all orders for fish
 export const GetAllOrderFishService = async () => {
-    try {
-      const response = await axios.get(`${baseLocalUrl}`, headers);
-      return response.data;
-  
-    } catch (error) {
-      console.error('Error get OrderFish Service:', error);
-      throw new Error("Error get OrderFish Service: " + error.message);
+  try {
+    const response = await axios.get(`${baseOrderFishUrl}/GetAllOrderFish`);
+    return response.data; // Return all fish orders
+  } catch (error) {
+    console.error("Error in GetAllOrderFishService:", error);
+    throw new Error("Failed to fetch all fish orders: " + error.message);
+  }
+};
+
+// Get fish order by ID
+export const GetOrderFishByIdService = async (id) => {
+  try {
+    const response = await axios.get(`${baseOrderFishUrl}/GetAllOrderFish/${id}`);
+    return response.data; // Return specific fish order
+  } catch (error) {
+    console.error("Error in GetOrderFishByIdService:", error);
+    throw new Error("Failed to fetch fish order by ID: " + error.message);
+  }
+};
+
+// Create a new order for fish
+export const CreateOrderFishService = async (orderFishData) => {
+  try {
+    const response = await axios.post(
+      `${baseOrderFishUrl}/GetCreateOrderFish`,
+      orderFishData
+    ); // Send POST request
+    return response.data; // Return the created fish order
+  } catch (error) {
+    console.error("Error in CreateOrderFishService:", error);
+    throw new Error("Failed to create fish order: " + error.message);
+  }
+};
+
+// Update an existing order for fish
+export const UpdateOrderFishService = async (orderFishData) => {
+  try {
+    const response = await axios.put(
+      `${baseOrderFishUrl}/UpdateOrderFish`,
+      orderFishData
+    );
+    if (response.status === 200) {
+      return { success: true, message: "Fish order updated successfully!" };
+    } else {
+      return { success: false, message: "Failed to update fish order." };
     }
-  };
-  
-  // Create a reusable function to update an account
-  export const UpdateOrderFishService = async (data) => {
-    try {
-      const response = await axios.put(`${baseAccountUrl}`, data);
-  
-      if (response.status === 200) {
-        return { success: true, message: "OrderFish Service updated successfully!" };
-      } else {
-        return { success: false, message: "Failed to update OrderFish Service." };
-      }
-    } catch (error) {
-      console.error('Error updating OrderFish Service:', error);
-      throw new Error("Error updating OrderFish Service: " + error.message);
+  } catch (error) {
+    console.error("Error in UpdateOrderFishService:", error);
+    throw new Error("Failed to update fish order: " + error.message);
+  }
+};
+
+// Delete fish order by ID
+export const DeleteOrderFishService = async (id) => {
+  try {
+    const response = await axios.delete(`${baseOrderFishUrl}/${id}`);
+    if (response.status === 200) {
+      return { success: true, message: "Fish order deleted successfully!" };
+    } else {
+      return { success: false, message: "Failed to delete fish order." };
     }
-  };
-  export async function CreateOrderFishService(orderFishServiceData) {
-    try {
-      const response = await axios.post(`${baseAccountUrl}/AddOrderFishService`, orderFishServiceData, headers); // Send POST request
-      return response.data; // Return the added additionalServiceData data
-    } catch (error) {
-      console.error('Error adding OrderFish Service Data:', error);
-      throw error; // Rethrow the error for handling in the calling function
-    }
-  };
-  export const DeleteOrderFishService = async (id) => {
-    try {
-      const response = await axios.delete(`${baseAccountUrl}/${id}`);
-  
-      if (response.status === 200) {
-        return { success: true, message: "OrderFish Service deleted successfully!" };
-      } else {
-        return { success: false, message: "Failed to delete OrderFish Service." };
-      }
-    } catch (error) {
-      console.error('Error deleting OrderFish Service:', error);
-      throw new Error("Error deleting OrderFish Service: " + error.message);
-    }
-  };
-  
+  } catch (error) {
+    console.error("Error in DeleteOrderFishService:", error);
+    throw new Error("Failed to delete fish order: " + error.message);
+  }
+};
