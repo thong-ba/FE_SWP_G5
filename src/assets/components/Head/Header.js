@@ -38,7 +38,7 @@ const Header = ({ isLoggedIn, handleLogout }) => {
           ) : (
             <>
               <li className="nav-item">
-                <Link to="/profile">
+                <Link to="/userinfo">
                   <img className="user-avatar profile-icon" src="hacker.png" alt="Profile" />
                 </Link>
               </li>

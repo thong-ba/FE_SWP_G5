@@ -73,8 +73,8 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate } from 'react-router-dom';
 import LayoutUtils from './assets/utils/LayoutUtils';
-import {jwtDecode} from 'jwt-decode'; // Không thêm dấu ngoặc nhọn.
- // Sử dụng thư viện để decode token
+import { jwtDecode } from 'jwt-decode'; // Không thêm dấu ngoặc nhọn.
+// Sử dụng thư viện để decode token
 import axios from 'axios';
 
 import HomePage from './assets/user/home/HomePage';
@@ -83,6 +83,7 @@ import Register from './assets/user/register/Register';
 import BookingOrder from './assets/user/bookingorder/BookingOrder';
 import Payment from './assets/user/payment/Payment';
 import Service from './assets/user/services/Service';
+import UserInfo from './assets/user/userinfo/UserInfo';
 import VerifyAccount from './assets/user/verify/VerifyAccount';
 
 import Manager from './assets/manager/dashboard/Manager';
@@ -191,6 +192,14 @@ function App() {
         element={
           <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
             <Service />
+          </LayoutUtils>
+        }
+      />
+      <Route
+        path="/userinfo"
+        element={
+          <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+            <UserInfo />
           </LayoutUtils>
         }
       />
