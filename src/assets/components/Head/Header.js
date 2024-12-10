@@ -25,7 +25,7 @@ const Header = ({ isLoggedIn, handleLogout }) => {
     <header className="header">
       <div className="logo-container">
         <img src="koi-login.png" alt="Logo" className="logo-image" />
-        <h1 className="logo">Koi Ordering</h1>
+        <h1 className="logo"> Koi Ordering</h1>
       </div>
       <nav className="navigation">
         <ul className="nav-list">
