@@ -36,11 +36,20 @@ function TransportService() {
   const fetchData = async () => {
     try {
       const apiResponse = await GetAllTransportService();
-      const apiData = apiResponse.result;
-      setData(apiData);
+      console.log("API Response:", apiResponse); // Log the entire response
+
+      if (apiResponse.isSuccess) {
+        const apiData = apiResponse.result; // Access the result array
+        setData(apiData);
+        console.log("Fetched Data:", apiData);
+      } else {
+        toast.error("Error: " + apiResponse.errorMessage || "Failed to fetch data");
+      }
+
       setLoading(false);
     } catch (error) {
       toast.error("Error fetching transport services: " + error.message);
+      setLoading(false); // Ensure loading is set to false on error
     }
   };
 
@@ -49,8 +58,11 @@ function TransportService() {
   }, []);
 
   const openAddModal = () => {
+    setFormData(null); // Clear any previous form data
+    form.resetFields(); // Reset the form fields
     setShowTransportOptions(true);
   };
+
 
   const openEditModal = (record) => {
     setFormData(record);
@@ -121,30 +133,6 @@ function TransportService() {
     }
   };
 
-  // const handleToggleActive = async (record) => {
-  //   try {
-  //     console.log("Toggle Status Payload:", { transportServiceId: record.transportServiceId });
-  //     const response = await axios.patch(
-  //       'http://26.61.210.173:3001/api/transport/toggle-transport-service',
-  //       { transportServiceId: record.transportServiceId },
-  //       {
-  //         headers: {
-  //           Authorization: `Bearer ${sessionStorage.getItem("accessToken")}`
-  //         }
-  //       }
-  //     );
-
-  //     if (response.data) {
-  //       console.log("Toggle Status Response:", response.data);
-  //       toast.success("Transport service status updated successfully");
-  //       refetch();
-  //     }
-  //   } catch (error) {
-  //     console.error("Error toggling transport service status:", error.response?.data || error.message);
-  //     toast.error("Failed to update transport service status");
-  //   }
-  // };
-
   const handleTransportSelect = (type) => {
     setTransportType(type);
     form.setFieldsValue({ transportType: type });
@@ -204,19 +192,6 @@ function TransportService() {
         </Button>
       ),
     },
-    // render: (text, record) => (
-    //   <Button
-    //     type="primary"
-    //     onClick={() => handleToggleActive(record)}
-    //     style={{
-    //       opacity: record.isActive ? 1 : 0.5,
-    //       backgroundColor: record.isActive ? '#ff7700' : '#ccc',
-    //       borderColor: '#ff7700',
-    //     }}
-    //   >
-    //     {record.isActive ? 'Active' : 'Inactive'}
-    //   </Button>
-    // ),
     {
       title: 'Actions',
       render: (text, record) => (
@@ -290,7 +265,7 @@ function TransportService() {
               color: 'white', // Set header text color to white
             }
           }}
-          rowKey="transportServiceId"
+          rowKey="id"
           pagination={{
             pageSize: 5, // Set the number of rows per page to 5
             showSizeChanger: false, // Optional: Hide the option to change page size
@@ -315,13 +290,6 @@ function TransportService() {
             >
               <Input />
             </Form.Item>
-            {/* <Form.Item
-              label="Service Name"
-              name="name"
-              rules={formData ? [] : [{ required: true, message: 'Please input service name!' }]}
-            >
-              <Dropdown />
-            </Form.Item> */}
             <Form.Item
               label="Description"
               name="description"
@@ -332,7 +300,9 @@ function TransportService() {
             <Form.Item
               label="Price per KM"
               name="pricePerKm"
-              rules={formData ? [] : [{ required: true, message: 'Please input price per KM!' }]}
+              rules={formData ? [] : [{ required: transportType === 'Local', message: 'Please input price per KM!' }]}
+              style={{ display: transportType === 'Local' ? 'block' : 'none' }}
+
             >
               <Input type="number" />
             </Form.Item>
@@ -345,6 +315,14 @@ function TransportService() {
             </Form.Item>
             <Form.Item name="transportType" style={{ display: 'none' }}> {/* Hidden field for transportType */}
               <Input type="hidden" />
+            </Form.Item>
+            <Form.Item
+              label="Transport Price"
+              name="transportPrice"
+              style={{ display: transportType === 'Domestic' || transportType === 'International' ? 'block' : 'none' }}
+              rules={formData ? [] : [{ required: transportType === 'Domestic' || transportType === 'International', message: 'Please input price per KG!' }]}
+            >
+              <Input type="number" />
             </Form.Item>
             <Form.Item
               label="Price per Amount"
