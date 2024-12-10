@@ -2,11 +2,17 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
+import LoginDriver from '../../driver/loginForDriver/LoginDriver';
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+// <<<<<<< newDevNew
+//   const [isDriverLogin, setIsDriverLogin] = useState(false);
+//   const navigate = useNavigate();
+// =======
+// >>>>>>> main
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -34,6 +40,7 @@ function Login({ onLogin }) {
   return (
     <div className="login-container">
       <h2>Login Page</h2>
+      {!isDriverLogin ? (
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -51,10 +58,16 @@ function Login({ onLogin }) {
         />
         <button type="submit">Login</button>
       </form>
+      ): (
+        <LoginDriver setIsLoggedIn={setIsLoggedIn}/>
+      )}
       {message && <div className="message-box">{message}</div>}
       <p>
         Don't have an account? <a href="/register" className="register-link-text" >Register here</a>
       </p>
+      <button onClick={() => setIsDriverLogin(!isDriverLogin)}>  
+      {isDriverLogin ? 'Login' : 'Login For Driver'}  
+    </button>  
     </div>
   );
 }
