@@ -8,11 +8,9 @@ function Login({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
-// <<<<<<< newDevNew
-//   const [isDriverLogin, setIsDriverLogin] = useState(false);
-//   const navigate = useNavigate();
-// =======
-// >>>>>>> main
+  const [isDriverLogin, setIsDriverLogin] = useState(false);
+  const navigate = useNavigate();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,7 +57,7 @@ function Login({ onLogin }) {
         <button type="submit">Login</button>
       </form>
       ): (
-        <LoginDriver setIsLoggedIn={setIsLoggedIn}/>
+        <LoginDriver setIsDriverLoggedIn={onLogin}/>
       )}
       {message && <div className="message-box">{message}</div>}
       <p>
