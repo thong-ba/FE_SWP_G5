@@ -87,7 +87,7 @@ import UserInfo from './assets/user/userinfo/UserInfo';
 import VerifyAccount from './assets/user/verify/VerifyAccount';
 
 import MapView from './assets/driver/currentlocation/MapView';
-
+import DriverLayout from './assets/driver/layout/DriverLayout';
 import Manager from './assets/manager/dashboard/Manager';
 import Staff from './assets/staff/dashboard/Staff';
 
@@ -301,7 +301,8 @@ function App() {
       
       <Route path="/staff" element={<Staff />} />
       <Route path="/manager" element={<Manager />} />
-      <Route path="/driver" element={<MapView location={location} />} />
+
+      <Route path="/driver" element={<DriverLayout isLoggedIn={isLoggedIn} handleLogout={handleLogout} ><MapView location={location} /> </DriverLayout>} />
     </Routes>
   );
 }
