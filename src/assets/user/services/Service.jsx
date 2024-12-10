@@ -4,57 +4,57 @@ import './Service.css';
 function Service() {
   return (
     <div className="service-container">
-      <h1 className="service-title">Dịch Vụ Cá Koi</h1>
+      <h1 className="service-title">Koi Fish Services</h1>
       
       <section className="service-section">
-        <h2 className="service-subtitle">Cá Koi là gì?</h2>
+        <h2 className="service-subtitle">What is Koi Fish?</h2>
         <p className="service-description">
-          Cá Koi (Nishikigoi) là một loại cá chép có nguồn gốc từ Nhật Bản, được nuôi chủ yếu để làm cảnh trong các hồ cá. Cá Koi có nhiều màu sắc rực rỡ và vẻ ngoài rất bắt mắt, bao gồm màu đỏ, vàng, trắng, cam, đen và nhiều kiểu phối hợp màu khác nhau. Chúng được coi là biểu tượng của sự thịnh vượng, sự may mắn và kiên cường. 
+          Koi fish (Nishikigoi) are a type of carp originating from Japan, primarily bred for ornamental purposes in ponds. Koi fish are known for their vibrant colors and stunning appearances, featuring hues like red, yellow, white, orange, black, and various combinations. They symbolize prosperity, luck, and resilience.
         </p>
         <p className="service-description">
-          Cá Koi được biết đến với khả năng sống lâu dài và dễ chăm sóc. Thậm chí có những con cá Koi sống trên 50 năm, một số thậm chí có thể đạt đến tuổi thọ lên tới 200 năm nếu được chăm sóc đúng cách. Chính vì lý do này mà cá Koi trở thành một phần quan trọng trong các khu vườn và không gian sống của người Nhật Bản và các quốc gia khác.
+          Koi fish are famous for their long lifespan and ease of care. Some Koi live over 50 years, and a few can even reach up to 200 years with proper care. This longevity makes Koi an essential part of gardens and living spaces in Japan and other countries.
         </p>
-        <img src="/koi-1.png" alt="Cá Koi 1" className="service-image" />
+        <img src="/koi-1.png" alt="Koi Fish 1" className="service-image" />
       </section>
 
       <section className="service-section">
-        <h2 className="service-subtitle">Cách Chăm Sóc Cá Koi</h2>
+        <h2 className="service-subtitle">How to Care for Koi Fish</h2>
         <p className="service-description">
-          Chăm sóc cá Koi đòi hỏi một môi trường sống lý tưởng và một chế độ ăn uống hợp lý. Một trong những yếu tố quan trọng nhất trong việc nuôi cá Koi là chất lượng nước trong hồ. Nước cần được duy trì ở mức pH và nhiệt độ ổn định, đảm bảo sự phát triển khỏe mạnh cho cá. Cá Koi thích sống trong nước có độ pH từ 7 đến 7.5 và nhiệt độ khoảng 15°C đến 25°C.
+          Caring for Koi fish requires an ideal environment and a proper diet. One of the most critical factors in Koi fish care is water quality. The water should maintain a stable pH level and temperature to ensure the fish's healthy growth. Koi fish thrive in water with a pH level of 7 to 7.5 and a temperature of 15°C to 25°C.
         </p>
         <p className="service-description">
-          Ngoài ra, hệ thống lọc nước là một phần không thể thiếu. Lọc nước giúp loại bỏ tạp chất, vi khuẩn và các chất ô nhiễm khác, đảm bảo rằng cá Koi luôn sống trong môi trường sạch sẽ và an toàn. Nếu nước trong hồ bị ô nhiễm, cá có thể bị bệnh hoặc chết sớm. Do đó, việc thay nước định kỳ và kiểm tra chất lượng nước là rất quan trọng.
+          A water filtration system is essential. Filtration helps remove impurities, bacteria, and pollutants, ensuring a clean and safe environment for the fish. If the pond water becomes polluted, the fish may become ill or die prematurely. Regular water changes and quality checks are crucial for maintaining a healthy habitat.
         </p>
         <p className="service-description">
-          Một yếu tố khác là chế độ ăn uống của cá Koi. Cá Koi cần một chế độ ăn uống đa dạng và giàu dinh dưỡng, bao gồm thức ăn chuyên dụng cho cá Koi. Thức ăn này có chứa protein, vitamin và khoáng chất cần thiết cho sự phát triển và sức khỏe của cá. Bạn cũng nên tránh cho cá ăn quá nhiều, vì điều này có thể làm ô nhiễm nước hồ.
+          Another factor is the diet of Koi fish. They need a diverse and nutritious diet, including specialized Koi food containing proteins, vitamins, and essential minerals. Avoid overfeeding, as it can pollute the pond water.
         </p>
-        <img src="/koi-2.png" alt="Cá Koi 2" className="service-image" />
+        <img src="/koi-2.png" alt="Koi Fish 2" className="service-image" />
       </section>
 
       <section className="service-section">
-        <h2 className="service-subtitle">Ý Nghĩa Việc Nuôi Cá Koi</h2>
+        <h2 className="service-subtitle">The Significance of Keeping Koi Fish</h2>
         <p className="service-description">
-          Cá Koi không chỉ là một loài cá cảnh đơn thuần mà còn mang nhiều ý nghĩa tâm linh và phong thủy. Trong văn hóa Nhật Bản, cá Koi được coi là biểu tượng của sự kiên cường, ý chí mạnh mẽ và khả năng vượt qua thử thách. Hình ảnh cá Koi bơi ngược dòng thường được dùng để biểu thị sự kiên trì và dũng cảm trong cuộc sống.
+          Koi fish are not just ornamental fish but also hold spiritual and Feng Shui significance. In Japanese culture, Koi symbolize perseverance, strong will, and the ability to overcome challenges. The image of Koi swimming upstream is often used to represent determination and courage in life.
         </p>
         <p className="service-description">
-          Cá Koi cũng có một ý nghĩa sâu sắc trong việc mang lại may mắn và tài lộc. Theo phong thủy, cá Koi giúp thu hút năng lượng tích cực và mang lại thịnh vượng cho gia chủ. Đặc biệt, trong các dịp lễ hội hay các nghi thức tôn giáo, cá Koi thường được dùng để cầu nguyện cho sức khỏe, hạnh phúc và thịnh vượng.
+          Koi fish are also believed to bring good fortune and wealth. In Feng Shui, Koi fish help attract positive energy and prosperity to their owners. Especially during festivals or religious ceremonies, Koi are often used to pray for health, happiness, and success.
         </p>
         <p className="service-description">
-          Mỗi màu sắc của cá Koi cũng mang một ý nghĩa riêng. Cá Koi màu đỏ tượng trưng cho tình yêu và sự thịnh vượng, màu vàng mang đến sự giàu có, trong khi màu trắng là biểu tượng của sự thuần khiết và trong sáng. Việc nuôi cá Koi trong gia đình không chỉ mang lại vẻ đẹp cho không gian sống mà còn giúp cải thiện tài vận và sức khỏe cho người nuôi.
+          Each color of Koi has its own meaning. Red Koi represents love and prosperity, yellow symbolizes wealth, while white stands for purity and clarity. Keeping Koi fish not only enhances the beauty of living spaces but also improves fortune and well-being for the owners.
         </p>
-        <img src="/koi-3.png" alt="Cá Koi 3" className="service-image" />
+        <img src="/koi-3.png" alt="Koi Fish 3" className="service-image" />
       </section>
 
       <section className="service-section">
-        <h2 className="service-subtitle">Tầm Quan Trọng Của Cá Koi Trong Phong Thủy</h2>
+        <h2 className="service-subtitle">The Importance of Koi Fish in Feng Shui</h2>
         <p className="service-description">
-          Trong phong thủy, cá Koi có một vị trí đặc biệt quan trọng. Chúng được xem là biểu tượng của sự thịnh vượng, tài lộc và sự may mắn. Việc nuôi cá Koi trong nhà hoặc trong sân vườn không chỉ giúp tạo ra một không gian hài hòa mà còn mang lại năng lượng tích cực, giúp gia chủ gặp nhiều may mắn và thành công trong cuộc sống.
+          In Feng Shui, Koi fish hold a special significance. They are considered symbols of prosperity, wealth, and luck. Keeping Koi in a home or garden not only creates a harmonious space but also attracts positive energy, helping the owner achieve success and happiness.
         </p>
         <p className="service-description">
-          Cá Koi đặc biệt có ý nghĩa trong việc cải thiện tài vận của gia chủ. Theo các chuyên gia phong thủy, việc đặt một hồ cá Koi trong nhà sẽ giúp thu hút nguồn năng lượng tích cực, đồng thời giúp gia chủ tránh được những rủi ro và bất lợi trong công việc và cuộc sống. Đặc biệt, việc đặt cá Koi gần cửa chính hay những nơi có luồng năng lượng mạnh sẽ giúp mang lại tài lộc và sức khỏe cho gia đình.
+          Koi fish play an essential role in enhancing financial fortune. According to Feng Shui experts, placing a Koi pond in the home can attract positive energy while helping the owner avoid risks and misfortune in work and life. Particularly, placing Koi near the main entrance or areas with strong energy flow brings wealth and health to the family.
         </p>
         <p className="service-description">
-          Bên cạnh đó, cá Koi còn giúp tạo ra không gian thư giãn, giảm stress và mang lại cảm giác yên bình cho người nuôi. Đó là lý do tại sao cá Koi được ưa chuộng không chỉ trong các khu vườn, hồ cá mà còn trong các không gian sống của những người yêu thích phong thủy và sự hòa hợp với thiên nhiên.
+          Additionally, Koi fish help create a relaxing atmosphere, reduce stress, and bring peace of mind to the owner. This is why Koi are favored not only in gardens and ponds but also in living spaces of people who appreciate Feng Shui and harmony with nature.
         </p>
       </section>
     </div>
