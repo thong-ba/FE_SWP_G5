@@ -1836,7 +1836,7 @@
 
 "@react-google-maps/api@^2.20.3":
   version "2.20.3"
-  resolved "https://registry.npmjs.org/@react-google-maps/api/-/api-2.20.3.tgz"
+  resolved "https://registry.yarnpkg.com/@react-google-maps/api/-/api-2.20.3.tgz#0d30e6753d7cddc34f2cd9cc7c5a5a7460adb438"
   integrity sha512-ndXC8nZDPT78nCceZnftGSvA/iVhwx2XhlfEYaoUy2biGelhrE2vDzjyTuZhb4RV+bVYpd4LkIf3hzyxAFd+Qg==
   dependencies:
     "@googlemaps/js-api-loader" "1.16.8"
@@ -6684,11 +6684,6 @@ jwt-decode@^4.0.0:
   resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-4.0.0.tgz#2270352425fd413785b2faf11f6e755c5151bd4b"
   integrity sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==
 
-jwt-decode@^4.0.0:
-  version "4.0.0"
-  resolved "https://registry.yarnpkg.com/jwt-decode/-/jwt-decode-4.0.0.tgz#2270352425fd413785b2faf11f6e755c5151bd4b"
-  integrity sha512-+KJGIyHgkGuIq3IEBNftfhW/LfWhXUIY6OmyVWjliu5KH1y0fw7VQ8YndE2O4qZdMSd9SqbnC8GOcZEy0Om7sA==
-
 kdbush@^4.0.2:
   version "4.0.2"
   resolved "https://registry.npmjs.org/kdbush/-/kdbush-4.0.2.tgz"
@@ -6730,7 +6725,8 @@ klona@^2.0.4, klona@^2.0.5:
     "@testing-library/user-event" "^13.2.1"
     antd "^5.22.3"
     axios "^1.7.8"
-    koi-ordering "file:C:/Users/huy/AppData/Local/Yarn/Cache/v6/npm-koi-ordering-0.1.0-913456e9-f41b-439b-803d-0ff2fa2a244e-1733715429546/node_modules/koi-ordering"
+    jwt-decode "^4.0.0"
+    koi-ordering "file:C:/Users/huy/AppData/Local/Yarn/Cache/v6/npm-koi-ordering-0.1.0-4281ec62-36ec-49a9-9e5f-421039ad4b26-1733808517697/node_modules/koi-ordering"
     leaflet "^1.9.4"
     react "^18.3.1"
     react-dom "^18.3.1"

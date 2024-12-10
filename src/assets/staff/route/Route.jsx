@@ -1,3 +1,4 @@
+import { LoadScript } from "@react-google-maps/api";
 import axios from "axios";
 import { useState } from "react";
 
@@ -12,20 +13,37 @@ const Route = () => {
       stopOrder: 0,
       address: "",
       orderId: 0,
+      latitude: null, //new
+      longitude: null, //new
     },
   ]);
 
   const handleAddRouteStop = () => {
     setRouteStopRequests((prev) => [
       ...prev,
-      { stopOrder: prev.length + 1, address: "", orderId: 0 },
+      { stopOrder: prev.length + 1, address: "", orderId: 0, latitude: null, longitude: null, },
     ]);
   };
 
-  const handleUpdateRouteStop = (index, field, value) => {
-    setRouteStopRequests((prev) =>
-      prev.map((stop, i) => (i === index ? { ...stop, [field]: value } : stop))
-    );
+  const handleUpdateRouteStop = async (index, field, value) => {
+    // setRouteStopRequests((prev) =>
+    //   prev.map((stop, i) => (i === index ? { ...stop, [field]: value } : stop))
+    // );
+
+    const updatedStops = routeStopRequests.map((stop, i) => 
+    i === index ? { ...stop, [field]: value } : stop);
+
+    if (field === "address" && value) {
+        const coordinates = await getCoordinatesFromAddress(value);
+        if (coordinates) {
+          updatedStops[index].latitude = coordinates.lat;
+        updatedStops[index].longitude = coordinates.lng;
+
+        setCenter({ lat: coordinates.lat, lng: coordinates.lng }); 
+        }
+    }
+
+    setRouteStopRequests(updatedStops);
   };
 
   const handleSubmit = async () => {
@@ -51,6 +69,21 @@ const Route = () => {
       alert("Failed to create route.");
     }
   };
+
+  const getCoordinatesFromAddress = async (address) => {
+    try {
+      const response = await axios.get(`https://api.gomaps.pro/geocode?address=${encodeURIComponent(address)}`);
+
+      return response.data.location;
+    }
+    catch (error) {
+      console.error("Error fetching coordinates:", error);
+      return null;
+    }
+  };
+
+  const containerStyle = { width: "100%", height: "500px" };
+  const defaultCenter = { lat: 10.762622, lng: 106.660172 };
 
   return (
     <div>
@@ -112,6 +145,12 @@ const Route = () => {
 
       <button onClick={handleAddRouteStop}>Add Stop</button>
       <button onClick={handleSubmit}>Submit Route</button>
+
+      {/* Map */}
+      <h3>Route Stops Map</h3>
+      <LoadScript googleMapsApiKey="">
+        
+      </LoadScript>
     </div>
   );
 };
