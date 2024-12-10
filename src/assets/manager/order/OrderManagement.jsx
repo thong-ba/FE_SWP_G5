@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Table, Modal } from 'antd';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { GetAllOrders } from '../../../api/OrderApi';
+import { GetAllOrderService } from '../../../api/OrderApi';
 import './OrderManagement.css';
 
 function TransportService() {
@@ -13,7 +13,7 @@ function TransportService() {
   // Move fetchData outside useEffect so it can be reused
   const fetchData = async () => {
     try {
-      const apiResponse = await GetAllOrders();
+      const apiResponse = await GetAllOrderService();
       console.log("API Response:", apiResponse); // Log the entire response
 
       if (apiResponse.isSuccess) {
