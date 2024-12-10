@@ -2,7 +2,7 @@ import { getJwtToken, headers, localUrl, ngrokUrl } from "./Url";
 import axios from "axios";
 
 //URL For Swagger API
-const baseLocalUrl = `${ngrokUrl}/TransportService`;
+const baseLocalUrl = `${localUrl}/TransportService`;
 
 
 // Create a reusable function to update an account
