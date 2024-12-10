@@ -59,10 +59,10 @@ export default function Homepage() {
           < div className="hero-content">
 
             <div className="hero-buttons">
-              <button className="primary-button" onClick={() => navigate('/placeorder')}>
+              <button className="primary-button" onClick={() => navigate('/bookingorder')}>
                 Transport Fish
               </button>
-              <button className="secondary-button" onClick={() => navigate('/account-management', { state: { activeComponent: 'orders' } })}>
+              <button className="secondary-button" onClick={() => navigate('/trackorder', { state: { activeComponent: 'orders' } })}>
                 Tracking Order
               </button>
             </div>
