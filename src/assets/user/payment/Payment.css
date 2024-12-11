@@ -1,4 +1,4 @@
-.payment-container {
+/* .payment-container {
     padding: 30px;
     font-family: 'Arial', sans-serif;
     max-width: 1200px;
@@ -116,4 +116,230 @@
 
 .confirm-button:hover {
     background-color: #ff6600;
+} */
+/* Payment Page Container */
+
+
+/* Payment Page Container */
+
+
+
+/* Payment Page Container */
+
+
+
+
+/* Payment Page Container */
+/* Payment Page Container */
+.payment-container {
+    padding: 20px;
+    max-width: 800px;
+    margin: 0 auto;
+    font-family: Arial, sans-serif;
+    border: 1px solid #ddd; /* Border around the entire container */
+    border-radius: 8px; /* Rounded corners */
+    background-color: #f9f9f9; /* Slight background color */
 }
+
+/* Heading */
+.heading {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+}
+
+/* Order Summary */
+.order-summary {
+    margin-bottom: 20px;
+    border: 1px solid #ddd; /* Border around the order summary */
+    padding: 20px;
+    border-radius: 8px;
+    background-color: #fff; /* White background for the summary */
+}
+
+.order-summary h3 {
+    font-size: 20px;
+    margin-bottom: 10px;
+}
+
+.text {
+    font-size: 16px;
+    margin-bottom: 8px;
+}
+
+.text strong {
+    font-weight: bold;
+}
+
+/* Order Info Flex Layout */
+.order-info {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.order-info .info-section {
+    flex: 1;
+    margin-right: 10px;
+}
+
+.order-info .info-section:last-child {
+    margin-right: 0;
+}
+
+.order-info .section-title {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+/* Payment Options */
+.payment-options {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.payment-options .option-button {
+    flex: 1;
+    padding: 15px;
+    text-align: center;
+    background-color: #e0f7fa; /* Light blue background */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0 10px;
+    color: #00796b; /* Dark teal text */
+    font-weight: bold; /* Make text bold */
+}
+
+.payment-options .option-button:hover {
+    background-color: #b2ebf2; /* Slightly darker blue when hovered */
+}
+
+/* Cash Option Button (Người giao hàng, Người nhận hàng) */
+.cash-option {
+    padding: 10px;
+    width: 45%;
+    text-align: center;
+    background-color: #fff3e0; /* Light orange background */
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    color: #ff5722; /* Dark orange text */
+    font-weight: bold; /* Make text bold */
+}
+
+.cash-option:hover {
+    background-color: #ffe0b2; /* Slightly darker orange on hover */
+}
+
+/* Selected Button Styles */
+.selected {
+    background-color: #4CAF50; /* Green background for selected */
+    color: white; /* White text for selected buttons */
+}
+
+/* Border around option buttons */
+.payment-options .option-button, .cash-option {
+    border: 1px solid #ddd; /* Light border for all option buttons */
+}
+
+.payment-method-container {
+    margin-top: 20px;
+}
+
+.cash-options {
+    margin-top: 10px;
+}
+
+.cash-option-container {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 10px;
+}
+
+.cash-option {
+    padding: 10px;
+    width: 45%;
+    text-align: center;
+    background-color: #f1f1f1;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.cash-option:hover {
+    background-color: #ddd;
+}
+
+.selected {
+    background-color: #4CAF50;
+    color: white;
+}
+
+/* QR Payment */
+.qr-payment img {
+    width: 100%;
+    max-width: 250px;
+    display: block;
+    margin: 10px auto;
+}
+
+/* Confirm Button */
+.confirm-button {
+    width: 100%;
+    padding: 12px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    font-size: 18px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bold; /* Make text bold */
+}
+
+.confirm-button:disabled {
+    background-color: #bbb;
+    cursor: not-allowed;
+}
+
+.confirm-button:hover:enabled {
+    background-color: #45a049;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .payment-options {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .payment-options .option-button {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .cash-option-container {
+        flex-direction: column;
+    }
+
+    .cash-option {
+        width: 100%;
+        margin-bottom: 10px;
+    }
+
+    .order-info {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    .order-info .info-section {
+        margin-bottom: 10px;
+    }
+}
+
+
+
+

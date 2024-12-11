@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Base URL for OrderFish API
-const baseOrderFishUrl = "http://localhost:5141/api/OrderFish";
+const baseOrderFishUrl = "http://localhost:7046/api/OrderFish";
 
 // Get all orders for fish
 export const GetAllOrderFishService = async () => {
