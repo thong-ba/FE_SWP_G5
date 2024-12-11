@@ -7,7 +7,7 @@ const PaymentSuccess = () => {
     return (
         <div className="paymentsuccess-container">
             <img className='img-logo' src='paymentSuccess.png' alt="Payment successful" />
-            <div>Payment Success</div>
+            <div className='paymentsuccess-text '>Payment Success</div>
         </div>
     );
 };

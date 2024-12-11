@@ -20,6 +20,7 @@ import Manager from './assets/manager/dashboard/Manager';
 import Staff from './assets/staff/dashboard/Staff';
 import PendingOrderTab from './assets/staff/order/PendingOrderTab/PendingOrderTab';
 import PaymentSuccess from './assets/user/payment/paymentStatus/paymentSuccess';
+import PaymentFail from './assets/user/payment/paymentStatus/paymentFail';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -307,6 +308,7 @@ function App() {
 
       <Route path="/driver" element={<DriverLayout isLoggedIn={isLoggedIn} handleLogout={handleLogout} ><MapView location={location} /> </DriverLayout>} />
       <Route path="/paymentsuccess" element={<PaymentSuccess></PaymentSuccess>} />
+      <Route path="/paymentfail" element={<PaymentFail></PaymentFail>} />
       <Route
         path="/pendingorder"
         element={
