@@ -1,27 +1,76 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
-import "./PendingOrderTab.css";
+import { getPendingOrder } from "../getOrder/getOrder";
+import React, { useEffect, useState } from "react";
 
-const PendingOrderTab = () => {
-  const [orders, setOrders] = useState([]);  // Tất cả đơn hàng
-  const [currentPage, setCurrentPage] = useState(1);  // Trang hiện tại
-  const [ordersPerPage] = useState(5);  // Số đơn hàng mỗi trang
-  const [loading, setLoading] = useState(true);  // Trạng thái tải dữ liệu
+function PendingOrderTab() {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const cancelOrder = async (orderId) => {
+    try {
+      const response = await axios.put(
+        `https://localhost:7046/api/Order/Update-Order-Status-Canceled?OrderId=${orderId}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.isSuccess) {
+        alert("Order canceled successfully");
+
+        setOrders((prevOrders) =>
+          prevOrders.filter((order) => order.id !== orderId)
+        );
+      } else alert("Failed to cancel the order");
+    } catch (error) {
+      console.error("Error canceling order:", error);
+      alert("Error canceling the order");
+    }
+  };
+
+  const pendingPickUpOrder = async (orderId) => {
+    try {
+      const response = await axios.put(
+        `https://localhost:7046/api/Order/Update-Order-Status-PendingPickUp?OrderId=${orderId}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.isSuccess) {
+        alert("Order pending pick up successfully");
+
+        setOrders((prevOrders) =>
+          prevOrders.filter((order) => order.id !== orderId)
+        );
+      } else alert("Failed to pending pick up the order");
+    } catch (error) {
+      console.error("Error pending pick up order:", error);
+      alert("Error pending pick up the order");
+    }
+  };
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get("https://localhost:7046/api/Order");
-
-        if (response.data.isSuccess) {
-          // Lọc các đơn hàng có status = 2
-          const pendingOrders = response.data.result.filter(order => order.orderStatus === 2);
-          setOrders(pendingOrders);  // Lưu các đơn hàng có status = 2
+        const data = await getPendingOrder();
+        console.log("Fetched data: ", data);
+        if (Array.isArray(data)) {
+          setOrders(data);
         } else {
-          console.error("Error fetching orders:", response.data.errorMessage);
+          setOrders([]);
+          setError("No data found");
         }
       } catch (error) {
         console.error("Error fetching orders:", error);
+        setError("Failed to fetch pending orders");
       } finally {
         setLoading(false);
       }
@@ -30,106 +79,56 @@ const PendingOrderTab = () => {
     fetchOrders();
   }, []);
 
-  // Tính toán các đơn hàng cần hiển thị trên trang hiện tại
-  const indexOfLastOrder = currentPage * ordersPerPage;
-  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
-
-  // Tính tổng số trang
-  const totalPages = Math.ceil(orders.length / ordersPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    if (pageNumber >= 1 && pageNumber <= totalPages) {
-      setCurrentPage(pageNumber);
-    }
-  };
-
-  const handleUpdate = (orderId) => {
-    // Logic để xử lý cập nhật đơn hàng
-    console.log(`Updating order with ID: ${orderId}`);
-  };
-
-  const handleDelete = (orderId) => {
-    // Logic để xử lý xóa đơn hàng
-    console.log(`Deleting order with ID: ${orderId}`);
-  };
-
-  if (loading) {
-    return <div className="loading-message">Loading...</div>;
-  }
+  if (loading) return <div>Loading pending orders...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="pending-orders-container">
-      <h2 className="pending-orders-title">Pending Orders</h2>
-      <table className="pending-orders-table">
-        <thead className="pending-orders-header">
+    <div>
+      <h2>Pending Orders</h2>
+      <table className="order-table">
+        <thead>
           <tr>
-            <th className="pending-orders-header-cell">Order ID</th>
-            <th className="pending-orders-header-cell">From Address</th>
-            <th className="pending-orders-header-cell">To Address</th>
-            <th className="pending-orders-header-cell">Status</th>
-            <th className="pending-orders-header-cell">Receiver Name</th>
-            <th className="pending-orders-header-cell">Receiver Phone</th>
-            <th className="pending-orders-header-cell">Total Price</th>
-            <th className="pending-orders-header-cell">Transport Service</th>
-            <th className="pending-orders-header-cell">Notes</th>
-            <th className="pending-orders-header-cell">Others</th> {/* Cột "OTHERS" */}
+            <th>STT</th>
+            <th>From Address</th>
+            <th>To Address</th>
+            <th>Receiver Name</th>
+            <th>Receiver Phone</th>
+            <th>Notes</th>
+            <th>Total Price</th>
+            <th>Actions</th>
           </tr>
         </thead>
-        <tbody className="pending-orders-body">
-          {currentOrders.map((order) => (
-            <tr key={order.id} className="pending-orders-row">
-              <td className="pending-orders-cell">{order.id}</td>
-              <td className="pending-orders-cell">{order.fromAddress}</td>
-              <td className="pending-orders-cell">{order.toAddress}</td>
-              <td className="pending-orders-cell">{order.orderStatus}</td>
-              <td className="pending-orders-cell">{order.receiverName}</td>
-              <td className="pending-orders-cell">{order.receiverPhone}</td>
-              <td className="pending-orders-cell">{order.totalPrice}</td>
-              <td className="pending-orders-cell">{order.transportService.name}</td>
-              <td className="pending-orders-cell">{order.notes}</td>
-              <td className="pending-orders-cell">
-                {/* Các nút Update và Delete */}
-                <button
-                  onClick={() => handleUpdate(order.id)}
-                  className="action-button"
+        <tbody>
+          {orders.map((order, index) => (
+            <tr key={order.id}>
+              <td>{index + 1}</td>
+              <td>{order.fromAddress}</td>
+              <td>{order.toAddress}</td>
+              <td>{order.receiverName}</td>
+              <td>{order.receiverPhone}</td>
+              <td>{order.notes}</td>
+              <td>{order.totalPrice}</td>
+              <td>
+                <button className="btn-detail">View Details</button>
+                {/* <button
+                  className="btn-confirm"
+                  onClick={() => pendingPickUpOrder(order.id)}
                 >
-                  Update
-                </button>
+                  Confirm
+                </button> */}
                 <button
-                  onClick={() => handleDelete(order.id)}
-                  className='action-button'
+                  className="btn-cancel"
+                  onClick={() => cancelOrder(order.id)}
                 >
-                  Delete
+                  Cancel
                 </button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      {/* Pagination Controls */}
-      <div className="pagination-container">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="pagination-button"
-        >
-          Previous
-        </button>
-        <span className="pagination-info">
-          Page {currentPage} of {totalPages}
-        </span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="pagination-button"
-        >
-          Next
-        </button>
-      </div>
     </div>
   );
-};
+}
 
 export default PendingOrderTab;

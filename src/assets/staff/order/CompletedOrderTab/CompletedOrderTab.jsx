@@ -1,27 +1,25 @@
-import React, { useEffect, useState } from "react";
-import axios from "axios";
-import "./CompletedOrder.css";
+import { useEffect, useState } from "react";
+import { getCompletedOrder } from "../getOrder/getOrder";
 
-const CompletedOrderTab = () => {
+function CompletedOrderTab() {
   const [orders, setOrders] = useState([]);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [ordersPerPage] = useState(5);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get("https://localhost:7046/api/Order");  // API endpoint cho các đơn hàng
-
-        if (response.data.isSuccess) {
-          // Lọc các đơn hàng có status = 4
-          const completedOrders = response.data.result.filter(order => order.orderStatus === 4);
-          setOrders(completedOrders);
+        const data = await getCompletedOrder();
+        console.log("Fetched data: ", data);
+        if (Array.isArray(data)) {
+          setOrders(data);
         } else {
-          console.error("Error fetching orders:", response.data.errorMessage);
+          setOrders([]);
+          setError("No data found");
         }
       } catch (error) {
         console.error("Error fetching orders:", error);
+        setError("Failed to fetch pending orders");
       } finally {
         setLoading(false);
       }
@@ -30,92 +28,40 @@ const CompletedOrderTab = () => {
     fetchOrders();
   }, []);
 
-  const indexOfLastOrder = currentPage * ordersPerPage;
-  const indexOfFirstOrder = indexOfLastOrder - ordersPerPage;
-  const currentOrders = orders.slice(indexOfFirstOrder, indexOfLastOrder);
-
-  const totalPages = Math.ceil(orders.length / ordersPerPage);
-
-  const handlePageChange = (pageNumber) => {
-    if (pageNumber >= 1 && pageNumber <= totalPages) {
-      setCurrentPage(pageNumber);
-    }
-  };
-
-  const handleUpdate = (orderId) => {
-    console.log(`Updating completed order with ID: ${orderId}`);
-  };
-
-  const handleDelete = (orderId) => {
-    console.log(`Deleting completed order with ID: ${orderId}`);
-  };
-
-  if (loading) {
-    return <div className="loading-message">Loading...</div>;
-  }
+  if (loading) return <div>Loading pending orders...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="completed-orders-container">
-      <h2 className="completed-orders-title">Completed Orders</h2>
-      <table className="completed-orders-table">
+    <div>
+      <h2>Completed Orders</h2>
+      <table className="order-table">
         <thead>
           <tr>
-            <th>Order ID</th>
+            <th>STT</th>
             <th>From Address</th>
             <th>To Address</th>
-            <th>Status</th>
             <th>Receiver Name</th>
             <th>Receiver Phone</th>
-            <th>Total Price</th>
-            <th>Transport Service</th>
             <th>Notes</th>
-            <th>Actions</th>
+            <th>Total Price</th>
           </tr>
         </thead>
         <tbody>
-          {currentOrders.map((order) => (
+          {orders.map((order, index) => (
             <tr key={order.id}>
-              <td>{order.id}</td>
+              <td>{index + 1}</td>
               <td>{order.fromAddress}</td>
               <td>{order.toAddress}</td>
-              <td>{order.orderStatus}</td>
               <td>{order.receiverName}</td>
               <td>{order.receiverPhone}</td>
-              <td>{order.totalPrice}</td>
-              <td>{order.transportService.name}</td>
               <td>{order.notes}</td>
-              <td>
-                <button onClick={() => handleUpdate(order.id)} className="action-button">
-                  Update
-                </button>
-                <button onClick={() => handleDelete(order.id)} className="action-button">
-                  Delete
-                </button>
-              </td>
+              <td>{order.totalPrice}</td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      <div className="pagination-container">
-        <button
-          onClick={() => handlePageChange(currentPage - 1)}
-          disabled={currentPage === 1}
-          className="pagination-button"
-        >
-          Previous
-        </button>
-        <span>Page {currentPage} of {totalPages}</span>
-        <button
-          onClick={() => handlePageChange(currentPage + 1)}
-          disabled={currentPage === totalPages}
-          className="pagination-button"
-        >
-          Next
-        </button>
-      </div>
     </div>
   );
-};
+}
 
 export default CompletedOrderTab;
