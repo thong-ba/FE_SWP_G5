@@ -269,7 +269,7 @@ useEffect(() => {
       />
 
       {/* Redirect nếu không phù hợp */}
-      <Route
+      {/* <Route
         path="/staff"
         element={
           userRole === 'DeliveringStaff' ? (
@@ -292,7 +292,7 @@ useEffect(() => {
             <Navigate to="/home" />
           )
         }
-      />
+      /> */}
       <Route path="*" element={<Navigate to="/home" />} />
       <Route path="/" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
       <Route path="/home" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />

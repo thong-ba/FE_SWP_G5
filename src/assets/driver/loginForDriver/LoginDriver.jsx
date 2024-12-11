@@ -3,7 +3,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import {jwtDecode} from "jwt-decode";
 
-function LoginDriver({ setIsLoggedIn }) {
+function LoginDriver({ onLogin }) {
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [message, setMessage] = useState('');
@@ -28,7 +28,7 @@ function LoginDriver({ setIsLoggedIn }) {
                 localStorage.setItem('driverId', driverId);
 
                 setMessage('Login successful!');
-                setIsLoggedIn(true);
+                onLogin(true);
                 setTimeout(() => navigate('/driver'), 1000);
             }
             else {

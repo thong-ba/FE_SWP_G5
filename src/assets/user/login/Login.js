@@ -57,7 +57,7 @@ function Login({ onLogin }) {
         <button type="submit">Login</button>
       </form>
       ) : (
-        <LoginDriver setDriverIsLoggedIn={setIsLoggedIn}/>
+        <LoginDriver onLogin={onLogin}/>
       )}
       {message && <div className="message-box">{message}</div>}
       <p>
