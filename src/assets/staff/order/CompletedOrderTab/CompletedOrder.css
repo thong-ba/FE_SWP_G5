@@ -1,0 +1,88 @@
+/* CompletedOrderTab.css */
+
+/* Container for the completed orders */
+.completed-orders-container {
+    padding: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  .completed-orders-title {
+    font-size: 24px;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  .completed-orders-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .completed-orders-table th,
+  .completed-orders-table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+  }
+  
+  .completed-orders-table th {
+    background-color: #f2f2f2;
+    font-weight: bold;
+  }
+  
+  .completed-orders-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+  }
+  
+  .completed-orders-table tr:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .completed-orders-table td {
+    word-wrap: break-word;
+    max-width: 200px;
+  }
+  
+  .action-button {
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    padding: 8px 16px;
+    cursor: pointer;
+    margin-right: 8px;
+  }
+  
+  .action-button:hover {
+    background-color: #45a049;
+  }
+  
+  .pagination-container {
+    text-align: center;
+    margin-top: 20px;
+  }
+  
+  .pagination-button {
+    padding: 8px 16px;
+    background-color: #007BFF;
+    color: white;
+    border: none;
+    cursor: pointer;
+    margin: 0 10px;
+  }
+  
+  .pagination-button:hover {
+    background-color: #0056b3;
+  }
+  
+  .pagination-button:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+  }
+  
+  .loading-message {
+    font-size: 18px;
+    text-align: center;
+    margin-top: 20px;
+    font-weight: bold;
+  }
+  

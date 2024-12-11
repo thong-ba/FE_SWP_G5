@@ -1,23 +1,76 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
-import './PendingOrderTab.css';
+import { getPendingOrder } from "../getOrder/getOrder";
+import React, { useEffect, useState } from "react";
 
-
-const PendingOrderTab = () => {
+function PendingOrderTab() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  const cancelOrder = async (orderId) => {
+    try {
+      const response = await axios.put(
+        `https://localhost:7046/api/Order/Update-Order-Status-Canceled?OrderId=${orderId}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.isSuccess) {
+        alert("Order canceled successfully");
+
+        setOrders((prevOrders) =>
+          prevOrders.filter((order) => order.id !== orderId)
+        );
+      } else alert("Failed to cancel the order");
+    } catch (error) {
+      console.error("Error canceling order:", error);
+      alert("Error canceling the order");
+    }
+  };
+
+  const pendingPickUpOrder = async (orderId) => {
+    try {
+      const response = await axios.put(
+        `https://localhost:7046/api/Order/Update-Order-Status-PendingPickUp?OrderId=${orderId}`,
+        {},
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+
+      if (response.data.isSuccess) {
+        alert("Order pending pick up successfully");
+
+        setOrders((prevOrders) =>
+          prevOrders.filter((order) => order.id !== orderId)
+        );
+      } else alert("Failed to pending pick up the order");
+    } catch (error) {
+      console.error("Error pending pick up order:", error);
+      alert("Error pending pick up the order");
+    }
+  };
 
   useEffect(() => {
     const fetchOrders = async () => {
       try {
-        const response = await axios.get("https://localhost:7046/api/Order");
-        if (response.data.isSuccess) {
-          setOrders(response.data.result);
+        const data = await getPendingOrder();
+        console.log("Fetched data: ", data);
+        if (Array.isArray(data)) {
+          setOrders(data);
         } else {
-          console.error("Error fetching orders:", response.data.errorMessage);
+          setOrders([]);
+          setError("No data found");
         }
       } catch (error) {
         console.error("Error fetching orders:", error);
+        setError("Failed to fetch pending orders");
       } finally {
         setLoading(false);
       }
@@ -26,45 +79,56 @@ const PendingOrderTab = () => {
     fetchOrders();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
-  }
+  if (loading) return <div>Loading pending orders...</div>;
+  if (error) return <div>Error: {error}</div>;
 
   return (
-    <div className="pending-orders">
+    <div>
       <h2>Pending Orders</h2>
-      <table>
+      <table className="order-table">
         <thead>
           <tr>
-            <th>Order ID</th>
+            <th>STT</th>
             <th>From Address</th>
             <th>To Address</th>
-            <th>Status</th>
             <th>Receiver Name</th>
             <th>Receiver Phone</th>
-            <th>Total Price</th>
-            <th>Transport Service</th>
             <th>Notes</th>
+            <th>Total Price</th>
+            <th>Actions</th>
           </tr>
         </thead>
         <tbody>
-          {orders.map((order) => (
+          {orders.map((order, index) => (
             <tr key={order.id}>
-              <td>{order.id}</td>
+              <td>{index + 1}</td>
               <td>{order.fromAddress}</td>
               <td>{order.toAddress}</td>
-              <td>{order.orderStatus}</td>
               <td>{order.receiverName}</td>
               <td>{order.receiverPhone}</td>
-              <td>{order.totalPrice}</td>
-              <td>{order.transportService.name}</td>
               <td>{order.notes}</td>
+              <td>{order.totalPrice}</td>
+              <td>
+                <button className="btn-detail">View Details</button>
+                {/* <button
+                  className="btn-confirm"
+                  onClick={() => pendingPickUpOrder(order.id)}
+                >
+                  Confirm
+                </button> */}
+                <button
+                  className="btn-cancel"
+                  onClick={() => cancelOrder(order.id)}
+                >
+                  Cancel
+                </button>
+              </td>
             </tr>
           ))}
         </tbody>
       </table>
     </div>
   );
-};
+}
 
 export default PendingOrderTab;

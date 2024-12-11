@@ -110,12 +110,12 @@ function PendingPickUpOrderTab() {
               <td>{order.totalPrice}</td>
               <td>
                 <button className="btn-detail">View Details</button>
-                <button
+                {/* <button
                   className="btn-confirm"
                   onClick={() => pendingPickUpOrder(order.id)}
                 >
                   Confirm
-                </button>
+                </button> */}
                 <button
                   className="btn-cancel"
                   onClick={() => cancelOrder(order.id)}

@@ -38,7 +38,7 @@ const Header = ({ isLoggedIn, handleLogout }) => {
             <Link to="/service">Services</Link>
             {isDropdownOpen && (
               <ul className="dropdown">
-                <li className="dropdown-item"><Link to="/bookingorder">Booking Order</Link></li>
+                <li className="dropdown-item"><Link to="/shippingoption">Booking Order</Link></li>
               </ul>
             )}
           </li>

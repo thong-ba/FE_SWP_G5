@@ -1,7 +1,7 @@
 .staff-container {
   display: flex;
   min-height: 100vh;
-  padding: 10px;
+  padding: 50px;
   font-family: "Noto Sans Variable", system-ui, sans-serif;
   background-color: #f4f4f4;
 }

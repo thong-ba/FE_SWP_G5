@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import styles from './BookingOrder.module.css'; // Importing CSS module
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -16,6 +16,7 @@ const BookingOrder = () => {
     const [step, setStep] = useState(1); // Start with Step 1
     const [senderInfo, setSenderInfo] = useState({ fullName: '', phone: '', address: '' });
     const [receiverInfo, setReceiverInfo] = useState({ fullName: '', phone: '', address: '' });
+<<<<<<< HEAD
 
     const [senderfishInfo, setSenderFishInfo] = useState({ Name: '', Age: '', Weight: '', Length: '' });
 
@@ -26,17 +27,35 @@ const BookingOrder = () => {
 
     const [selectedFish, setSelectedFish] = useState([]);
 
+=======
+    const [newFish, setNewFish] = useState({ name: '', age: '', image: null, weight: '', certificateImage: null });
+    const [shippingType, setShippingType] = useState('');
+    const [selectedProducts, setSelectedProducts] = useState([]);
+    const [selectedIndexes, setSelectedIndexes] = useState([]);
+>>>>>>> 6d7265df664dbe71485c9ed003cb8f9f3576950f
     const [senderCoordinates, setSenderCoordinates] = useState(null);
     const [receiverCoordinates, setReceiverCoordinates] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [distance, setDistance] = useState(null);
     const [shippingCost, setShippingCost] = useState(null);
     const [totalFishCost, setTotalFishCost] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
     const navigate = useNavigate();
+    const location = useLocation();
 
-    const handleInputChange = (e, setInfo) => {
+    const handleAddFish = () => {
+        setSelectedProducts([...selectedProducts, newFish]);
+        setNewFish({ name: '', age: '', image: null, weight: '', certificateImage: null });
+    };
+
+    const handleInputChange = (e, field) => {
         const { name, value } = e.target;
-        setInfo(prevInfo => ({ ...prevInfo, [name]: value }));
+        setNewFish(prevFish => ({ ...prevFish, [name]: value }));
+    };
+
+    const handleFileChange = (e, field) => {
+        const file = e.target.files[0];
+        setNewFish(prevFish => ({ ...prevFish, [field]: file }));
     };
 
     const handleNextStep = () => {
@@ -50,6 +69,19 @@ const BookingOrder = () => {
     const handlePrevStep = () => setStep(prev => prev - 1);
     const handleOptional = () => setStep(prev => prev + 1);
 
+    const handleCheckboxChange = (index) => {
+        if (selectedIndexes.includes(index)) {
+            setSelectedIndexes(selectedIndexes.filter(i => i !== index));
+        } else {
+            setSelectedIndexes([...selectedIndexes, index]);
+        }
+    };
+
+    const handleDeleteSelected = () => {
+        const updatedProducts = selectedProducts.filter((_, index) => !selectedIndexes.includes(index));
+        setSelectedProducts(updatedProducts);
+        setSelectedIndexes([]);
+    };
     const handleAddProduct = (e) => {
         const product = e.target.value;
         if (product && !selectedProducts.includes(product)) {
@@ -174,6 +206,12 @@ const BookingOrder = () => {
         };
         fetchCoordinates();
     }, [senderInfo.address, receiverInfo.address]);
+    
+    useEffect(() => {
+        if (location.state && location.state.shippingType) {
+            setShippingType(location.state.shippingType); // Lấy shippingType từ state
+        }
+    }, [location]);
 
     useEffect(() => {
         if (distance !== null && shippingType) {
@@ -198,6 +236,7 @@ const BookingOrder = () => {
     }, [totalFishCost, shippingCost]);
 
     const handleSubmit = () => {
+<<<<<<< HEAD
         const orderData = {
             senderInfo,
             receiverInfo,
@@ -211,6 +250,8 @@ const BookingOrder = () => {
         sessionStorage.setItem('orderData', JSON.stringify(orderData));
     
         // Navigate to payment page
+=======
+>>>>>>> 6d7265df664dbe71485c9ed003cb8f9f3576950f
         navigate('/payment');
     };
 
@@ -266,27 +307,10 @@ const BookingOrder = () => {
                             onChange={(e) => handleInputChange(e, setReceiverInfo)}
                         />
 
-                        {/* Shipping Type Selection */}
-                        <h2>Shipping Options</h2>
-                        <div className={styles.optionButtons}>
-                            <div
-                                className={`${styles.optionButton} ${shippingType === 'express' ? styles.selected : ''}`}
-                                onClick={() => setShippingType('express')}
-                            >
-                                EXPRESS
-                            </div>
-                            <div
-                                className={`${styles.optionButton} ${shippingType === 'fast' ? styles.selected : ''}`}
-                                onClick={() => setShippingType('fast')}
-                            >
-                                FAST
-                            </div>
-                            <div
-                                className={`${styles.optionButton} ${shippingType === 'standard' ? styles.selected : ''}`}
-                                onClick={() => setShippingType('standard')}
-                            >
-                                STANDARD
-                            </div>
+                        {/* Display the Shipping Type Information */}
+                        <h2>Shipping Information</h2>
+                        <div className={styles.shippingInfo}>
+                            <p><strong>Shipping Type:</strong> {shippingType}</p>
                         </div>
 
                         {distance !== null && shippingCost !== null && (
@@ -356,6 +380,7 @@ const BookingOrder = () => {
                 )}
 
                 {/* Step 2: Add Products */}
+<<<<<<< HEAD
                 {step === 4 && (
                     <div className={styles.addProductsStep}>
                         <h2 className={styles.addProductsTitle}>Add Products</h2>
@@ -370,14 +395,77 @@ const BookingOrder = () => {
                                 <li key={index} className={styles.productListItem}>{product}</li>
                             ))}
                         </ul>
+=======
+                <div className={styles.bookingOrderContainer}>
+                    <div className={styles.formContainer}>
+                        {/* Step 2: Add Fish */}
+                        {step === 2 && (
+                            <div className={styles.step}>
+                                <h2>Thêm Thông Tin Cá</h2>
+                                <input
+                                    type="text"
+                                    name="name"
+                                    placeholder="Tên cá"
+                                    value={newFish.name}
+                                    onChange={(e) => handleInputChange(e, 'name')}
+                                />
+                                <input
+                                    type="number"
+                                    name="age"
+                                    placeholder="Tuổi cá"
+                                    value={newFish.age}
+                                    onChange={(e) => handleInputChange(e, 'age')}
+                                />
+                                <input
+                                    type="file"
+                                    name="image"
+                                    onChange={(e) => handleFileChange(e, 'image')}
+                                />
+                                <input
+                                    type="number"
+                                    name="weight"
+                                    placeholder="Cân nặng cá"
+                                    value={newFish.weight}
+                                    onChange={(e) => handleInputChange(e, 'weight')}
+                                />
+                                <input
+                                    type="file"
+                                    name="certificateImage"
+                                    onChange={(e) => handleFileChange(e, 'certificateImage')}
+                                />
+>>>>>>> 6d7265df664dbe71485c9ed003cb8f9f3576950f
 
-                        <div className={styles.costInfo}>
-                            <p><strong>Tổng tiền cá koi:</strong> {totalFishCost.toFixed(2)} VND</p>
-                            <p><strong>Tổng tiền vận chuyển:</strong> {shippingCost ? shippingCost.toFixed(2) : 0} VND</p>
-                            <p><strong>Tổng số tiền:</strong> {totalAmount.toFixed(2)} VND</p>
-                        </div>
+                                <button onClick={handleAddFish}>Thêm Cá</button>
+
+                                {/* Hiển thị danh sách sản phẩm đã chọn */}
+                                <div>
+                                    <h3>Sản phẩm đã chọn:</h3>
+                                    <ul className={styles.fishList}>
+                                        {selectedProducts.map((fish, index) => (
+                                            <li key={index} className={styles.fishItem}>
+                                                <input
+                                                    type="checkbox"
+                                                    checked={selectedIndexes.includes(index)}
+                                                    onChange={() => handleCheckboxChange(index)}
+                                                />
+                                                <span>
+                                                    {fish.name} - {fish.age} tuổi - {fish.weight}kg
+                                                </span>
+                                            </li>
+                                        ))}
+                                    </ul>
+                                    <button
+                                        onClick={handleDeleteSelected}
+                                        className={styles.deleteSelectedButton}
+                                        disabled={selectedIndexes.length === 0}
+                                    >
+                                        Xóa mục đã chọn
+                                    </button>
+                                </div>
+                            </div>
+                        )}
                     </div>
-                )}
+                </div>
 
 
                 {/* Navigation */}
@@ -407,3 +495,4 @@ const BookingOrder = () => {
 };
 
 export default BookingOrder;
+
