@@ -1,7 +1,6 @@
 /* General container styling */
 .container {
   padding: 20px;
-  max-width: 900px;
   margin: 0 auto;
   font-family: Arial, sans-serif;
 }
@@ -47,8 +46,9 @@ h2 {
 
 .routeTable th,
 .routeTable td {
-  text-align: center;
-  padding: 12px;
+  text-align: center;  /* Căn giữa nội dung của các cột */
+  padding: 14px 16px;  /* Tăng khoảng cách giữa các phần tử trong bảng */
+  font-size: 14px;  /* Đặt font chữ tối thiểu là 14px */
   border: 1px solid #ddd;
 }
 
@@ -69,6 +69,7 @@ h2 {
 
 .routeTable input[type="radio"] {
   cursor: pointer;
+  transform: scale(1.2);  /* Tăng kích thước radio button */
 }
 
 /* Next button styling */

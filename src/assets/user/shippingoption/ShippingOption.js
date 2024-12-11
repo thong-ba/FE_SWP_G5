@@ -1,29 +1,68 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import styles from './ShippingOption.module.css';
 
 const ShippingOption = () => {
   const [selectedOption, setSelectedOption] = useState('');
   const [selectedRoute, setSelectedRoute] = useState(null);
+  const [innerCityRoutes, setInnerCityRoutes] = useState([]);  // State cho dữ liệu innerCity
+  const [localRoutes, setLocalRoutes] = useState([]);  // State cho dữ liệu local
+  const [internationalRoutes, setInternationalRoutes] = useState([]);  // State cho dữ liệu international
   const navigate = useNavigate();
 
-  const exportRoutes = [
-    { id: 1, name: 'Chuyến A', from: 'Hà Nội', to: 'Tokyo', price: '500,000 VND' },
-    { id: 2, name: 'Chuyến B', from: 'Hồ Chí Minh', to: 'Seoul', price: '600,000 VND' },
-    { id: 3, name: 'Chuyến C', from: 'Đà Nẵng', to: 'Singapore', price: '700,000 VND' },
-  ];
+  // Lấy dữ liệu từ API cho "innerCity"
+  useEffect(() => {
+    if (selectedOption === 'innerCity') {
+      fetch('https://localhost:7046/api/TransportService/Domestic')  // API cho "innerCity"
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.isSuccess) {
+            setInnerCityRoutes(data.result);  // Lưu dữ liệu vào state
+          } else {
+            console.error('Lỗi khi lấy dữ liệu từ API');
+          }
+        })
+        .catch((error) => {
+          console.error('Có lỗi xảy ra khi gọi API:', error);
+        });
+    }
+  }, [selectedOption]);  // Chỉ gọi API khi chọn "innerCity"
 
-  const innerCityRoutes = [
-    { id: 4, name: 'Chuyến 1', from: 'Quận 1', to: 'Quận 3', price: '200,000 VND' },
-    { id: 5, name: 'Chuyến 2', from: 'Quận 2', to: 'Quận 7', price: '250,000 VND' },
-    { id: 6, name: 'Chuyến 3', from: 'Quận 5', to: 'Quận 10', price: '300,000 VND' },
-  ];
+  // Lấy dữ liệu từ API cho "local"
+  useEffect(() => {
+    if (selectedOption === 'local') {
+      fetch('https://localhost:7046/api/TransportService/Local')  // API cho "local"
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.isSuccess) {
+            setLocalRoutes(data.result);  // Lưu dữ liệu vào state
+          } else {
+            console.error('Lỗi khi lấy dữ liệu từ API');
+          }
+        })
+        .catch((error) => {
+          console.error('Có lỗi xảy ra khi gọi API:', error);
+        });
+    }
+  }, [selectedOption]);  // Chỉ gọi API khi chọn "local"
 
-  const areaRoutes = [
-    { id: 7, name: 'Chuyến X', from: 'Bắc Giang', to: 'Hà Nội', price: '350,000 VND' },
-    { id: 8, name: 'Chuyến Y', from: 'Hải Phòng', to: 'Quảng Ninh', price: '400,000 VND' },
-    { id: 9, name: 'Chuyến Z', from: 'Thanh Hóa', to: 'Nghệ An', price: '450,000 VND' },
-  ];
+  // Lấy dữ liệu từ API cho "international"
+  useEffect(() => {
+    if (selectedOption === 'international') {
+      fetch('https://localhost:7046/api/TransportService/International')  // API cho "international"
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.isSuccess) {
+            setInternationalRoutes(data.result);  // Lưu dữ liệu vào state
+          } else {
+            console.error('Lỗi khi lấy dữ liệu từ API');
+          }
+        })
+        .catch((error) => {
+          console.error('Có lỗi xảy ra khi gọi API:', error);
+        });
+    }
+  }, [selectedOption]);  // Chỉ gọi API khi chọn "international"
 
   const handleOptionChange = (option) => {
     setSelectedOption(option);
@@ -34,30 +73,30 @@ const ShippingOption = () => {
     setSelectedRoute(routeId);
   };
 
-
-
   const handleNext = () => {
     // Tìm chi tiết tuyến đường dựa trên lựa chọn của người dùng
     const selectedRouteDetails =
-      selectedOption === 'export'
-        ? exportRoutes.find((route) => route.id === selectedRoute)
+      selectedOption === 'international'
+        ? internationalRoutes.find((route) => route.id === selectedRoute)
         : selectedOption === 'innerCity'
         ? innerCityRoutes.find((route) => route.id === selectedRoute)
-        : areaRoutes.find((route) => route.id === selectedRoute);
+        : selectedOption === 'local'
+        ? localRoutes.find((route) => route.id === selectedRoute)
+        : null;
 
     // Kiểm tra nếu tìm thấy chi tiết tuyến đường
     if (selectedRouteDetails) {
-        // Navigate đến trang BookingOrder với state chứa routeId và shippingType
-        navigate('/bookingorder', {
-            state: {
-                routeId: selectedRouteDetails.id,  // Truyền routeId từ chi tiết tuyến đường
-                shippingType: selectedOption       // Truyền shippingType
-            }
-        });
+      // Navigate đến trang BookingOrder với state chứa routeId và shippingType
+      navigate('/bookingorder', {
+        state: {
+          routeId: selectedRouteDetails.id,  // Truyền routeId từ chi tiết tuyến đường
+          shippingType: selectedOption       // Truyền shippingType
+        }
+      });
     } else {
-        console.warn('Không tìm thấy tuyến đường phù hợp');
+      console.warn('Không tìm thấy tuyến đường phù hợp');
     }
-};
+  };
 
   const renderTable = (routes) => (
     <table className={styles.routeTable}>
@@ -66,9 +105,14 @@ const ShippingOption = () => {
           <th>Chọn</th>
           <th>Mã số</th>
           <th>Tên chuyến</th>
-          <th>Vị trí từ</th>
-          <th>Vị trí đến</th>
-          <th>Giá cả</th>
+          <th>Loại vận chuyển</th>
+          <th>Giới thiệu</th>
+          <th>Giá theo Km</th>
+          <th>Giá theo Kg</th>
+          <th>Giá theo đơn vị</th>
+          <th>Tỉnh đi</th>
+          <th>Tỉnh đến</th>
+          <th>Tình trạng</th>
         </tr>
       </thead>
       <tbody>
@@ -84,9 +128,14 @@ const ShippingOption = () => {
             </td>
             <td>{route.id}</td>
             <td>{route.name}</td>
-            <td>{route.from}</td>
-            <td>{route.to}</td>
-            <td>{route.price}</td>
+            <td>{route.transportType === 0 ? 'Nội Địa' : route.transportType === 1 ? 'Quốc Tế' : 'Quốc Tế - International'}</td>
+            <td>{route.description}</td>
+            <td>{route.pricePerKm ? route.pricePerKm + ' VND' : '-'}</td> 
+            <td>{route.pricePerKg ? route.pricePerKg + ' VND' : '-'}</td>
+            <td>{route.pricePerAmount ? route.pricePerAmount + ' VND' : '-'}</td> 
+            <td>{route.fromProvince}</td>
+            <td>{route.toProvince}</td>
+            <td>{route.isActive ? 'Hoạt động' : 'Không hoạt động'}</td> {/* Tình trạng */}
           </tr>
         ))}
       </tbody>
@@ -100,7 +149,7 @@ const ShippingOption = () => {
       <div className={styles.buttonContainer}>
         <button
           className={styles.optionButton}
-          onClick={() => handleOptionChange('export')}
+          onClick={() => handleOptionChange('international')}
         >
           Quốc Tế
         </button>
@@ -112,15 +161,15 @@ const ShippingOption = () => {
         </button>
         <button
           className={styles.optionButton}
-          onClick={() => handleOptionChange('area')}
+          onClick={() => handleOptionChange('local')}
         >
-          Khu Vực
+          Vận Chuyển Nội Địa
         </button>
       </div>
 
-      {selectedOption === 'export' && renderTable(exportRoutes)}
-      {selectedOption === 'innerCity' && renderTable(innerCityRoutes)}
-      {selectedOption === 'area' && renderTable(areaRoutes)}
+      {selectedOption === 'international' && renderTable(internationalRoutes)}  {/* Hiển thị bảng cho "international" */}
+      {selectedOption === 'innerCity' && renderTable(innerCityRoutes)}  {/* Hiển thị bảng cho "innerCity" */}
+      {selectedOption === 'local' && renderTable(localRoutes)}  {/* Hiển thị bảng cho "local" */}
 
       {selectedRoute && (
         <div className={styles.nextButtonContainer}>
@@ -128,7 +177,7 @@ const ShippingOption = () => {
             onClick={handleNext}
             className={styles.nextButton}
           >
-            Next
+            Tiếp theo
           </button>
         </div>
       )}
