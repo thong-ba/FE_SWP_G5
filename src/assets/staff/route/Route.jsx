@@ -1,7 +1,6 @@
-import { LoadScript } from "@react-google-maps/api";
-import axios from "axios";
 import { useState } from "react";
-import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
+import axios from "axios";
+import "./Route.css";
 
 const Route = () => {
   const [routeRequest, setRouteRequest] = useState({
@@ -99,13 +98,14 @@ const Route = () => {
   // const [center, setCenter] = useState({ lat: 10.762622, lng: 106.660172 });
 
   return (
-    <div>
-      <h2>Create Route</h2>
+    <div className="route-container">
+      <h2 className="route-title">Create Route</h2>
 
-      <div>
-        <label>Notes:</label>
+      <div className="route-field">
+        <label className="route-label">Notes:</label>
         <input
           type="text"
+          className="route-input"
           value={routeRequest.notes}
           onChange={(e) =>
             setRouteRequest((prev) => ({ ...prev, notes: e.target.value }))
@@ -113,10 +113,11 @@ const Route = () => {
         />
       </div>
 
-      <div>
-        <label>Driver ID:</label>
+      <div className="route-field">
+        <label className="route-label">Driver ID:</label>
         <input
           type="number"
+          className="route-input"
           value={routeRequest.driverId}
           onChange={(e) =>
             setRouteRequest((prev) => ({ ...prev, driverId: +e.target.value }))
@@ -124,30 +125,33 @@ const Route = () => {
         />
       </div>
 
-      <h3>Route Stops</h3>
+      <h3 className="route-subtitle">Route Stops</h3>
       {routeStopRequests.map((stop, index) => (
-        <div key={index} style={{ marginBottom: "10px" }}>
-          <label>Stop Order:</label>
+        <div key={index} className="route-stop">
+          <label className="route-label">Stop Order:</label>
           <input
             type="number"
+            className="route-input"
             value={stop.stopOrder}
             onChange={(e) =>
               handleUpdateRouteStop(index, "stopOrder", +e.target.value)
             }
           />
 
-          <label>Address:</label>
+          <label className="route-label">Address:</label>
           <input
             type="text"
+            className="route-input"
             value={stop.address}
             onChange={(e) =>
               handleUpdateRouteStop(index, "address", e.target.value)
             }
           />
 
-          <label>Order ID:</label>
+          <label className="route-label">Order ID:</label>
           <input
             type="number"
+            className="route-input"
             value={stop.orderId}
             onChange={(e) =>
               handleUpdateRouteStop(index, "orderId", +e.target.value)

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode'; // Không thêm dấu ngoặc nhọn
+import { jwtDecode } from 'jwt-decode'; // Không thêm dấu ngoặc nhọn
 import LayoutUtils from './assets/utils/LayoutUtils';
 
 import HomePage from './assets/user/home/HomePage';
@@ -18,6 +18,7 @@ import MapView from './assets/driver/currentlocation/MapView';
 import DriverLayout from './assets/driver/layout/DriverLayout';
 import Manager from './assets/manager/dashboard/Manager';
 import Staff from './assets/staff/dashboard/Staff';
+import PendingOrderTab from './assets/staff/order/PendingOrderTab/PendingOrderTab';
 
 
 function App() {
@@ -29,7 +30,7 @@ function App() {
     accuracy: null,
   });
   const navigate = useNavigate();
-  
+
   // useEffect(() => {
   //   if (navigator.geolocation) {
   //     navigator.geolocation.getCurrentPosition(
@@ -64,77 +65,77 @@ function App() {
   // }, []);
 
   useEffect(() => {
-        if (navigator.geolocation) {
-            const id = navigator.geolocation.watchPosition(
-            // navigator.geolocation.getCurrentPosition(
-                (position) => {
-                  // if (position.coords.accuracy < 50) {
-                    setLocation({
-                        latitude: position.coords.latitude,
-                        longitude: position.coords.longitude,
-                        accuracy: position.coords.accuracy,
-                    });
-                  // } 
-                  // else {
-                  //   console.warn("Location accuracy too low: ", position.coords.accuracy);
-                  // }
-                },
-                (error) => {
-                    console.error("Error getting location: ", error);
-                },
-                {
-                  enableHighAccuracy: true, // Yêu cầu độ chính xác cao
-                  maximumAge: 0,            // Không sử dụng vị trí cũ
-                  timeout: 10000
-                }
-            );
-            return () => navigator.geolocation.clearWatch(id);
-        } else {
-            console.error("Geolocation is not supported by this browser.");
+    if (navigator.geolocation) {
+      const id = navigator.geolocation.watchPosition(
+        // navigator.geolocation.getCurrentPosition(
+        (position) => {
+          // if (position.coords.accuracy < 50) {
+          setLocation({
+            latitude: position.coords.latitude,
+            longitude: position.coords.longitude,
+            accuracy: position.coords.accuracy,
+          });
+          // } 
+          // else {
+          //   console.warn("Location accuracy too low: ", position.coords.accuracy);
+          // }
+        },
+        (error) => {
+          console.error("Error getting location: ", error);
+        },
+        {
+          enableHighAccuracy: true, // Yêu cầu độ chính xác cao
+          maximumAge: 0,            // Không sử dụng vị trí cũ
+          timeout: 10000
         }
-    }, []);
+      );
+      return () => navigator.geolocation.clearWatch(id);
+    } else {
+      console.error("Geolocation is not supported by this browser.");
+    }
+  }, []);
 
 
-useEffect(() => {
-  const checkToken = () => {
-    const token = sessionStorage.getItem("token");
-    if (token) {
-      try {
-        const decoded = jwtDecode(token);
-        console.log("Decoded token:", decoded); // Logging decoded token for debugging
-        const currentTime = Math.floor(Date.now() / 1000);
+  useEffect(() => {
+    const checkToken = () => {
+      const token = sessionStorage.getItem("token");
+      if (token) {
+        try {
+          const decoded = jwtDecode(token);
+          console.log("Decoded token:", decoded); // Logging decoded token for debugging
+          const currentTime = Math.floor(Date.now() / 1000);
 
-        if (decoded.exp > currentTime) {
-          setIsLoggedIn(true);
+          if (decoded.exp > currentTime) {
+            setIsLoggedIn(true);
 
-          // Dynamically find the Role key in the decoded token
-          const roleKey = Object.keys(decoded).find((key) =>
-            key.toLowerCase().includes("role")
-          );
-          setUserRole(decoded[roleKey] || null);
+            // Dynamically find the Role key in the decoded token
+            const roleKey = Object.keys(decoded).find((key) =>
+              key.toLowerCase().includes("role")
+            );
+            setUserRole(decoded[roleKey] || null);
 
-          console.log("User Role:", decoded[roleKey] || null);
-        } else {
+            console.log("User Role:", decoded[roleKey] || null);
+          } else {
+            sessionStorage.removeItem("token");
+
+            setIsLoggedIn(false);
+          }
+        } catch (error) {
+          console.error("Token decoding failed:", error);
           sessionStorage.removeItem("token");
-
           setIsLoggedIn(false);
         }
-      } catch (error) {
-        console.error("Token decoding failed:", error);
-        sessionStorage.removeItem("token");
+      } else {
         setIsLoggedIn(false);
       }
-    } else {
-      setIsLoggedIn(false);
-    }
-  };
+    };
 
-  checkToken();
-}, []);
+    checkToken();
+  }, []);
 
 
   const handleLogin = (token) => {
-    
+
 
     try {
       const decoded = jwtDecode(token);
@@ -144,13 +145,12 @@ useEffect(() => {
 
       if (decoded.Role === 'Manager') {
         navigate('/manager');
-      } else if (decoded.Role === 'SalesStaff' ) {
+      } else if (decoded.Role === 'SalesStaff') {
         navigate('/staff');
-      } else if(decoded.Role === 'DeliveringStaff')
-      {
+      } else if (decoded.Role === 'DeliveringStaff') {
         navigate('/staff');
       }
-      
+
       else {
         navigate('/home');
       }
@@ -231,7 +231,7 @@ useEffect(() => {
           )
         }
       />
-       <Route
+      <Route
         path="/payment"
         element={
           <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
@@ -239,7 +239,7 @@ useEffect(() => {
           </LayoutUtils>
         }
       />
-       <Route
+      <Route
         path="/service"
         element={
           <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
@@ -247,7 +247,7 @@ useEffect(() => {
           </LayoutUtils>
         }
       />
-       <Route
+      <Route
         path="/userinfo"
         element={
           <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
@@ -255,7 +255,7 @@ useEffect(() => {
           </LayoutUtils>
         }
       />
-      
+
       {/* Routes cho manager và staff */}
       <Route
         path="/manager"
@@ -301,15 +301,29 @@ useEffect(() => {
       <Route path="/bookingorder" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><BookingOrder /></LayoutUtils>} />
       <Route path="/payment" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Payment /></LayoutUtils>} />
       <Route path="/service" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Service /></LayoutUtils>} />
-      
+
       <Route path="/staff" element={<Staff />} />
       <Route path="/manager" element={<Manager />} />
 
       <Route path="/driver" element={<DriverLayout isLoggedIn={isLoggedIn} handleLogout={handleLogout} ><MapView location={location} /> </DriverLayout>} />
+
+      <Route
+        path="/pendingorder"
+        element={
+          isLoggedIn ? (
+            <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+              <PendingOrderTab />  {/* Đảm bảo bạn đã tạo và import trang PendingOrder */}
+            </LayoutUtils>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
     </Routes>
+
+
+
   );
 }
 
 export default App;
-
-
