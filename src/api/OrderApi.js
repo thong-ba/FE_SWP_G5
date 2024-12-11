@@ -1,14 +1,14 @@
-// <<<<<<< Long
+
 import axios from "axios";
 
 // Base URL cho Order API
 const baseOrderUrl = "http://localhost:5141/api/Order";
-// =======
+
 // import { getJwtToken, headers, localUrl } from "./Url";
 // import axios from "axios";
 
 // const baseOrderUrl = `${localUrl}/Order`;
-// >>>>>>> main
+
 
 // 1. Lấy danh sách tất cả các order
 export const GetAllOrderService = async () => {
@@ -138,8 +138,7 @@ export const GetAllProcessingOrderService = async () => {
     throw new Error("Failed to fetch all processing orders: " + error.message);
   }
 };
-// <<<<<<< Long
-// =======
+
 export const UpdateOrderStatus = async (status, data) => {
   try {
     const response = await axios.put(`${baseOrderUrl}/Update-Order-Status-${status}`, data);
@@ -154,4 +153,3 @@ export const UpdateOrderStatus = async (status, data) => {
     throw new Error("Error updating Transport Service: " + error.message);
   }
 };
-// >>>>>>> main

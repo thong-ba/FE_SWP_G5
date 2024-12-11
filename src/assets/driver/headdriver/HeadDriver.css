@@ -1,0 +1,54 @@
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px;
+  background-color: rgb(146, 68, 146);
+  color: white;
+}
+
+.logo-container {
+    display: flex;
+    align-items: center;
+}
+
+.logo-image {
+    width: 30px; /* Giảm kích thước hình đại diện */
+    height: 30px; /* Giảm kích thước hình đại diện */
+    margin-right: 10px; /* Khoảng cách giữa hình đại diện và tên web */
+}
+  
+.logo {
+    font-size: 24px;
+    color: white;
+    display: contents;    
+}
+  
+
+.user-avatar {
+    width: 25px;  /* Kích thước avatar thu nhỏ */
+    height: 25px; /* Kích thước avatar thu nhỏ */
+    border-radius: 50%; /* Đảm bảo avatar có dạng tròn */
+    object-fit: cover; /* Đảm bảo ảnh không bị méo */
+    margin-right: 10px; /* Khoảng cách giữa avatar và các mục khác */
+}
+
+.nav-list {
+    list-style-type: none;
+    display: flex;
+    gap: 50px;
+}
+
+.nav-item {
+    font-size: 16px;
+}
+
+.nav-item a {
+    color: white;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.nav-item a:hover {
+    color: #ffa500;
+}

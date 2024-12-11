@@ -14,14 +14,86 @@ import TrackOrder from './assets/user/trackorder/TrackOrder';
 
 import VerifyAccount from './assets/user/verify/VerifyAccount';
 
+import MapView from './assets/driver/currentlocation/MapView';
+import DriverLayout from './assets/driver/layout/DriverLayout';
 import Manager from './assets/manager/dashboard/Manager';
 import Staff from './assets/staff/dashboard/Staff';
 
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const [userRole, setUserRole] = useState(null);
+  const [userRole, setUserRole] = useState(null); // Lưu vai trò người dùng
+  const [location, setLocation] = useState({
+    latitude: null,
+    longitude: null,
+    accuracy: null,
+  });
   const navigate = useNavigate();
+  
+  // useEffect(() => {
+  //   if (navigator.geolocation) {
+  //     navigator.geolocation.getCurrentPosition(
+  //       async (position) => {
+  //         const location = {
+  //           latitude: position.coords.latitude,
+  //           longitude: position.coords.longitude,
+  //         };
+  //         console.log("Location object: ", location);
+  //         setLocation(location);
+
+  //         if (location.latitude !== 0 && location.longitude !== 0) {
+  //         try {
+  //           const response = await axios.post("https://localhost:7046/api/Location/${id}", location);
+  //           console.log("Location sent to API: ", response.data);
+  //         }
+  //         catch (error) {
+  //           console.error("Error sending location to API:", error);
+  //         }
+  //       } else {
+  //         console.error("Invalid latitude or longitude");
+  //       }
+  //       },
+  //       (error) => {
+  //         console.log("Error getting location: ", error);
+  //       }
+  //     );
+  //   }
+  //   else {
+  //     console.error("Geolocation is not supported by this browser.");
+  //   }
+  // }, []);
+
+  useEffect(() => {
+        if (navigator.geolocation) {
+            const id = navigator.geolocation.watchPosition(
+            // navigator.geolocation.getCurrentPosition(
+                (position) => {
+                  // if (position.coords.accuracy < 50) {
+                    setLocation({
+                        latitude: position.coords.latitude,
+                        longitude: position.coords.longitude,
+                        accuracy: position.coords.accuracy,
+                    });
+                  // } 
+                  // else {
+                  //   console.warn("Location accuracy too low: ", position.coords.accuracy);
+                  // }
+                },
+                (error) => {
+                    console.error("Error getting location: ", error);
+                },
+                {
+                  enableHighAccuracy: true, // Yêu cầu độ chính xác cao
+                  maximumAge: 0,            // Không sử dụng vị trí cũ
+                  timeout: 10000
+                }
+            );
+            return () => navigator.geolocation.clearWatch(id);
+        } else {
+            console.error("Geolocation is not supported by this browser.");
+        }
+    }, []);
+
 
 useEffect(() => {
   const checkToken = () => {
@@ -44,6 +116,7 @@ useEffect(() => {
           console.log("User Role:", decoded[roleKey] || null);
         } else {
           sessionStorage.removeItem("token");
+
           setIsLoggedIn(false);
         }
       } catch (error) {
@@ -61,6 +134,8 @@ useEffect(() => {
 
 
   const handleLogin = (token) => {
+    
+
     try {
       const decoded = jwtDecode(token);
       sessionStorage.setItem('token', token);
@@ -194,7 +269,7 @@ useEffect(() => {
       />
 
       {/* Redirect nếu không phù hợp */}
-      <Route
+      {/* <Route
         path="/staff"
         element={
           userRole === 'DeliveringStaff' ? (
@@ -217,10 +292,24 @@ useEffect(() => {
             <Navigate to="/home" />
           )
         }
-      />
+      /> */}
       <Route path="*" element={<Navigate to="/home" />} />
+      <Route path="/" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
+      <Route path="/home" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
+      <Route path="/login" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Login setIsLoggedIn={setIsLoggedIn} /></LayoutUtils>} />
+      <Route path="/register" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Register /></LayoutUtils>} />
+      <Route path="/bookingorder" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><BookingOrder /></LayoutUtils>} />
+      <Route path="/payment" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Payment /></LayoutUtils>} />
+      <Route path="/service" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Service /></LayoutUtils>} />
+      
+      <Route path="/staff" element={<Staff />} />
+      <Route path="/manager" element={<Manager />} />
+
+      <Route path="/driver" element={<DriverLayout isLoggedIn={isLoggedIn} handleLogout={handleLogout} ><MapView location={location} /> </DriverLayout>} />
     </Routes>
   );
 }
 
 export default App;
+
+
