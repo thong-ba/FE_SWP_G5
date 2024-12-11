@@ -14,8 +14,8 @@ const Route = () => {
       stopOrder: 0,
       address: "",
       orderId: 0,
-      latitude: null, //new
-      longitude: null, //new
+      //latitude: null, //new
+      //longitude: null, //new
     },
   ]);
 
@@ -26,34 +26,34 @@ const Route = () => {
         stopOrder: prev.length + 1,
         address: "",
         orderId: 0,
-        latitude: null,
-        longitude: null,
+        //latitude: null,
+        //longitude: null,
       },
     ]);
   };
 
   const handleUpdateRouteStop = async (index, field, value) => {
-    // setRouteStopRequests((prev) =>
-    //   prev.map((stop, i) => (i === index ? { ...stop, [field]: value } : stop))
-    // );
-
-    const updatedStops = routeStopRequests.map((stop, i) =>
-      i === index ? { ...stop, [field]: value } : stop
+    setRouteStopRequests((prev) =>
+      prev.map((stop, i) => (i === index ? { ...stop, [field]: value } : stop))
     );
 
-    if (field === "address" && value) {
-      const coordinates = await getCoordinatesFromAddress(value);
-      if (coordinates) {
-        updatedStops[index].latitude = coordinates.lat;
-        updatedStops[index].longitude = coordinates.lng;
+    // const updatedStops = routeStopRequests.map((stop, i) =>
+    //   i === index ? { ...stop, [field]: value } : stop
+    // );
 
-        if (index === 0) {
-          setCenter({ lat: coordinates.lat, lng: coordinates.lng });
-        }
-      }
-    }
+    // if (field === "address" && value) {
+    //   const coordinates = await getCoordinatesFromAddress(value);
+    //   if (coordinates) {
+    //     updatedStops[index].latitude = coordinates.lat;
+    //     updatedStops[index].longitude = coordinates.lng;
 
-    setRouteStopRequests(updatedStops);
+    //     if (index === 0) {
+    //       setCenter({ lat: coordinates.lat, lng: coordinates.lng });
+    //     }
+    //   }
+    // }
+
+    // setRouteStopRequests(updatedStops);
   };
 
   const handleSubmit = async () => {
@@ -80,23 +80,23 @@ const Route = () => {
     }
   };
 
-  const getCoordinatesFromAddress = async (address) => {
-    try {
-      const response = await axios.get(
-        `https://api.gomaps.pro/v1/geocode?address=${encodeURIComponent(
-          address
-        )}&AlzaSyUvPQNAeiGylwDuGIWC1DBYCD8wdshPPZV`
-      );
+  // const getCoordinatesFromAddress = async (address) => {
+  //   try {
+  //     const response = await axios.get(
+  //       `https://api.gomaps.pro/v1/geocode?address=${encodeURIComponent(
+  //         address
+  //       )}&AlzaSyUvPQNAeiGylwDuGIWC1DBYCD8wdshPPZV`
+  //     );
 
-      return response.data.location;
-    } catch (error) {
-      console.error("Error fetching coordinates:", error);
-      return null;
-    }
-  };
+  //     return response.data.location;
+  //   } catch (error) {
+  //     console.error("Error fetching coordinates:", error);
+  //     return null;
+  //   }
+  // };
 
-  const containerStyle = { width: "100%", height: "500px" };
-  const [center, setCenter] = useState({ lat: 10.762622, lng: 106.660172 });
+  // const containerStyle = { width: "100%", height: "500px" };
+  // const [center, setCenter] = useState({ lat: 10.762622, lng: 106.660172 });
 
   return (
     <div>
@@ -160,7 +160,7 @@ const Route = () => {
       <button onClick={handleSubmit}>Submit Route</button>
 
       {/* Map */}
-      <h3>Route Stops Map</h3>
+      {/* <h3>Route Stops Map</h3>
       <MapContainer
         center={center}
         zoom={13}
@@ -188,7 +188,7 @@ const Route = () => {
               </Marker>
             )
         )}
-      </MapContainer>
+      </MapContainer> */}
     </div>
   );
 };
