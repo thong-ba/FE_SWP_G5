@@ -1,8 +1,8 @@
 // <<<<<<< Long
-// import axios from "axios";
+import axios from "axios";
 
-// // Base URL cho Order API
-// const baseOrderUrl = "http://localhost:5141/api/Order";
+// Base URL cho Order API
+const baseOrderUrl = "http://localhost:5141/api/Order";
 // =======
 // import { getJwtToken, headers, localUrl } from "./Url";
 // import axios from "axios";
@@ -140,18 +140,18 @@ export const GetAllProcessingOrderService = async () => {
 };
 // <<<<<<< Long
 // =======
-// export const UpdateOrderStatus = async (status, data) => {
-//   try {
-//     const response = await axios.put(`${baseOrderUrl}/Update-Order-Status-${status}`, data);
+export const UpdateOrderStatus = async (status, data) => {
+  try {
+    const response = await axios.put(`${baseOrderUrl}/Update-Order-Status-${status}`, data);
 
-//     if (response.statusCode === 200) {
-//       return { isSuccess: true, message: "Order updated successfully!" };
-//     } else {
-//       return { isSuccess: false, message: "Failed to update Order ." };
-//     }
-//   } catch (error) {
-//     console.error('Error updating Transport Service:', error);
-//     throw new Error("Error updating Transport Service: " + error.message);
-//   }
-// };
+    if (response.statusCode === 200) {
+      return { isSuccess: true, message: "Order updated successfully!" };
+    } else {
+      return { isSuccess: false, message: "Failed to update Order ." };
+    }
+  } catch (error) {
+    console.error('Error updating Transport Service:', error);
+    throw new Error("Error updating Transport Service: " + error.message);
+  }
+};
 // >>>>>>> main
