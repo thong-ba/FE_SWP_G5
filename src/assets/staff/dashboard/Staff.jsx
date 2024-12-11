@@ -2,13 +2,13 @@ import React, { useEffect, useState } from "react";
 import "./Staff.css";
 import axios from "axios";
 import PendingOrderTab from "../order/PendingOrderTab/PendingOrderTab";
-// import PendingPickUpOrderTab from "../order/PendingPickUpOrderTab/PendingPickUpOrderTab";
-// import CompletedOrderTab from "../order/CompletedOrderTab/CompletedOrderTab";
-// import CancelOrderTab from "../order/CancelOrderTab/CancelOrderTab";
+import PendingPickUpOrderTab from "../order/PendingPickUpOrderTab/PendingPickUpOrderTab";
+import CompletedOrderTab from "../order/CompletedOrderTab/CompletedOrderTab";
+import CancelOrderTab from "../order/CancelOrderTab/CancelOrderTab";
 import Route from "../route/Route";
 
 function Staff() {
-  const [activeTab, setActiveTab] = useState('pendingOrders');
+  const [activeTab, setActiveTab] = useState("pendingOrders");
   const [isLogoutDialogVisible, setIsLogoutDialogVisible] = useState(false);
 
   const renderContent = () => {
@@ -35,9 +35,9 @@ function Staff() {
   const handleLogout = () => {
     setIsLogoutDialogVisible(false);
     // Perform the actual logout operation here
-    alert('Logged out successfully');
+    alert("Logged out successfully");
     // Redirect to home page
-    window.location.href = '/';
+    window.location.href = "/";
   };
 
   return (
@@ -47,8 +47,8 @@ function Staff() {
         <ul>
           <li>
             <button
-              onClick={() => setActiveTab('pendingOrders')}
-              className={activeTab === 'pendingOrders' ? 'active' : ''}
+              onClick={() => setActiveTab("pendingOrders")}
+              className={activeTab === "pendingOrders" ? "active" : ""}
             >
               Pending Orders
             </button>
@@ -58,13 +58,13 @@ function Staff() {
               onClick={() => setActiveTab("pendingPickUpOrders")}
               className={activeTab === "pendingPickUpOrders" ? "active" : ""}
             >
-              Processing Orders
+              Pending Pick Up Orders
             </button>
           </li>
           <li>
             <button
-              onClick={() => setActiveTab('completedOrders')}
-              className={activeTab === 'completedOrders' ? 'active' : ''}
+              onClick={() => setActiveTab("completedOrders")}
+              className={activeTab === "completedOrders" ? "active" : ""}
             >
               Completed Orders
             </button>
@@ -94,8 +94,15 @@ function Staff() {
           <div className="logout-dialog-content">
             <h3>Confirm Logout</h3>
             <p>Are you sure you want to log out?</p>
-            <button onClick={handleLogout} className="btn-confirm-logout">Confirm</button>
-            <button onClick={() => setIsLogoutDialogVisible(false)} className="btn-cancel-logout">Cancel</button>
+            <button onClick={handleLogout} className="btn-confirm-logout">
+              Confirm
+            </button>
+            <button
+              onClick={() => setIsLogoutDialogVisible(false)}
+              className="btn-cancel-logout"
+            >
+              Cancel
+            </button>
           </div>
         </div>
       )}

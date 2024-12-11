@@ -59,7 +59,7 @@ function LoginDriver({ onLogin }) {
               onChange={(e) => setPassword(e.target.value)}  
               required  
             />  
-            <button type="submit">Login As Driver</button>  
+            <button type="submit">Login</button>  
           </form>  
           {message && <div className="message-box">{message}</div>}  
         </div>  

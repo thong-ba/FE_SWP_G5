@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import './Login.css';
+import LoginDriver from '../../driver/loginForDriver/LoginDriver';
 
 function Login({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -37,6 +38,7 @@ function Login({ onLogin }) {
   return (
     <div className="login-container">
       <h2>Login Page</h2>
+      {!isDriverLogin ? (
       <form onSubmit={handleSubmit}>
         <input
           type="text"
@@ -61,6 +63,9 @@ function Login({ onLogin }) {
       <p>
         Don't have an account? <a href="/register" className="register-link-text" >Register here</a>
       </p>
+      <button onClick={() => setIsDriverLogin(!isDriverLogin)}>  
+      {isDriverLogin ? 'Login' : 'Login For Driver'}  
+    </button>  
     </div>
   );
 }

@@ -14,6 +14,8 @@ import TrackOrder from './assets/user/trackorder/TrackOrder';
 
 import VerifyAccount from './assets/user/verify/VerifyAccount';
 
+import MapView from './assets/driver/currentlocation/MapView';
+import DriverLayout from './assets/driver/layout/DriverLayout';
 import Manager from './assets/manager/dashboard/Manager';
 import Staff from './assets/staff/dashboard/Staff';
 import PendingOrderTab from './assets/staff/order/PendingOrderTab/PendingOrderTab';
@@ -325,5 +327,3 @@ function App() {
 }
 
 export default App;
-
-
