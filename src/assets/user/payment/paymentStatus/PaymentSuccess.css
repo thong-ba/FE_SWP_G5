@@ -1,0 +1,14 @@
+.paymentsuccess-container {
+    display: flex;
+    flex-direction: column; /* Stack items vertically */
+    align-items: center; /* Center items horizontally */
+    justify-content: center; /* Center items vertically */
+    height: 100vh; /* Full viewport height for perfect centering */
+    text-align: center; /* Center the text inside the div */
+}
+
+.img-logo {
+    width: 200px;
+    height: 200px;
+    margin-bottom: 20px; /* Add some space between the image and the text */
+}
