@@ -1,11 +1,8 @@
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import "./Staff.css";
-import axios from "axios";
 import PendingOrderTab from "../order/PendingOrderTab/PendingOrderTab";
-import PendingPickUpOrderTab from "../order/PendingPickUpOrderTab/PendingPickUpOrderTab";
-import CompletedOrderTab from "../order/CompletedOrderTab/CompletedOrderTab";
-import CancelOrderTab from "../order/CancelOrderTab/CancelOrderTab";
-import Route from "../route/Route";
+import StaffProfile from "./StaffProfile";  
+import CompletedOrderTab from "../order/CompletedOrderTab/CompletedOrderTab";  // Import the CompletedOrderTab component
 
 function Staff() {
   const [activeTab, setActiveTab] = useState("pendingOrders");
@@ -15,14 +12,10 @@ function Staff() {
     switch (activeTab) {
       case "pendingOrders":
         return <PendingOrderTab />;
-      case "pendingPickUpOrders":
-        return <PendingPickUpOrderTab />;
-      case "completedOrders":
+      case "staffProfile":
+        return <StaffProfile />;
+      case "completedOrders":  // Add case for "completedOrders"
         return <CompletedOrderTab />;
-      case "cancelOrders":
-        return <CancelOrderTab />;
-      case "createRouteAndRouteStop":
-        return <Route />;
       default:
         return <div>Select a tab to view information</div>;
     }
@@ -34,9 +27,7 @@ function Staff() {
 
   const handleLogout = () => {
     setIsLogoutDialogVisible(false);
-    // Perform the actual logout operation here
     alert("Logged out successfully");
-    // Redirect to home page
     window.location.href = "/";
   };
 
@@ -55,34 +46,18 @@ function Staff() {
           </li>
           <li>
             <button
-              onClick={() => setActiveTab("pendingPickUpOrders")}
-              className={activeTab === "pendingPickUpOrders" ? "active" : ""}
-            >
-              Pending Pick Up Orders
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => setActiveTab("completedOrders")}
+              onClick={() => setActiveTab("completedOrders")}  // Add "Complete Order" tab
               className={activeTab === "completedOrders" ? "active" : ""}
             >
-              Completed Orders
+              Complete Orders
             </button>
           </li>
           <li>
             <button
-              onClick={() => setActiveTab("cancelOrders")}
-              className={activeTab === "cancelOrders" ? "active" : ""}
+              onClick={() => setActiveTab("staffProfile")}
+              className={activeTab === "staffProfile" ? "active" : ""}
             >
-              Cancel Orders
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={() => setActiveTab("createRouteAndRouteStop")}
-              className={activeTab === "createRouteAndRouteStop" ? "active" : ""}
-            >
-              Create Route And Route Stop
+              Staff Profile
             </button>
           </li>
         </ul>

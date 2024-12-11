@@ -1,99 +1,83 @@
-/* General Styles */
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-  
-  .pending-orders {
-    margin: 20px auto;
+.pending-orders-container {
     padding: 20px;
-    max-width: 1200px;
     background-color: #f9f9f9;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   }
   
-  .pending-orders h2 {
-    text-align: center;
-    margin-bottom: 20px;
-    color: #333;
+  .pending-orders-title {
     font-size: 24px;
-    font-weight: bold;
+    margin-bottom: 20px;
   }
   
-  /* Table Styles */
-  table {
+  .pending-orders-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
+    margin-bottom: 20px;
   }
   
-  thead {
-    background-color: #007bff;
-    color: #fff;
-  }
-  
-  thead th {
-    padding: 12px;
-    text-align: left;
-    font-size: 14px;
-    text-transform: uppercase;
-  }
-  
-  tbody tr {
-    border-bottom: 1px solid #ddd;
-  }
-  
-  tbody tr:hover {
+  .pending-orders-header {
     background-color: #f1f1f1;
   }
   
-  td {
-    padding: 12px;
-    font-size: 14px;
-    color: #333;
+  .pending-orders-header-cell {
+    padding: 10px;
+    text-align: left;
+    font-weight: bold;
+    border: 1px solid #ddd;
   }
   
-  td:nth-child(odd) {
-    background-color: #f8f8f8;
+  .pending-orders-body {
+    background-color: #fff;
   }
   
-  td:nth-child(even) {
-    background-color: #ffffff;
+  .pending-orders-row {
+    border-bottom: 1px solid #ddd;
   }
   
-  /* Responsive Design */
-  @media screen and (max-width: 768px) {
-    table {
-      display: block;
-      overflow-x: auto;
-      white-space: nowrap;
-    }
-  
-    thead th {
-      font-size: 12px;
-    }
-  
-    td {
-      font-size: 12px;
-    }
+  .pending-orders-cell {
+    padding: 10px;
+    border: 1px solid #ddd;
   }
   
-  /* Button and Interaction Styles */
-  button {
-    padding: 10px 15px;
+  .loading-message {
+    text-align: center;
+    font-size: 18px;
+    padding: 20px;
+  }
+  
+  .pagination-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 20px;
+  }
+  
+  .pagination-button {
+    padding: 25px;
+    width: 120px;
+    margin: 30px;
+    font-size: 16px;
     background-color: #007bff;
-    color: #fff;
+    color: white;
     border: none;
-    border-radius: 5px;
     cursor: pointer;
-    font-size: 14px;
   }
   
-  button:hover {
-    background-color: #0056b3;
+  .pagination-button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
   }
   
+  .pagination-info {
+    font-size: 16px;
+  }
+
+  .action-button-update{
+    background-color: #007bff;
+    color: white;
+  }
+  
+  .action-button-delete
+  {
+    background-color: red;
+    color: white;
+  }
