@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import styles from './BookingOrder.module.css'; // Importing CSS module
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -16,24 +16,55 @@ const BookingOrder = () => {
     const [step, setStep] = useState(1); // Start with Step 1
     const [senderInfo, setSenderInfo] = useState({ fullName: '', phone: '', address: '' });
     const [receiverInfo, setReceiverInfo] = useState({ fullName: '', phone: '', address: '' });
+    const [newFish, setNewFish] = useState({ name: '', age: '', image: null, weight: '', certificateImage: null });
     const [shippingType, setShippingType] = useState('');
+    const [routeId, setRouteId] = useState('');
     const [selectedProducts, setSelectedProducts] = useState([]);
+    const [selectedIndexes, setSelectedIndexes] = useState([]);
     const [senderCoordinates, setSenderCoordinates] = useState(null);
     const [receiverCoordinates, setReceiverCoordinates] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [distance, setDistance] = useState(null);
     const [shippingCost, setShippingCost] = useState(null);
     const [totalFishCost, setTotalFishCost] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
     const navigate = useNavigate();
+    const location = useLocation();
 
-    const handleInputChange = (e, setInfo) => {
+    const handleAddFish = () => {
+        setSelectedProducts([...selectedProducts, newFish]);
+        setNewFish({ name: '', age: '', image: null, weight: '', certificateImage: null });
+    };
+
+    // const handleInputChange = (e, field) => {
+    //     const { name, value } = e.target;
+    //     setNewFish(prevFish => ({ ...prevFish, [name]: value }));
+    // };
+    const handleInputChange = (e, setStateFunction) => {
         const { name, value } = e.target;
-        setInfo(prevInfo => ({ ...prevInfo, [name]: value }));
+        setStateFunction((prev) => ({ ...prev, [name]: value }));
+    };
+    const handleFileChange = (e, field) => {
+        const file = e.target.files[0];
+        setNewFish(prevFish => ({ ...prevFish, [field]: file }));
     };
 
     const handleNextStep = () => setStep(prev => prev + 1);
     const handlePrevStep = () => setStep(prev => prev - 1);
 
+    const handleCheckboxChange = (index) => {
+        if (selectedIndexes.includes(index)) {
+            setSelectedIndexes(selectedIndexes.filter(i => i !== index));
+        } else {
+            setSelectedIndexes([...selectedIndexes, index]);
+        }
+    };
+
+    const handleDeleteSelected = () => {
+        const updatedProducts = selectedProducts.filter((_, index) => !selectedIndexes.includes(index));
+        setSelectedProducts(updatedProducts);
+        setSelectedIndexes([]);
+    };
     const handleAddProduct = (e) => {
         const product = e.target.value;
         if (product && !selectedProducts.includes(product)) {
@@ -92,6 +123,12 @@ const BookingOrder = () => {
     }, [senderInfo.address, receiverInfo.address]);
 
     useEffect(() => {
+        if (location.state && location.state.shippingType) {
+            setShippingType(location.state.shippingType); // Lấy shippingType từ state
+        }
+    }, [location]);
+
+    useEffect(() => {
         if (distance !== null && shippingType) {
             let cost = 0;
             if (shippingType === 'express') {
@@ -113,8 +150,22 @@ const BookingOrder = () => {
         setTotalAmount(totalFishCost + (shippingCost || 0));
     }, [totalFishCost, shippingCost]);
 
+
+    useEffect(() => {
+        if (location.state && location.state.routeId) {
+            setRouteId(location.state.routeId); // Lấy routeId từ state
+        }
+    }, [location]);
+    useEffect(() => {
+        console.log(location.state);  // In ra để kiểm tra dữ liệu
+        if (location.state && location.state.routeId) {
+            setRouteId(location.state.routeId);
+        }
+    }, [location]);
+
+
     const handleSubmit = () => {
-        navigate('/payment'); 
+        navigate('/payment');
     };
 
     return (
@@ -169,29 +220,12 @@ const BookingOrder = () => {
                             onChange={(e) => handleInputChange(e, setReceiverInfo)}
                         />
 
-                        {/* Shipping Type Selection */}
-                        <h2>Shipping Options</h2>
-                        <div className={styles.optionButtons}>
-                            <div
-                                className={`${styles.optionButton} ${shippingType === 'express' ? styles.selected : ''}`}
-                                onClick={() => setShippingType('express')}
-                            >
-                                EXPRESS
-                            </div>
-                            <div
-                                className={`${styles.optionButton} ${shippingType === 'fast' ? styles.selected : ''}`}
-                                onClick={() => setShippingType('fast')}
-                            >
-                                FAST
-                            </div>
-                            <div
-                                className={`${styles.optionButton} ${shippingType === 'standard' ? styles.selected : ''}`}
-                                onClick={() => setShippingType('standard')}
-                            >
-                                STANDARD
-                            </div>
+                        {/* Display the Shipping Type Information */}
+                        <h2>Shipping Information</h2>
+                        <div className={styles.shippingInfo}>
+                            <p><strong>Shipping Type:</strong> {shippingType}</p>
+                            <p><strong>Id tuyến đường:</strong> {routeId || 'Không có dữ liệu'}</p>
                         </div>
-
                         {distance !== null && shippingCost !== null && (
                             <div className={styles.shippingInfo}>
                                 <p><strong>Tổng số km:</strong> {distance.toFixed(2)} km</p>
@@ -203,24 +237,66 @@ const BookingOrder = () => {
 
                 {/* Step 2: Add Products */}
                 {step === 2 && (
-                    <div className={styles.addProductsStep}>
-                        <h2 className={styles.addProductsTitle}>Add Products</h2>
-                        <select className={styles.productSelect} onChange={handleAddProduct}>
-                            <option value="">Select a product</option>
-                            <option value="Koi 1">Koi 1</option>
-                            <option value="Koi 2">Koi 2</option>
-                            <option value="Koi 3">Koi 3</option>
-                        </select>
-                        <ul className={styles.productList}>
-                            {selectedProducts.map((product, index) => (
-                                <li key={index} className={styles.productListItem}>{product}</li>
-                            ))}
-                        </ul>
+                    <div className={styles.step}>
+                        <h2>Thêm Thông Tin Cá</h2>
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Tên cá"
+                            value={newFish.name}
+                            onChange={(e) => handleInputChange(e, setNewFish)}
+                        />
+                        <input
+                            type="number"
+                            name="age"
+                            placeholder="Tuổi cá"
+                            value={newFish.age}
+                            onChange={(e) => handleInputChange(e, setNewFish)}
+                        />
+                        <input
+                            type="file"
+                            name="image"
+                            onChange={(e) => handleFileChange(e, 'image')}
+                        />
+                        <input
+                            type="number"
+                            name="weight"
+                            placeholder="Cân nặng cá"
+                            value={newFish.weight}
+                            onChange={(e) => handleInputChange(e, setNewFish)}
+                        />
+                        <input
+                            type="file"
+                            name="certificateImage"
+                            onChange={(e) => handleFileChange(e, 'certificateImage')}
+                        />
 
-                        <div className={styles.costInfo}>
-                            <p><strong>Tổng tiền cá koi:</strong> {totalFishCost.toFixed(2)} VND</p>
-                            <p><strong>Tổng tiền vận chuyển:</strong> {shippingCost ? shippingCost.toFixed(2) : 0} VND</p>
-                            <p><strong>Tổng số tiền:</strong> {totalAmount.toFixed(2)} VND</p>
+                        <button onClick={handleAddFish}>Thêm Cá</button>
+
+                        {/* Hiển thị danh sách sản phẩm đã chọn */}
+                        <div>
+                            <h3>Sản phẩm đã chọn:</h3>
+                            <ul className={styles.fishList}>
+                                {selectedProducts.map((fish, index) => (
+                                    <li key={index} className={styles.fishItem}>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedIndexes.includes(index)}
+                                            onChange={() => handleCheckboxChange(index)}
+                                        />
+                                        <span>
+                                            {fish.name} - {fish.age} tuổi - {fish.weight}kg
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
+                            <button
+                                onClick={handleDeleteSelected}
+                                className={styles.deleteSelectedButton}
+                                disabled={selectedIndexes.length === 0}
+                            >
+                                Xóa mục đã chọn
+                            </button>
                         </div>
                     </div>
                 )}
@@ -249,3 +325,4 @@ const BookingOrder = () => {
 };
 
 export default BookingOrder;
+

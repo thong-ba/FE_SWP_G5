@@ -7,6 +7,7 @@ import HomePage from './assets/user/home/HomePage';
 import Login from './assets/user/login/Login';
 import Register from './assets/user/register/Register';
 import BookingOrder from './assets/user/bookingorder/BookingOrder';
+import ShippingOption from './assets/user/shippingoption/ShippingOption';
 import Payment from './assets/user/payment/Payment';
 import Service from './assets/user/services/Service';
 import UserInfo from './assets/user/userinfo/UserInfo';
@@ -19,7 +20,9 @@ import DriverLayout from './assets/driver/layout/DriverLayout';
 import Manager from './assets/manager/dashboard/Manager';
 import Staff from './assets/staff/dashboard/Staff';
 import PendingOrderTab from './assets/staff/order/PendingOrderTab/PendingOrderTab';
-
+import PaymentSuccess from './assets/user/payment/paymentStatus/paymentSuccess';
+import PaymentFail from './assets/user/payment/paymentStatus/paymentFail';
+import TransportPage from './assets/user/transportservice/TransportService';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -220,6 +223,18 @@ function App() {
         }
       />
       <Route
+        path="/shippingoption"
+        element={
+          isLoggedIn ? (
+            <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+              <ShippingOption />
+            </LayoutUtils>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+      <Route
         path="/trackorder"
         element={
           isLoggedIn ? (
@@ -252,6 +267,14 @@ function App() {
         element={
           <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
             <UserInfo />
+          </LayoutUtils>
+        }
+      />
+      <Route
+        path="/transport"
+        element={
+          <LayoutUtils>
+            <TransportPage />
           </LayoutUtils>
         }
       />
@@ -299,6 +322,7 @@ function App() {
       <Route path="/login" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Login setIsLoggedIn={setIsLoggedIn} /></LayoutUtils>} />
       <Route path="/register" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Register /></LayoutUtils>} />
       <Route path="/bookingorder" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><BookingOrder /></LayoutUtils>} />
+      <Route path="/shippingoption" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><ShippingOption /></LayoutUtils>} />
       <Route path="/payment" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Payment /></LayoutUtils>} />
       <Route path="/service" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Service /></LayoutUtils>} />
 
@@ -306,7 +330,8 @@ function App() {
       <Route path="/manager" element={<Manager />} />
 
       <Route path="/driver" element={<DriverLayout isLoggedIn={isLoggedIn} handleLogout={handleLogout} ><MapView location={location} /> </DriverLayout>} />
-
+      <Route path="/paymentsuccess" element={<PaymentSuccess></PaymentSuccess>} />
+      <Route path="/paymentfail" element={<PaymentFail></PaymentFail>} />
       <Route
         path="/pendingorder"
         element={
