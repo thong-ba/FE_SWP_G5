@@ -1,166 +1,146 @@
-// import React, { useState } from 'react';
-// import { useNavigate } from 'react-router-dom'; // Thêm import để sử dụng navigate
-// import styles from './ShippingOption.module.css'; // Đảm bảo bạn đã tạo file CSS cho styling
-
-// const ShippingOption = () => {
-//   const [selectedOption, setSelectedOption] = useState('');
-//   const [selectedRoute, setSelectedRoute] = useState('');
-//   const navigate = useNavigate(); // Khởi tạo useNavigate
-
-//   const exportRoutes = [
-//     { route: 'Tuyến đường 1', price: '500,000 VND' },
-//     { route: 'Tuyến đường 2', price: '600,000 VND' },
-//     { route: 'Tuyến đường 3', price: '700,000 VND' },
-//   ];
-
-//   const innerCityRoutes = [
-//     { route: 'Tuyến đường A', price: '200,000 VND' },
-//     { route: 'Tuyến đường B', price: '250,000 VND' },
-//     { route: 'Tuyến đường C', price: '300,000 VND' },
-//   ];
-
-//   const areaRoutes = [
-//     { route: 'Tuyến đường X', price: '350,000 VND' },
-//     { route: 'Tuyến đường Y', price: '400,000 VND' },
-//     { route: 'Tuyến đường Z', price: '450,000 VND' },
-//   ];
-
-//   const handleOptionChange = (option) => {
-//     setSelectedOption(option);
-//     setSelectedRoute(''); // Reset selected route when changing shipping option
-//   };
-
-//   const handleRouteChange = (event) => {
-//     setSelectedRoute(event.target.value);
-//   };
-
-//   const handleNext = () => {
-//     // Chuyển hướng đến trang bookingorder khi nhấn nút Next
-//     navigate('/bookingorder');
-//   };
-
-//   return (
-//     <div className={styles.container}>
-//       <h2>Chọn hình thức vận chuyển</h2>
-
-//       <div className={styles.buttonContainer}>
-//         <button
-//           className={styles.optionButton}
-//           onClick={() => handleOptionChange('export')}
-//         >
-//           Xuất khẩu
-//         </button>
-//         <button
-//           className={styles.optionButton}
-//           onClick={() => handleOptionChange('innerCity')}
-//         >
-//           Nội thành
-//         </button>
-//         <button
-//           className={styles.optionButton}
-//           onClick={() => handleOptionChange('area')}
-//         >
-//           Khu vực
-//         </button>
-//       </div>
-
-//       {selectedOption && (
-//         <div className={styles.dropdownContainer}>
-//           <label>Chọn tuyến đường:</label>
-//           <select
-//             value={selectedRoute}
-//             onChange={handleRouteChange}
-//             className={styles.routeDropdown}
-//           >
-//             <option value="">Chọn tuyến</option>
-//             {selectedOption === 'export' &&
-//               exportRoutes.map((route, index) => (
-//                 <option key={index} value={route.route}>
-//                   {route.route} - {route.price}
-//                 </option>
-//               ))}
-//             {selectedOption === 'innerCity' &&
-//               innerCityRoutes.map((route, index) => (
-//                 <option key={index} value={route.route}>
-//                   {route.route} - {route.price}
-//                 </option>
-//               ))}
-//             {selectedOption === 'area' &&
-//               areaRoutes.map((route, index) => (
-//                 <option key={index} value={route.route}>
-//                   {route.route} - {route.price}
-//                 </option>
-//               ))}
-//           </select>
-//         </div>
-//       )}
-
-//       {selectedRoute && (
-//         <div className={styles.nextButtonContainer}>
-//           <button
-//             onClick={handleNext} // Thay vì alert, sử dụng handleNext để chuyển trang
-//             className={styles.nextButton}
-//           >
-//             Next
-//           </button>
-//         </div>
-//       )}
-//     </div>
-//   );
-// };
-
-// export default ShippingOption;
-
-
-
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom'; 
-import styles from './ShippingOption.module.css'; 
+import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
+import styles from './ShippingOption.module.css';
 
 const ShippingOption = () => {
   const [selectedOption, setSelectedOption] = useState('');
-  const [selectedRoute, setSelectedRoute] = useState('');
-  const navigate = useNavigate(); 
+  const [selectedRoute, setSelectedRoute] = useState(null);
+  const [innerCityRoutes, setInnerCityRoutes] = useState([]);  // State cho dữ liệu innerCity
+  const [localRoutes, setLocalRoutes] = useState([]);  // State cho dữ liệu local
+  const [internationalRoutes, setInternationalRoutes] = useState([]);  // State cho dữ liệu international
+  const navigate = useNavigate();
 
-  const exportRoutes = [
-    { route: 'Tuyến đường 1', price: '500,000 VND' },
-    { route: 'Tuyến đường 2', price: '600,000 VND' },
-    { route: 'Tuyến đường 3', price: '700,000 VND' },
-  ];
+  // Lấy dữ liệu từ API cho "innerCity"
+  useEffect(() => {
+    if (selectedOption === 'innerCity') {
+      fetch('https://localhost:7046/api/TransportService/Domestic')  // API cho "innerCity"
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.isSuccess) {
+            setInnerCityRoutes(data.result);  // Lưu dữ liệu vào state
+          } else {
+            console.error('Lỗi khi lấy dữ liệu từ API');
+          }
+        })
+        .catch((error) => {
+          console.error('Có lỗi xảy ra khi gọi API:', error);
+        });
+    }
+  }, [selectedOption]);  // Chỉ gọi API khi chọn "innerCity"
 
-  const innerCityRoutes = [
-    { route: 'Tuyến đường A', price: '200,000 VND' },
-    { route: 'Tuyến đường B', price: '250,000 VND' },
-    { route: 'Tuyến đường C', price: '300,000 VND' },
-  ];
+  // Lấy dữ liệu từ API cho "local"
+  useEffect(() => {
+    if (selectedOption === 'local') {
+      fetch('https://localhost:7046/api/TransportService/Local')  // API cho "local"
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.isSuccess) {
+            setLocalRoutes(data.result);  // Lưu dữ liệu vào state
+          } else {
+            console.error('Lỗi khi lấy dữ liệu từ API');
+          }
+        })
+        .catch((error) => {
+          console.error('Có lỗi xảy ra khi gọi API:', error);
+        });
+    }
+  }, [selectedOption]);  // Chỉ gọi API khi chọn "local"
 
-  const areaRoutes = [
-    { route: 'Tuyến đường X', price: '350,000 VND' },
-    { route: 'Tuyến đường Y', price: '400,000 VND' },
-    { route: 'Tuyến đường Z', price: '450,000 VND' },
-  ];
+  // Lấy dữ liệu từ API cho "international"
+  useEffect(() => {
+    if (selectedOption === 'international') {
+      fetch('https://localhost:7046/api/TransportService/International')  // API cho "international"
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.isSuccess) {
+            setInternationalRoutes(data.result);  // Lưu dữ liệu vào state
+          } else {
+            console.error('Lỗi khi lấy dữ liệu từ API');
+          }
+        })
+        .catch((error) => {
+          console.error('Có lỗi xảy ra khi gọi API:', error);
+        });
+    }
+  }, [selectedOption]);  // Chỉ gọi API khi chọn "international"
 
   const handleOptionChange = (option) => {
     setSelectedOption(option);
-    setSelectedRoute(''); // Reset selected route when option changes
+    setSelectedRoute(null); // Reset selected route when option changes
   };
 
-  const handleRouteChange = (event) => {
-    setSelectedRoute(event.target.value);
+  const handleRouteSelection = (routeId) => {
+    setSelectedRoute(routeId);
   };
 
   const handleNext = () => {
-    navigate('/bookingorder', { state: { shippingType: selectedOption, route: selectedRoute } });
+    // Tìm chi tiết tuyến đường dựa trên lựa chọn của người dùng
+    const selectedRouteDetails =
+      selectedOption === 'international'
+        ? internationalRoutes.find((route) => route.id === selectedRoute)
+        : selectedOption === 'innerCity'
+        ? innerCityRoutes.find((route) => route.id === selectedRoute)
+        : selectedOption === 'local'
+        ? localRoutes.find((route) => route.id === selectedRoute)
+        : null;
+
+    // Kiểm tra nếu tìm thấy chi tiết tuyến đường
+    if (selectedRouteDetails) {
+      // Navigate đến trang BookingOrder với state chứa routeId và shippingType
+      navigate('/bookingorder', {
+        state: {
+          routeId: selectedRouteDetails.id,  // Truyền routeId từ chi tiết tuyến đường
+          shippingType: selectedOption       // Truyền shippingType
+        }
+      });
+    } else {
+      console.warn('Không tìm thấy tuyến đường phù hợp');
+    }
   };
 
-  let routes = [];
-  if (selectedOption === 'export') {
-    routes = exportRoutes;
-  } else if (selectedOption === 'innerCity') {
-    routes = innerCityRoutes;
-  } else if (selectedOption === 'area') {
-    routes = areaRoutes;
-  }
+  const renderTable = (routes) => (
+    <table className={styles.routeTable}>
+      <thead>
+        <tr>
+          <th>Chọn</th>
+          <th>Mã số</th>
+          <th>Tên chuyến</th>
+          <th>Loại vận chuyển</th>
+          <th>Giới thiệu</th>
+          <th>Giá theo Km</th>
+          <th>Giá theo Kg</th>
+          <th>Giá theo đơn vị</th>
+          <th>Tỉnh đi</th>
+          <th>Tỉnh đến</th>
+          <th>Tình trạng</th>
+        </tr>
+      </thead>
+      <tbody>
+        {routes.map((route) => (
+          <tr key={route.id}>
+            <td>
+              <input
+                type="radio"
+                name="route"
+                checked={selectedRoute === route.id}
+                onChange={() => handleRouteSelection(route.id)}
+              />
+            </td>
+            <td>{route.id}</td>
+            <td>{route.name}</td>
+            <td>{route.transportType === 0 ? 'Nội Địa' : route.transportType === 1 ? 'Quốc Tế' : 'Quốc Tế - International'}</td>
+            <td>{route.description}</td>
+            <td>{route.pricePerKm ? route.pricePerKm + ' VND' : '-'}</td> 
+            <td>{route.pricePerKg ? route.pricePerKg + ' VND' : '-'}</td>
+            <td>{route.pricePerAmount ? route.pricePerAmount + ' VND' : '-'}</td> 
+            <td>{route.fromProvince}</td>
+            <td>{route.toProvince}</td>
+            <td>{route.isActive ? 'Hoạt động' : 'Không hoạt động'}</td> {/* Tình trạng */}
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
 
   return (
     <div className={styles.container}>
@@ -169,45 +149,35 @@ const ShippingOption = () => {
       <div className={styles.buttonContainer}>
         <button
           className={styles.optionButton}
-          onClick={() => handleOptionChange('export')}
+          onClick={() => handleOptionChange('international')}
         >
-          Xuất khẩu
+          Quốc Tế
         </button>
         <button
           className={styles.optionButton}
           onClick={() => handleOptionChange('innerCity')}
         >
-          Nội thành
+          Nội Thành
         </button>
         <button
           className={styles.optionButton}
-          onClick={() => handleOptionChange('area')}
+          onClick={() => handleOptionChange('local')}
         >
-          Khu vực
+          Vận Chuyển Nội Địa
         </button>
       </div>
 
-      {selectedOption && (
-        <div className={styles.dropdownContainer}>
-          <label htmlFor="route">Chọn tuyến đường:</label>
-          <select id="route" value={selectedRoute} onChange={handleRouteChange} className={styles.dropdown}>
-            <option value="">Chọn tuyến</option>
-            {routes.map((route, index) => (
-              <option key={index} value={route.route}>
-                {route.route} - {route.price}
-              </option>
-            ))}
-          </select>
-        </div>
-      )}
+      {selectedOption === 'international' && renderTable(internationalRoutes)}  {/* Hiển thị bảng cho "international" */}
+      {selectedOption === 'innerCity' && renderTable(innerCityRoutes)}  {/* Hiển thị bảng cho "innerCity" */}
+      {selectedOption === 'local' && renderTable(localRoutes)}  {/* Hiển thị bảng cho "local" */}
 
       {selectedRoute && (
         <div className={styles.nextButtonContainer}>
           <button
-            onClick={handleNext} 
+            onClick={handleNext}
             className={styles.nextButton}
           >
-            Next
+            Tiếp theo
           </button>
         </div>
       )}
