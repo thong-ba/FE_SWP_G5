@@ -18,6 +18,7 @@ const BookingOrder = () => {
     const [receiverInfo, setReceiverInfo] = useState({ fullName: '', phone: '', address: '' });
     const [newFish, setNewFish] = useState({ name: '', age: '', image: null, weight: '', certificateImage: null });
     const [shippingType, setShippingType] = useState('');
+    const [routeId, setRouteId] = useState('');
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [selectedIndexes, setSelectedIndexes] = useState([]);
     const [senderCoordinates, setSenderCoordinates] = useState(null);
@@ -35,11 +36,14 @@ const BookingOrder = () => {
         setNewFish({ name: '', age: '', image: null, weight: '', certificateImage: null });
     };
 
-    const handleInputChange = (e, field) => {
+    // const handleInputChange = (e, field) => {
+    //     const { name, value } = e.target;
+    //     setNewFish(prevFish => ({ ...prevFish, [name]: value }));
+    // };
+    const handleInputChange = (e, setStateFunction) => {
         const { name, value } = e.target;
-        setNewFish(prevFish => ({ ...prevFish, [name]: value }));
+        setStateFunction((prev) => ({ ...prev, [name]: value }));
     };
-
     const handleFileChange = (e, field) => {
         const file = e.target.files[0];
         setNewFish(prevFish => ({ ...prevFish, [field]: file }));
@@ -117,7 +121,7 @@ const BookingOrder = () => {
         };
         fetchCoordinates();
     }, [senderInfo.address, receiverInfo.address]);
-    
+
     useEffect(() => {
         if (location.state && location.state.shippingType) {
             setShippingType(location.state.shippingType); // Lấy shippingType từ state
@@ -145,6 +149,20 @@ const BookingOrder = () => {
     useEffect(() => {
         setTotalAmount(totalFishCost + (shippingCost || 0));
     }, [totalFishCost, shippingCost]);
+
+
+    useEffect(() => {
+        if (location.state && location.state.routeId) {
+            setRouteId(location.state.routeId); // Lấy routeId từ state
+        }
+    }, [location]);
+    useEffect(() => {
+        console.log(location.state);  // In ra để kiểm tra dữ liệu
+        if (location.state && location.state.routeId) {
+            setRouteId(location.state.routeId);
+        }
+    }, [location]);
+
 
     const handleSubmit = () => {
         navigate('/payment');
@@ -206,8 +224,8 @@ const BookingOrder = () => {
                         <h2>Shipping Information</h2>
                         <div className={styles.shippingInfo}>
                             <p><strong>Shipping Type:</strong> {shippingType}</p>
+                            <p><strong>Id tuyến đường:</strong> {routeId || 'Không có dữ liệu'}</p>
                         </div>
-
                         {distance !== null && shippingCost !== null && (
                             <div className={styles.shippingInfo}>
                                 <p><strong>Tổng số km:</strong> {distance.toFixed(2)} km</p>
@@ -218,75 +236,70 @@ const BookingOrder = () => {
                 )}
 
                 {/* Step 2: Add Products */}
-                <div className={styles.bookingOrderContainer}>
-                    <div className={styles.formContainer}>
-                        {/* Step 2: Add Fish */}
-                        {step === 2 && (
-                            <div className={styles.step}>
-                                <h2>Thêm Thông Tin Cá</h2>
-                                <input
-                                    type="text"
-                                    name="name"
-                                    placeholder="Tên cá"
-                                    value={newFish.name}
-                                    onChange={(e) => handleInputChange(e, 'name')}
-                                />
-                                <input
-                                    type="number"
-                                    name="age"
-                                    placeholder="Tuổi cá"
-                                    value={newFish.age}
-                                    onChange={(e) => handleInputChange(e, 'age')}
-                                />
-                                <input
-                                    type="file"
-                                    name="image"
-                                    onChange={(e) => handleFileChange(e, 'image')}
-                                />
-                                <input
-                                    type="number"
-                                    name="weight"
-                                    placeholder="Cân nặng cá"
-                                    value={newFish.weight}
-                                    onChange={(e) => handleInputChange(e, 'weight')}
-                                />
-                                <input
-                                    type="file"
-                                    name="certificateImage"
-                                    onChange={(e) => handleFileChange(e, 'certificateImage')}
-                                />
+                {step === 2 && (
+                    <div className={styles.step}>
+                        <h2>Thêm Thông Tin Cá</h2>
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Tên cá"
+                            value={newFish.name}
+                            onChange={(e) => handleInputChange(e, setNewFish)}
+                        />
+                        <input
+                            type="number"
+                            name="age"
+                            placeholder="Tuổi cá"
+                            value={newFish.age}
+                            onChange={(e) => handleInputChange(e, setNewFish)}
+                        />
+                        <input
+                            type="file"
+                            name="image"
+                            onChange={(e) => handleFileChange(e, 'image')}
+                        />
+                        <input
+                            type="number"
+                            name="weight"
+                            placeholder="Cân nặng cá"
+                            value={newFish.weight}
+                            onChange={(e) => handleInputChange(e, setNewFish)}
+                        />
+                        <input
+                            type="file"
+                            name="certificateImage"
+                            onChange={(e) => handleFileChange(e, 'certificateImage')}
+                        />
 
-                                <button onClick={handleAddFish}>Thêm Cá</button>
+                        <button onClick={handleAddFish}>Thêm Cá</button>
 
-                                {/* Hiển thị danh sách sản phẩm đã chọn */}
-                                <div>
-                                    <h3>Sản phẩm đã chọn:</h3>
-                                    <ul className={styles.fishList}>
-                                        {selectedProducts.map((fish, index) => (
-                                            <li key={index} className={styles.fishItem}>
-                                                <input
-                                                    type="checkbox"
-                                                    checked={selectedIndexes.includes(index)}
-                                                    onChange={() => handleCheckboxChange(index)}
-                                                />
-                                                <span>
-                                                    {fish.name} - {fish.age} tuổi - {fish.weight}kg
-                                                </span>
-                                            </li>
-                                        ))}
-                                    </ul>
-                                    <button
-                                        onClick={handleDeleteSelected}
-                                        className={styles.deleteSelectedButton}
-                                        disabled={selectedIndexes.length === 0}
-                                    >
-                                        Xóa mục đã chọn
-                                    </button>
-                                </div>
-                            </div>
-                        )}
+                        {/* Hiển thị danh sách sản phẩm đã chọn */}
+                        <div>
+                            <h3>Sản phẩm đã chọn:</h3>
+                            <ul className={styles.fishList}>
+                                {selectedProducts.map((fish, index) => (
+                                    <li key={index} className={styles.fishItem}>
+                                        <input
+                                            type="checkbox"
+                                            checked={selectedIndexes.includes(index)}
+                                            onChange={() => handleCheckboxChange(index)}
+                                        />
+                                        <span>
+                                            {fish.name} - {fish.age} tuổi - {fish.weight}kg
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
+                            <button
+                                onClick={handleDeleteSelected}
+                                className={styles.deleteSelectedButton}
+                                disabled={selectedIndexes.length === 0}
+                            >
+                                Xóa mục đã chọn
+                            </button>
+                        </div>
                     </div>
-                </div>
+                )}
 
 
                 {/* Navigation */}
