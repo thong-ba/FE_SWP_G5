@@ -6716,13 +6716,13 @@ klona@^2.0.4, klona@^2.0.5:
     antd "^5.22.3"
     axios "^1.7.8"
     jwt-decode "^4.0.0"
-    koi-ordering "file:../../../../../../AppData/Local/Yarn/Cache/v6/npm-koi-ordering-0.1.0-162e8ecd-281c-419d-b4b2-5bc2ddbfe561-1733811266629/node_modules/koi-ordering"
+    koi-ordering "file:C:/Users/huy/AppData/Local/Yarn/Cache/v6/npm-koi-ordering-0.1.0-1a6ac119-f3bd-4a3f-b862-04129aca9b79-1733851480851/node_modules/koi-ordering"
     leaflet "^1.9.4"
     react "^18.3.1"
     react-dom "^18.3.1"
     react-leaflet "^4.2.1"
     react-router-dom "6"
-    react-scripts "5.0.1"
+    react-scripts "^5.0.1"
     react-toastify "^10.0.6"
     uuid "^11.0.3"
     web-vitals "^2.1.0"
@@ -8675,7 +8675,7 @@ react-router@6.28.0:
   dependencies:
     "@remix-run/router" "1.21.0"
 
-react-scripts@5.0.1:
+react-scripts@^5.0.1:
   version "5.0.1"
   resolved "https://registry.yarnpkg.com/react-scripts/-/react-scripts-5.0.1.tgz#6285dbd65a8ba6e49ca8d651ce30645a6d980003"
   integrity sha512-8VAmEm/ZAwQzJ+GOMLbBsTdDKOpuZh7RPs0UymvBR2vRk4iZWCskjbFnxqjrzoIvlNNRZ3QJFx6/qDSi6zSnaQ==

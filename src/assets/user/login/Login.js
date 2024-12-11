@@ -7,6 +7,9 @@ function Login({ onLogin }) {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
+  const [isDriverLogin, setIsDriverLogin] = useState(false);
+  const navigate = useNavigate();
+
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -51,6 +54,9 @@ function Login({ onLogin }) {
         />
         <button type="submit">Login</button>
       </form>
+      ) : (
+        <LoginDriver onLogin={onLogin}/>
+      )}
       {message && <div className="message-box">{message}</div>}
       <p>
         Don't have an account? <a href="/register" className="register-link-text" >Register here</a>
