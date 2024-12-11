@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 import "./Staff.css";
 import axios from "axios";
 import PendingOrderTab from "../order/PendingOrderTab/PendingOrderTab";
-import PendingPickUpOrderTab from "../order/PendingPickUpOrderTab/PendingPickUpOrderTab";
-import CompletedOrderTab from "../order/CompletedOrderTab/CompletedOrderTab";
-import CancelOrderTab from "../order/CancelOrderTab/CancelOrderTab";
+// import PendingPickUpOrderTab from "../order/PendingPickUpOrderTab/PendingPickUpOrderTab";
+// import CompletedOrderTab from "../order/CompletedOrderTab/CompletedOrderTab";
+// import CancelOrderTab from "../order/CancelOrderTab/CancelOrderTab";
 import Route from "../route/Route";
 
 function Staff() {
