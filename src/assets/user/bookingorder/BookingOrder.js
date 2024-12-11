@@ -16,8 +16,16 @@ const BookingOrder = () => {
     const [step, setStep] = useState(1); // Start with Step 1
     const [senderInfo, setSenderInfo] = useState({ fullName: '', phone: '', address: '' });
     const [receiverInfo, setReceiverInfo] = useState({ fullName: '', phone: '', address: '' });
+
+    const [senderfishInfo, setSenderFishInfo] = useState({ Name: '', Age: '', Weight: '', Length: '' });
+
+    const [fishQualification, setSenderFishQualificationInfo] = useState({ name: '', file: null, });
+
     const [shippingType, setShippingType] = useState('');
     const [selectedProducts, setSelectedProducts] = useState([]);
+
+    const [selectedFish, setSelectedFish] = useState([]);
+
     const [senderCoordinates, setSenderCoordinates] = useState(null);
     const [receiverCoordinates, setReceiverCoordinates] = useState(null);
     const [distance, setDistance] = useState(null);
@@ -31,13 +39,27 @@ const BookingOrder = () => {
         setInfo(prevInfo => ({ ...prevInfo, [name]: value }));
     };
 
-    const handleNextStep = () => setStep(prev => prev + 1);
+    const handleNextStep = () => {
+        sessionStorage.setItem('senderInfo', JSON.stringify(senderInfo));
+        sessionStorage.setItem('receiverInfo', JSON.stringify(receiverInfo));
+        sessionStorage.setItem('shippingType', shippingType);
+        sessionStorage.setItem('selectedProducts', JSON.stringify(selectedProducts));
+        sessionStorage.setItem('totalAmount', totalAmount);
+        setStep(prev => prev + 1);
+    };
     const handlePrevStep = () => setStep(prev => prev - 1);
+    const handleOptional = () => setStep(prev => prev + 1);
 
     const handleAddProduct = (e) => {
         const product = e.target.value;
         if (product && !selectedProducts.includes(product)) {
             setSelectedProducts([...selectedProducts, product]);
+        }
+    };
+    const handleAddFish = (e) => {
+        const fish = e.target.value;
+        if (fish && !selectedFish.includes(fish)) {
+            setSelectedFish([...selectedFish, fish]);
         }
     };
 
@@ -69,6 +91,68 @@ const BookingOrder = () => {
         const distance = R * c;
         return distance;
     };
+
+    // useEffect(() => {
+    //     const fetchCoordinates = async () => {
+    //         if (senderInfo.address && receiverInfo.address) {
+    //             const senderCoords = await geocodeAddress(senderInfo.address);
+    //             const receiverCoords = await geocodeAddress(receiverInfo.address);
+
+    //             if (senderCoords) setSenderCoordinates(senderCoords);
+    //             if (receiverCoords) setReceiverCoordinates(receiverCoords);
+
+    //             if (senderCoords && receiverCoords) {
+    //                 const distance = calculateDistance(
+    //                     senderCoords[0], senderCoords[1],
+    //                     receiverCoords[0], receiverCoords[1]
+    //                 );
+    //                 setDistance(distance);
+    //             }
+    //         }
+    //     };
+    //     fetchCoordinates();
+    // }, [senderInfo.address, receiverInfo.address]);
+    useEffect(() => {
+        if (navigator.geolocation) {
+            const watchId = navigator.geolocation.watchPosition(
+                (position) => {
+                    const { latitude, longitude } = position.coords;
+                    console.log('Location fetched:', latitude, longitude);
+                    setSenderCoordinates([latitude, longitude]);
+                },
+                (error) => {
+                    switch (error.code) {
+                        case error.PERMISSION_DENIED:
+                            console.error('User denied the request for Geolocation.');
+                            break;
+                        case error.POSITION_UNAVAILABLE:
+                            console.error('Location information is unavailable.');
+                            break;
+                        case error.TIMEOUT:
+                            console.error('The request to get user location timed out.');
+                            break;
+                        case error.UNKNOWN_ERROR:
+                            console.error('An unknown error occurred.');
+                            break;
+                        default:
+                            console.error('Error getting location:', error);
+                            break;
+                    }
+                },
+                {
+                    enableHighAccuracy: true,  // Set to false if high accuracy is not necessary
+                    timeout: 10000,  // Set a timeout for location fetch
+                }
+            );
+
+            return () => {
+                // Cleanup the watch when the component is unmounted
+                navigator.geolocation.clearWatch(watchId);
+            };
+        } else {
+            console.error('Geolocation is not supported by this browser.');
+        }
+    }, []);
 
     useEffect(() => {
         const fetchCoordinates = async () => {
@@ -114,7 +198,20 @@ const BookingOrder = () => {
     }, [totalFishCost, shippingCost]);
 
     const handleSubmit = () => {
-        navigate('/payment'); 
+        const orderData = {
+            senderInfo,
+            receiverInfo,
+            shippingType,
+            selectedProducts,
+            senderfishInfo,
+            fishQualification,
+        };
+    
+        // Save to sessionStorage
+        sessionStorage.setItem('orderData', JSON.stringify(orderData));
+    
+        // Navigate to payment page
+        navigate('/payment');
     };
 
     return (
@@ -200,9 +297,66 @@ const BookingOrder = () => {
                         )}
                     </div>
                 )}
+                {/* Step 2: Add OrderFish */}
+                {step === 2 && (
+                    <div className={styles.step}>
+                        <h2>Order Information</h2>
+
+                        {/* Sender Fish Information */}
+                        <input
+                            type="text"
+                            name="Name"
+                            placeholder="Fish Name"
+                            value={senderfishInfo.Name}
+                            onChange={(e) => handleInputChange(e, setSenderFishInfo)}
+                        />
+                        <input
+                            type="text"
+                            name="Age"
+                            placeholder="Fish Age"
+                            value={senderfishInfo.Age}
+                            onChange={(e) => handleInputChange(e, setSenderFishInfo)}
+                        />
+                        <input
+                            type="text"
+                            name="Weight"
+                            placeholder="Fish Weight"
+                            value={senderfishInfo.Weight}
+                            onChange={(e) => handleInputChange(e, setSenderFishInfo)}
+                        />
+                        <input
+                            type="text"
+                            name="Length"
+                            placeholder="Fish Length"
+                            value={senderfishInfo.Length}
+                            onChange={(e) => handleInputChange(e, setSenderFishInfo)}
+                        />
+
+
+                    </div>
+                )}
+
+                {step === 3 && (
+                    <div className={styles.step}>
+                        <h2>Fish Qualification (Optional)</h2>
+                        <input
+                            type="text"
+                            name="name"
+                            placeholder="Fish Name"
+                            value={fishQualification.name}
+                            onChange={(e) => handleInputChange(e, setSenderFishQualificationInfo)}
+                        />
+                        <input
+                            type="file"
+                            accept="*"
+                            onChange={(e) => handleInputChange(e, setSenderFishQualificationInfo)}
+                        />
+                        <p>{fishQualification.file ? fishQualification.file.name : "No file selected"}</p>
+                    </div>
+                )}
 
                 {/* Step 2: Add Products */}
-                {step === 2 && (
+                {step === 4 && (
                     <div className={styles.addProductsStep}>
                         <h2 className={styles.addProductsTitle}>Add Products</h2>
                         <select className={styles.productSelect} onChange={handleAddProduct}>
@@ -229,8 +383,12 @@ const BookingOrder = () => {
                 {/* Navigation */}
                 <div className={styles.navigationButtons}>
                     {step > 1 && <button onClick={handlePrevStep}>Back</button>}
-                    {step < 2 && <button onClick={handleNextStep}>Next</button>}
                     {step === 2 && <button onClick={handleSubmit}>Submit</button>}
+                    {step > 3 && <button onClick={handleOptional}>FishQualification</button>}
+                    {step < 3 && <button onClick={handleNextStep}>Next</button>}
+
+
+                    {step === 3 && <button onClick={handleSubmit}>Submit</button>}
                 </div>
             </div>
 

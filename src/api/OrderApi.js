@@ -2,7 +2,7 @@
 import axios from "axios";
 
 // Base URL cho Order API
-const baseOrderUrl = "http://localhost:5141/api/Order";
+const baseOrderUrl = "http://localhost:7046/api/Order";
 
 // import { getJwtToken, headers, localUrl } from "./Url";
 // import axios from "axios";
@@ -24,7 +24,7 @@ export const GetAllOrderService = async () => {
 // 2. Tạo một order mới
 export const CreateOrderService = async (orderData) => {
   try {
-    const response = await axios.post(`${baseOrderUrl}/create-order`, orderData); // Gửi POST request
+    const response = await axios.post(`https://localhost:7046/api/Order/create-order`, orderData); // Gửi POST request
     return response.data; // Trả về dữ liệu order vừa được tạo
   } catch (error) {
     console.error("Error in CreateOrderService:", error);

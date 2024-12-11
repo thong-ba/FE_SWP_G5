@@ -1,7 +1,7 @@
 import axios from "axios";
 
 // Base URL for FishHealth API
-const baseFishHealthUrl = "http://localhost:5141/api/FishHealth";
+const baseFishHealthUrl = "http://localhost:7046/api/FishHealth";
 
 // Get all fish health records
 export const GetAllFishHealthService = async () => {
