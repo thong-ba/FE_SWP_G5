@@ -22,6 +22,7 @@ import Staff from './assets/staff/dashboard/Staff';
 import PendingOrderTab from './assets/staff/order/PendingOrderTab/PendingOrderTab';
 import PaymentSuccess from './assets/user/payment/paymentStatus/paymentSuccess';
 import PaymentFail from './assets/user/payment/paymentStatus/paymentFail';
+import TransportPage from './assets/user/transportservice/TransportService';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -266,6 +267,14 @@ function App() {
         element={
           <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
             <UserInfo />
+          </LayoutUtils>
+        }
+      />
+      <Route
+        path="/transport"
+        element={
+          <LayoutUtils>
+            <TransportPage />
           </LayoutUtils>
         }
       />
