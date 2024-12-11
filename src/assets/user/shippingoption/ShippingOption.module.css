@@ -1,0 +1,61 @@
+.container {
+    padding: 20px;
+  }
+  
+  h2 {
+    text-align: center;
+  }
+  
+  .buttonContainer {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .optionButton {
+    padding: 10px 20px;
+    font-size: 16px;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    transition: background-color 0.3s;
+  }
+  
+  .optionButton:hover {
+    background-color: #45a049;
+  }
+  
+  .dropdownContainer {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .routeDropdown {
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+  }
+  
+  .nextButtonContainer {
+    margin-top: 20px;
+    text-align: center;
+  }
+  
+  .nextButton {
+    padding: 12px 30px;
+    font-size: 16px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+  }
+  
+  .nextButton:hover {
+    background-color: #45a049;
+  }
+  

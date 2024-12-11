@@ -13,8 +13,27 @@
 }
 
 .step {
+    padding: 20px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
     margin-bottom: 20px;
 }
+.step h2 {
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+}
+
+input[type="text"],
+input[type="number"],
+input[type="file"] {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+
 
 h2 {
     font-size: 18px;
@@ -82,17 +101,15 @@ select {
 }
 
 button {
-    font-size: 14px;
-    padding: 12px 20px;
-    margin: 20px;
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
     border: none;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
 }
-
 button:hover {
-    opacity: 0.8;
+    background-color: #45a049;
 }
 
 button:disabled {
@@ -119,6 +136,7 @@ button:nth-child(3) {
     width: 100%;
     margin-top: 40px;
 }
+
 .addProductsStep {
     margin-bottom: 20px;
 }
@@ -157,7 +175,100 @@ button:nth-child(3) {
     background-color: #e9e9e9;
 }
 
-.costInfo p {
+.modalOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.modalContent {
+    background: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    width: 400px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.modalButtons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.modalButtons button {
+    padding: 10px 15px;
+    border: none;
+    border-radius: 5px;
     font-size: 14px;
-    margin: 5px 0;
+    cursor: pointer;
+    background-color: #4CAF50;
+    color: white;
+    transition: background-color 0.3s;
+}
+
+.modalButtons button:nth-child(2) {
+    background-color: #f44336; /* Red for cancel */
+}
+
+.modalButtons button:hover {
+    opacity: 0.8;
+}
+ul {
+    list-style-type: none;
+    padding: 0;
+}
+ul li {
+    margin-bottom: 5px;
+    font-size: 1rem;
+}
+
+
+.fishList {
+    list-style-type: none;
+    padding: 0;
+}
+
+.fishItem {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* Căn chỉnh nội dung sang 2 bên */
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    padding: 10px;
+    border-radius: 5px;
+}
+
+.fishItem input[type="checkbox"] {
+    margin-right: 10px;
+}
+
+.fishItem span {
+    flex-grow: 1; /* Cho phép phần nội dung trải dài */
+}
+
+.deleteSelectedButton {
+    background-color: #ff4d4f;
+    color: white;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.deleteSelectedButton:disabled {
+    background-color: #ddd;
+    cursor: not-allowed;
+}
+
+.deleteSelectedButton:hover:not(:disabled) {
+    background-color: #e04344;
 }
