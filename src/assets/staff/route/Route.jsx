@@ -10,9 +10,10 @@ const Route = () => {
 
   const [routeStopRequests, setRouteStopRequests] = useState([
     {
-      stopOrder: 0,
+      stopOrder: 1,
       address: "",
       orderId: 0,
+      routeStopType: "pickup",
       //latitude: null, //new
       //longitude: null, //new
     },
@@ -157,6 +158,18 @@ const Route = () => {
               handleUpdateRouteStop(index, "orderId", +e.target.value)
             }
           />
+
+          <label className="route-label">Route Stop Type:</label>
+          <select
+            className="route-select"
+            value={stop.routeStopType}
+            onChange={(e) =>
+              handleUpdateRouteStop(index, "routeStopType", e.target.value)
+            }
+            >
+              <option value="pickup">Pick up Point</option>
+              <option value="delivery">Delivery Point</option>
+            </select>
         </div>
       ))}
 
