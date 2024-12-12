@@ -462,10 +462,13 @@ const BookingOrder = () => {
                 },
             });
             console.log("Success", response.data);
+            navigate('/payment');
         }
         catch (error) {
             console.error("Error", error.response?.data || error.message);
         }
+
+
     };
 
     return (
