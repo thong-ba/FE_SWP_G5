@@ -3071,7 +3071,7 @@ axe-core@^4.10.0:
   resolved "https://registry.yarnpkg.com/axe-core/-/axe-core-4.10.2.tgz#85228e3e1d8b8532a27659b332e39b7fa0e022df"
   integrity sha512-RE3mdQ7P3FRSe7eqCWoeQ/Z9QXrtniSjp1wUjt5nRC3WIpz5rSCve6o3fsZ2aCpJtrZjSZgjwXAoTO5k4tEI0w==
 
-axios@^1.7.8:
+axios@^1.7.9:
   version "1.7.9"
   resolved "https://registry.yarnpkg.com/axios/-/axios-1.7.9.tgz#d7d071380c132a24accda1b2cfc1535b79ec650a"
   integrity sha512-LhLcE7Hbiryz8oMDdDptSrWowmB4Bl6RCt6sIJKpRB4XtVf0iEgewX3au/pJqm+Py1kCASkb/FFKjxQaLtxJvw==
@@ -6714,9 +6714,9 @@ klona@^2.0.4, klona@^2.0.5:
     "@testing-library/react" "^13.0.0"
     "@testing-library/user-event" "^13.2.1"
     antd "^5.22.3"
-    axios "^1.7.8"
+    axios "^1.7.9"
     jwt-decode "^4.0.0"
-    koi-ordering "file:C:/Users/huy/AppData/Local/Yarn/Cache/v6/npm-koi-ordering-0.1.0-1a6ac119-f3bd-4a3f-b862-04129aca9b79-1733851480851/node_modules/koi-ordering"
+    koi-ordering "file:../../../../../AppData/Local/Yarn/Cache/v6/npm-koi-ordering-0.1.0-d4eea7b8-351a-4fdf-b1ea-5b0d579f525b-1733991800727/node_modules/koi-ordering"
     leaflet "^1.9.4"
     react "^18.3.1"
     react-dom "^18.3.1"

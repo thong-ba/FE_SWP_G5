@@ -1,59 +1,48 @@
+/* File: MapView.module.css */
 .container {
-    display: flex;
-    height: 100vh; /* Full screen height */
-  }
-  
-  .infoTable {
-    flex: 1; /* Occupies 1/3 of the container */
-    padding: 20px;
-    background-color: #f8f9fa; /* Light background */
-    border-right: 1px solid #ddd; /* Separator between sections */
-    overflow-y: auto; /* Scroll if content overflows */
-  }
-  
-  .table {
-    width: 100%;
-    border-collapse: collapse; /* Remove default spacing between cells */
-    margin-bottom: 20px; /* Spacing below the table */
-  }
-  
-  .table th,
-  .table td {
-    border: 1px solid #ddd; /* Border around each cell */
-    padding: 8px;
-    text-align: left;
-  }
-  
-  .table th {
-    background-color: #007bff; /* Header background color */
-    color: white; /* Header text color */
-  }
-  
-  .table tr:nth-child(even) {
-    background-color: #f2f2f2; /* Alternate row background */
-  }
-  
-  .table tr:hover {
-    background-color: #ddd; /* Highlight on hover */
-  }
-  
-  .removeButton {
-    margin-top: 10px;
-    padding: 10px 20px;
-    background-color: #007bff; /* Button background */
-    color: white; /* Button text */
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    font-size: 16px;
-  }
-  
-  .removeButton:hover {
-    background-color: #0056b3; /* Button hover background */
-  }
-  
-  .map {
-    flex: 2; /* Occupies 2/3 of the container */
-    height: 100%; /* Ensure map takes full height */
-  }
-  
+  display: flex;
+  height: 100vh;
+}
+
+.infoTable {
+  flex: 1;
+  padding: 20px;
+  background-color: #f8f9fa;
+  border-right: 1px solid #ddd;
+  overflow-y: auto;
+}
+
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.table th,
+.table td {
+  border: 1px solid #ddd;
+  padding: 10px;
+  text-align: left;
+}
+
+.table th {
+  background-color: #007bff;
+  color: white;
+}
+
+.table tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.table tr:hover {
+  background-color: #ddd;
+}
+
+.map {
+  flex: 1;
+  height: 100%;
+}
+.route-note-csl
+{
+  font-size: 20px;
+}
