@@ -36,6 +36,13 @@ const BookingOrder = () => {
     const [totalAmount, setTotalAmount] = useState(0);
     const navigate = useNavigate();
     const location = useLocation();
+    const [file, setFile] = useState(null);
+    const [orderId, setOrderId] = useState(null);
+    const [name, setName] = useState(null);
+    const [age, setAge] = useState(null);
+    const [weight, setWeight] = useState(null);
+    const [length, setLength] = useState(null);
+    
     
 
     const handleAddFish = () => {
@@ -56,10 +63,10 @@ const BookingOrder = () => {
         const { name, value } = e.target;
         setStateFunction((prev) => ({ ...prev, [name]: value }));
     };
-    const handleFileChange = (e, field) => {
-        const file = e.target.files[0];
-        setNewFish(prevFish => ({ ...prevFish, [field]: file }));
-    };
+    // const handleFileChange = (e, field) => {
+    //     const file = e.target.files[0];
+    //     setNewFish(prevFish => ({ ...prevFish, [field]: file }));
+    // };
 
     // const handleNextStep = async () => {
     //     try {
@@ -130,9 +137,10 @@ const BookingOrder = () => {
 
             setStep(prevStep => prevStep + 1);
 
-            // if (response.result && response.data.orderId) {
-            //     console.log('Order created successfully:', response.result);
-            //     setStep(prevStep => prevStep + 1);
+            console.log("id", response.data.result);
+            if (response.data.result) {
+                setOrderId(response.data.result);
+            }
 
             // } else {
             //     alert('Failed to create the order. Please try again.');
@@ -348,82 +356,115 @@ const BookingOrder = () => {
     }, [location]);
 
 
-    const handleSubmit = async () => {
-        const orderData = {
-            orderInfo,
-            shippingType,
-            selectedProducts,
-            newFish,
-            newFishQualification,
-        };
+    // const handleSubmit = async () => {
+    //     const orderData = {
+    //         orderInfo,
+    //         shippingType,
+    //         selectedProducts,
+    //         newFish,
+    //         newFishQualification,
+    //     };
     
-        // Log the selected fish for debugging
-        console.log("Selected Fish:", selectedProducts.filter((fish, index) => selectedIndexes.includes(index)));
+    //     // Log the selected fish for debugging
+    //     console.log("Selected Fish:", selectedProducts.filter((fish, index) => selectedIndexes.includes(index)));
     
-        // Save the order data to sessionStorage
-        sessionStorage.setItem("orderData", JSON.stringify(orderData));
+    //     // Save the order data to sessionStorage
+    //     sessionStorage.setItem("orderData", JSON.stringify(orderData));
     
+    //     try {
+    //         // Create the new fish order in the database
+    //         const orderResponse = await CreateOrderFishService({
+    //             orderInfo,
+    //             shippingType,
+    //             selectedProducts: selectedProducts.filter((fish, index) => selectedIndexes.includes(index)), // Only include selected fish
+    //         });
+    
+    //         if (orderResponse && orderResponse.id) {
+    //             const orderId = orderResponse.id;
+    //             console.log("Order created successfully. Order ID:", orderId);
+    
+    //             // Save new fish qualifications if any
+    //             if (newFishQualification && newFishQualification.name) {
+    //                 const qualificationPayload = {
+    //                     orderId,  // Link qualification to the created order
+    //                     name: newFishQualification.name,
+    //                     certificateImage: newFishQualification.certificateImage,
+    //                 };
+    
+    //                 await CreateFishQualificationService(qualificationPayload);
+    //                 console.log("Fish qualification saved successfully.");
+    //             }
+    
+    //             // Save new fish if any
+    //             if (newFish && newFish.name) {
+    //                 const { name, age, image, weight } = newFish; // Exclude quantity from the payload
+    //                 const fishPayload = {
+    //                     orderId, // Link new fish to the created order
+    //                     name,
+    //                     age,
+    //                     image,
+    //                     weight,
+    //                 };
+    
+    //                 await CreateOrderFishService(fishPayload); // Use CreateFishService for saving fish
+    //                 console.log("New fish saved successfully.");
+    //             }
+    
+    //             // Now add the selected fish to the database
+    //             const selectedFishPayload = selectedProducts.filter((fish, index) => selectedIndexes.includes(index)).map(fish => ({
+    //                 orderId,  // Link fish to the created order
+    //                 name: fish.name,
+    //                 age: fish.age,
+    //                 weight: fish.weight,
+    //                 length: fish.length, // Include length if applicable
+    //             }));
+    
+    //             for (const fishPayload of selectedFishPayload) {
+    //                 await CreateOrderFishService(fishPayload); // Add each selected fish to the database
+    //                 console.log("Selected fish saved successfully.");
+    //             }
+    
+    //             // Navigate to payment page
+    //             navigate("/payment");
+    //         } else {
+    //             alert("Failed to create the order. Please try again.");
+    //         }
+    //     } catch (error) {
+    //         console.error("Error submitting order and data:", error);
+    //         alert("An error occurred while submitting the order. Please try again.");
+    //     }
+    // };
+
+    const handleFileChange = (e) => {
+        setFile(e.target.files[0]);
+    };
+
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
+        const formData = new FormData();
+        formData.append("Name", name);
+        formData.append("Age", age);
+        formData.append("Weight", weight);
+        formData.append("Length", length);
+        formData.append("OrderId", orderId);
+        if (file) formData.append("File", file);
+
+        for (let pair of formData.entries()) {
+            console.log(pair[0], pair[1]);
+          }
+
+          
         try {
-            // Create the new fish order in the database
-            const orderResponse = await CreateOrderFishService({
-                orderInfo,
-                shippingType,
-                selectedProducts: selectedProducts.filter((fish, index) => selectedIndexes.includes(index)), // Only include selected fish
+            const response = await axios.post("https://localhost:7046/api/OrderFish/GetCreateOrderFish", formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                },
             });
-    
-            if (orderResponse && orderResponse.id) {
-                const orderId = orderResponse.id;
-                console.log("Order created successfully. Order ID:", orderId);
-    
-                // Save new fish qualifications if any
-                if (newFishQualification && newFishQualification.name) {
-                    const qualificationPayload = {
-                        orderId,  // Link qualification to the created order
-                        name: newFishQualification.name,
-                        certificateImage: newFishQualification.certificateImage,
-                    };
-    
-                    await CreateFishQualificationService(qualificationPayload);
-                    console.log("Fish qualification saved successfully.");
-                }
-    
-                // Save new fish if any
-                if (newFish && newFish.name) {
-                    const { name, age, image, weight } = newFish; // Exclude quantity from the payload
-                    const fishPayload = {
-                        orderId, // Link new fish to the created order
-                        name,
-                        age,
-                        image,
-                        weight,
-                    };
-    
-                    await CreateOrderFishService(fishPayload); // Use CreateFishService for saving fish
-                    console.log("New fish saved successfully.");
-                }
-    
-                // Now add the selected fish to the database
-                const selectedFishPayload = selectedProducts.filter((fish, index) => selectedIndexes.includes(index)).map(fish => ({
-                    orderId,  // Link fish to the created order
-                    name: fish.name,
-                    age: fish.age,
-                    weight: fish.weight,
-                    length: fish.length, // Include length if applicable
-                }));
-    
-                for (const fishPayload of selectedFishPayload) {
-                    await CreateOrderFishService(fishPayload); // Add each selected fish to the database
-                    console.log("Selected fish saved successfully.");
-                }
-    
-                // Navigate to payment page
-                navigate("/payment");
-            } else {
-                alert("Failed to create the order. Please try again.");
-            }
-        } catch (error) {
-            console.error("Error submitting order and data:", error);
-            alert("An error occurred while submitting the order. Please try again.");
+            console.log("Success", response.data);
+        }
+        catch (error) {
+            console.error("Error", error.response?.data || error.message);
         }
     };
 
@@ -490,40 +531,45 @@ const BookingOrder = () => {
                 {step === 2 && (
                     <div className={styles.step}>
                         <h2>Thêm Thông Tin Cá</h2>
+                        <form onSubmit={handleSubmit}>
                         <input
                             type="text"
                             name="name"
                             placeholder="Tên cá"
-                            value={newFish.name}
-                            onChange={(e) => handleInputChange(e, setNewFish)}
-                        />
+                            value={name}
+                            onChange={(e) => setName(e.target.value)} />
                         <input
                             type="number"
                             name="age"
                             placeholder="Tuổi cá"
-                            value={newFish.age}
-                            onChange={(e) => handleInputChange(e, setNewFish)}
-                        />
-                        <input
-                            type="file"
-                            name="image"
-                            onChange={(e) => handleFileChange(e, 'image')}
+                            value={age}
+                            onChange={(e) => setAge(e.target.value)}
                         />
                         <input
                             type="number"
                             name="weight"
                             placeholder="Cân nặng cá"
-                            value={newFish.weight}
-                            onChange={(e) => handleInputChange(e, setNewFish)}
+                            value={weight}
+                            onChange={(e) => setWeight(e.target.value)}
                         />
+                        <input
+                            type="number"
+                            name="length"
+                            placeholder="Cân nặng cá"
+                            value={length}
+                            onChange={(e) => setLength(e.target.value)}
+                        />
+                        <input type="file" onChange={handleFileChange} />
                         {/* <input
                             type="file"
                             name="certificateImage"
                             onChange={(e) => handleFileChange(e, 'certificateImage')}
                         /> */}
+                        <button type="submit">Submit</button>
+                        </form>
 
                         <button onClick={handleAddFish}>Thêm Cá</button>
-
+                        
                         {/* Hiển thị danh sách sản phẩm đã chọn */}
                         <div>
                             <h3>Sản phẩm đã chọn:</h3>
