@@ -462,7 +462,7 @@ const BookingOrder = () => {
                 },
             });
             console.log("Success", response.data);
-            navigate('/payment');
+            navigate(`/payment?orderId=${orderId}`);
         }
         catch (error) {
             console.error("Error", error.response?.data || error.message);

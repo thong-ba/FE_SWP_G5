@@ -79,66 +79,146 @@ import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import './Payment.css';
+import axios from 'axios';
 
-const PaymentPage = (orderId) => {
+const PaymentPage = () => {
     const [orderData, setOrderData] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState(''); // For payment method selection
     const [cashPayer, setCashPayer] = useState(''); // For selecting payer in cash payment
     const [loading, setLoading] = useState(false);
     const [totalAmount, setTotalAmount] = useState(0);
+    const location = useLocation();
+    const queryParams = new URLSearchParams(location.search);
+    const orderId = queryParams.get('orderId');
     const navigate = useNavigate();
-
-    useEffect(() => {
-        const savedData = sessionStorage.getItem('orderData');
-        if (savedData) {
-            setOrderData(JSON.parse(savedData));
-        }
-
-        const storedTotalAmount = JSON.parse(sessionStorage.getItem('totalAmount'));
-        if (storedTotalAmount !== null) {
-            setTotalAmount(storedTotalAmount);
-        }
-    }, []);
-
     
+    useEffect(() => {
+        const fetchOrderData = async () => {
+            try {
+                console.log("orderId", orderId);
+                const response = await 
+                axios.get(`https://localhost:7046/api/Order/GetOrderByIdAsyncAsync/${orderId}`);
+                
+                console.log("response", response.data);
+                setOrderData(response.data);
+
+                if (response.data) {
+                    const { totalPrice, transportService } = response.data.result;
+                    const shippingCost = transportService?.pricePerKm * response.data.distance || 0;
+                    setTotalAmount(totalPrice + shippingCost);
+                }
+            }
+            catch (error) {
+                console.error("Failed to fetch order data", error)
+            }
+        };
+
+        fetchOrderData();
+    }, [orderId]);
+
     if (!orderData) {
         return <p>Loading...</p>;
     }
 
-    const { senderInfo, receiverInfo, shippingType, selectedProducts, newFish, newFishQualification } = orderData;
+    const { senderInfo, receiverInfo, shippingType, orderFishes } = orderData.result;
 
-    const handlePayment = () => {
+    const handlePayment = async () => {
         setLoading(true);
+        try {
+            const token = sessionStorage.getItem('token');
+            
+            const response = await axios.post('https://localhost:7046/api/Payment',
+                { orderId: orderId },
+                {
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                }
+            );
+            console.log("Payment response: ", response.data);
+
+            if (response.data.isSuccess) {
+                const paymentUrl = response.data.result;
+
+                window.location.href = paymentUrl;  
+            } else {
+                console.error("Payment request failed:", response.data.errorMessage);
+            }
+        }
+        catch (error) {
+            console.error("Payment request failed:", error);
+        }
+        finally {
+            setLoading(false);
+        }
         // Proceed to payment logic (e.g., API call, payment gateway redirection)
         setTimeout(() => {
             setLoading(false);
-            navigate('/confirmation');  // Assuming there's a confirmation page
         }, 2000);
     };
+
+    const handleVnPay = async () => {
+        setLoading(true);
+        try {
+            const vnpayUrl = await axios.put(`https://localhost:7046/api/Order/UpdateStatusPaymentToVnPayByOrderIdAsync?OrderId=${orderId}`, {}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            console.log("Payment response: ", vnpayUrl.data);
+            setPaymentMethod('transfer');
+        }
+        catch (error) {
+            console.error("Payment request failed:", error);
+        } finally {
+            setLoading(false);
+        }
+    }
+
+    const handleCash = async () => {
+        setLoading(true);
+        try {
+            const cashUrl = await axios.put(`https://localhost:7046/api/Order/UpdateStatusPaymentToCashByOrderIdAsync?OrderId=${orderId}`, {}, {
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+            });
+
+            console.log("Cash response: ", cashUrl.data);
+            setPaymentMethod('cash');
+        }
+        catch (error) {
+            console.error("Cash request failed:", error);
+        } finally {
+            setLoading(false);
+        }
+    }
 
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat().format(amount);
     };
 
     return (
-        <div className="payment-container">
+        <div className="payment-contain Set the fetched data into stateer">
             <h2 className="heading">Xác Nhận Thanh Toán</h2>
 
             <div className="order-summary">
                 <h3>Thông Tin Đặt Hàng:</h3>
-                <p className='text'><strong>Người giao hàng:</strong> {senderInfo.fullName} - {senderInfo.phone} - {senderInfo.address}</p>
-                <p className='text'><strong>Người nhận hàng:</strong> {receiverInfo.fullName} - {receiverInfo.phone} - {receiverInfo.address}</p>
-                <p className='text'><strong>Số lượng cá:</strong> {selectedProducts.reduce((total, fish) => total + fish.quantity, 0)} con</p>
-                <p className='text'><strong>Hình thức giao hàng:</strong> {shippingType}</p>
+                <p className='text'><strong>Người giao hàng:</strong>{orderData.result?.fromAddress}</p>
+                <p className='text'><strong>Người nhận hàng:</strong> {orderData.result?.receiverName} - {orderData.result?.receiverPhone} - {orderData.result?.toAddress}</p>
+                <p className='text'><strong>Số lượng cá:</strong> {orderFishes?.length} con</p>
+                <p className='text'><strong>Hình thức giao hàng:</strong> {orderData.result?.transportService?.transportType}</p>
                 <p className='text'><strong>Tổng chi phí:</strong> {formatCurrency(totalAmount)} VND</p>
             </div>
 
             <h3>Hình Thức Thanh Toán</h3>
             <div className="payment-options">
-                <div className={`option-button ${paymentMethod === 'cash' ? 'selected' : ''}`} onClick={() => setPaymentMethod('cash')}>
+                <div className={`option-button ${paymentMethod === 'cash' ? 'selected' : ''}`} onClick={handleCash}>
                     Tiền mặt
                 </div>
-                <div className={`option-button ${paymentMethod === 'transfer' ? 'selected' : ''}`} onClick={() => setPaymentMethod('transfer')}>
+                <div className={`option-button ${paymentMethod === 'transfer' ? 'selected' : ''}`} onClick={handleVnPay}>
                     Chuyển khoản
                 </div>
             </div>
