@@ -1,35 +1,40 @@
 /* Phong cách tổng quát cho Header */
-.header {
+.header-container {
   display: flex;
   justify-content: space-between;
   align-items: center;
   padding: 20px;
-  background-color: rgb(146, 68, 146);
+  background-color: rgb(146, 68, 146); /* Màu nền Header */
   color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 100;
 }
 
 /* Logo và tên website */
-.logo-container {
+.header-logo-container {
   display: flex;
   align-items: center;
 }
 
-.logo-image {
-  width: 30px;
-  height: 30px;
+.header-logo-image {
+  width: 40px; /* Kích thước ảnh */
+  height: 40px;
+  border-radius: 50%; /* Bo tròn hình ảnh */
+  object-fit: cover; /* Đảm bảo ảnh được căn chỉnh đúng trong khu vực bo tròn */
   margin-right: 10px;
+  cursor: pointer; /* Chỉnh con trỏ khi di chuột vào avatar */
 }
 
-.logo {
-  font-size: 24px;
+.header-logo-text {
+  font-size: 28px;
   font-weight: bold;
   color: white;
+  padding-bottom: 10px;
+  letter-spacing: 1px;
 }
 
 /* Menu navigation */
-.nav-list {
+.header-nav-list {
   list-style-type: none;
   display: flex;
   gap: 40px;
@@ -37,29 +42,31 @@
   padding: 0;
 }
 
-.nav-item {
+.header-nav-item {
   font-size: 16px;
+  position: relative;
 }
 
-.nav-item a {
+.header-nav-link {
   color: white;
   text-decoration: none;
   padding: 10px 15px;
+  font-size: 20px;
   border-radius: 5px;
   transition: all 0.3s ease-in-out;
 }
 
-.nav-item a:hover {
+.header-nav-link:hover {
   background-color: rgba(255, 255, 255, 0.2);
   color: #ffa500;
 }
 
 /* Dropdown menu */
-.services {
+.services-dropdown {
   position: relative;
 }
 
-.dropdown {
+.header-dropdown-list {
   position: absolute;
   top: 100%;
   left: 0;
@@ -72,33 +79,34 @@
   display: none;
 }
 
-.services:hover .dropdown {
+.services-dropdown:hover .header-dropdown-list {
   display: flex;
+  flex-direction: column;
 }
 
-.dropdown-item a {
+.header-dropdown-item a {
   color: white;
-  display: flex;
-  padding: auto;
-  width: 120px;
+  display: block;
+  padding: 10px 20px;
+  width: 200px;
   transition: background-color 0.3s ease-in-out;
 }
 
-.dropdown-item a:hover {
+.header-dropdown-item a:hover {
   background-color: rgba(255, 255, 255, 0.2);
   color: #ffa500;
 }
 
 /* Avatar và logout */
-.user-avatar {
-  width: 25px;
-  height: 25px;
+.header-user-avatar {
+  width: 30px;
+  height: 30px;
   border-radius: 50%;
   object-fit: cover;
   margin-right: 10px;
 }
 
-.logout-button {
+.header-logout-button {
   background-color: rgb(255, 87, 87);
   color: white;
   padding: 10px 15px;
@@ -108,12 +116,12 @@
   transition: background-color 0.3s ease-in-out;
 }
 
-.logout-button:hover {
+.header-logout-button:hover {
   background-color: rgb(255, 69, 0);
 }
 
 /* Popup xác nhận logout */
-.logout-popup {
+.header-logout-popup {
   position: fixed;
   top: 0;
   left: 0;
@@ -126,7 +134,7 @@
   z-index: 10000;
 }
 
-.logout-popup-content {
+.header-logout-popup-content {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
@@ -134,12 +142,12 @@
   text-align: center;
 }
 
-.logout-popup-content h3 {
+.header-logout-popup-text {
   margin-bottom: 15px;
   color: rgb(146, 68, 146);
 }
 
-.logout-popup-content button {
+.header-logout-popup-content button {
   padding: 10px 20px;
   margin: 5px;
   border: none;
@@ -148,32 +156,51 @@
   transition: background-color 0.3s ease-in-out;
 }
 
-.logout-popup-content .confirm {
+.header-confirm-button {
   background-color: rgb(255, 87, 87);
   color: white;
 }
 
-.logout-popup-content .confirm:hover {
+.header-confirm-button:hover {
   background-color: rgb(255, 69, 0);
 }
 
-.logout-popup-content .cancel {
+.header-cancel-button {
   background-color: rgb(201, 201, 201);
   color: black;
 }
 
-.logout-popup-content .cancel:hover {
+.header-cancel-button:hover {
   background-color: rgb(170, 170, 170);
 }
 
 /* Responsive */
 @media (max-width: 768px) {
-  .nav-list {
+  .header-nav-list {
     flex-direction: column;
     gap: 20px;
   }
 
-  .nav-item {
+  .header-nav-item {
     text-align: center;
+  }
+
+  .header-logo-container {
+    flex-direction: column;
+    align-items: center;
+  }
+
+  .header-logo-text {
+    font-size: 22px;
+  }
+
+  .header-nav-item .header-nav-link {
+    padding: 15px;
+    width: 100%;
+    text-align: center;
+  }
+
+  .header-dropdown-list {
+    width: 100%;
   }
 }
