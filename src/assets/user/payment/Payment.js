@@ -88,6 +88,7 @@ const PaymentPage = () => {
     const [totalAmount, setTotalAmount] = useState(0);
     const navigate = useNavigate();
 
+    
     useEffect(() => {
         const savedData = sessionStorage.getItem('orderData');
         if (savedData) {
@@ -100,21 +101,35 @@ const PaymentPage = () => {
         }
     }, []);
 
+    const handlePayment = async () => {
+        setLoading(true);
+        try {
+            const response = await fetch("https://localhost:7046/api/CashPayment", {
+                method: "POST",
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ OrderId: orderData.orderId }),
+            });
+            if (response.ok) {
+                navigate("/confirmation");
+            }
+            else {
+                console.error("Payment failed: ", response.statusText);
+            }
+        }
+        catch (error) {
+            console.error("Error during payment: ", error);
+        }
+        finally {
+            setLoading(true);
+        }
+    };
+    
     
     if (!orderData) {
         return <p>Loading...</p>;
     }
 
     const { senderInfo, receiverInfo, shippingType, selectedProducts, orderFish, fishQualification } = orderData;
-
-    const handlePayment = () => {
-        setLoading(true);
-        // Proceed to payment logic (e.g., API call, payment gateway redirection)
-        setTimeout(() => {
-            setLoading(false);
-            navigate('/confirmation');  // Assuming there's a confirmation page
-        }, 2000);
-    };
 
     const formatCurrency = (amount) => {
         return new Intl.NumberFormat().format(amount);
