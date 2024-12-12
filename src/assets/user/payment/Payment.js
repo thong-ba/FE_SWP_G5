@@ -105,7 +105,7 @@ const PaymentPage = () => {
         return <p>Loading...</p>;
     }
 
-    const { senderInfo, receiverInfo, shippingType, selectedProducts, orderFish, fishQualification } = orderData;
+    const { senderInfo, receiverInfo, shippingType, selectedProducts, newFish, newFishQualification } = orderData;
 
     const handlePayment = () => {
         setLoading(true);
@@ -128,7 +128,7 @@ const PaymentPage = () => {
                 <h3>Thông Tin Đặt Hàng:</h3>
                 <p className='text'><strong>Người giao hàng:</strong> {senderInfo.fullName} - {senderInfo.phone} - {senderInfo.address}</p>
                 <p className='text'><strong>Người nhận hàng:</strong> {receiverInfo.fullName} - {receiverInfo.phone} - {receiverInfo.address}</p>
-                <p className='text'><strong>Số lượng cá:</strong> {selectedProducts.length} con</p>
+                <p className='text'><strong>Số lượng cá:</strong> {selectedProducts.reduce((total, fish) => total + fish.quantity, 0)} con</p>
                 <p className='text'><strong>Hình thức giao hàng:</strong> {shippingType}</p>
                 <p className='text'><strong>Tổng chi phí:</strong> {formatCurrency(totalAmount)} VND</p>
             </div>

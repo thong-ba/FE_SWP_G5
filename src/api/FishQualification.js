@@ -2,7 +2,7 @@ import { getJwtToken, Url, headers, localUrl } from "./Url";
 import axios from "axios";
 
 
-const baseFishQualificationUrl = "http://localhost:5141/api/FishQualification";
+const baseFishQualificationUrl = "https://localhost:7046/api/FishQualification";
 
 
 
