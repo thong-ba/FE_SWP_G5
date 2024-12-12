@@ -155,7 +155,7 @@ const PaymentPage = () => {
         // Proceed to payment logic (e.g., API call, payment gateway redirection)
         setTimeout(() => {
             setLoading(false);
-        }, 2000);
+        }, 10);
     };
 
     const handleVnPay = async () => {
