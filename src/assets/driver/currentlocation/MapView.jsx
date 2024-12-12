@@ -511,7 +511,7 @@ function MapView({ location }) {
   const fetchRouteDetails = async (driverId) => {
     try {
       const response = await fetch(
-        `https://localhost:7046/api/Route/GetRouteByDriver/${driverId}`
+        `https://localhost:7046/api/Route/GetAllRouteWithRouteStatusBy/${driverId}`
       );
       const data = await response.json();
       console.log("Route Details:", data); // Thêm log để kiểm tra dữ liệu
@@ -616,10 +616,10 @@ function MapView({ location }) {
               <th>Driver ID</th>
               <td>{driverId}</td>
             </tr>
-            <tr>
+            {/* <tr>
               <th>Status</th>
               <td>{status}</td>
-            </tr>
+            </tr> */}
             <tr>
               <th>Latitude</th>
               <td>{mapLocation.latitude}</td>
