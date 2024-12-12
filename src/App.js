@@ -12,7 +12,7 @@ import Payment from './assets/user/payment/Payment';
 import Service from './assets/user/services/Service';
 import UserInfo from './assets/user/userinfo/UserInfo';
 import TrackOrder from './assets/user/trackorder/TrackOrder';
-import  UpdateProfile  from './assets/user/updateprofile/UpdateProfile';
+import UpdateProfile  from './assets/user/updateprofile/UpdateProfile';
 
 import VerifyAccount from './assets/user/verify/VerifyAccount';
 
