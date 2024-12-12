@@ -3,7 +3,7 @@ import { MapContainer, TileLayer, Marker } from 'react-leaflet';
 import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import styles from './BookingOrder.module.css'; // Importing CSS module
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -19,18 +19,30 @@ const BookingOrder = () => {
     const [senderfishInfo, setSenderFishInfo] = useState({ Name: '', Age: '', Weight: '', Length: '' });
     const [fishQualification, setSenderFishQualificationInfo] = useState({ name: '', file: null });
     const [shippingType, setShippingType] = useState('');
+    const [routeId, setRouteId] = useState('');
     const [selectedProducts, setSelectedProducts] = useState([]);
     const [selectedFish, setSelectedFish] = useState([]);
     const [senderCoordinates, setSenderCoordinates] = useState(null);
     const [receiverCoordinates, setReceiverCoordinates] = useState(null);
+    const [isModalOpen, setIsModalOpen] = useState(false);
     const [distance, setDistance] = useState(null);
     const [selectedIndexes, setSelectedIndexes] = useState([]);
     const [shippingCost, setShippingCost] = useState(null);
     const [totalFishCost, setTotalFishCost] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
     const navigate = useNavigate();
+    const location = useLocation();
 
-    const handleInputChange = (e, setInfo) => {
+    const handleAddFish = () => {
+        setSelectedProducts([...selectedProducts, newFish]);
+        setNewFish({ name: '', age: '', image: null, weight: '', certificateImage: null });
+    };
+
+    // const handleInputChange = (e, field) => {
+    //     const { name, value } = e.target;
+    //     setNewFish(prevFish => ({ ...prevFish, [name]: value }));
+    // };
+    const handleInputChange = (e, setStateFunction) => {
         const { name, value } = e.target;
         setInfo(prevInfo => ({ ...prevInfo, [name]: value }));
     };
@@ -181,6 +193,12 @@ const BookingOrder = () => {
     }, [senderInfo.address, receiverInfo.address]);
 
     useEffect(() => {
+        if (location.state && location.state.shippingType) {
+            setShippingType(location.state.shippingType); // Lấy shippingType từ state
+        }
+    }, [location]);
+
+    useEffect(() => {
         if (distance !== null && shippingType) {
             let cost = 0;
             if (shippingType === 'express') {
@@ -201,6 +219,20 @@ const BookingOrder = () => {
     useEffect(() => {
         setTotalAmount(totalFishCost + (shippingCost || 0));
     }, [totalFishCost, shippingCost]);
+
+
+    useEffect(() => {
+        if (location.state && location.state.routeId) {
+            setRouteId(location.state.routeId); // Lấy routeId từ state
+        }
+    }, [location]);
+    useEffect(() => {
+        console.log(location.state);  // In ra để kiểm tra dữ liệu
+        if (location.state && location.state.routeId) {
+            setRouteId(location.state.routeId);
+        }
+    }, [location]);
+
 
     const handleSubmit = () => {
         const orderData = {
@@ -271,29 +303,12 @@ const BookingOrder = () => {
                             onChange={(e) => handleInputChange(e, setReceiverInfo)}
                         />
 
-                        {/* Shipping Type Selection */}
-                        <h2>Shipping Options</h2>
-                        <div className={styles.optionButtons}>
-                            <div
-                                className={`${styles.optionButton} ${shippingType === 'express' ? styles.selected : ''}`}
-                                onClick={() => setShippingType('express')}
-                            >
-                                EXPRESS
-                            </div>
-                            <div
-                                className={`${styles.optionButton} ${shippingType === 'fast' ? styles.selected : ''}`}
-                                onClick={() => setShippingType('fast')}
-                            >
-                                FAST
-                            </div>
-                            <div
-                                className={`${styles.optionButton} ${shippingType === 'standard' ? styles.selected : ''}`}
-                                onClick={() => setShippingType('standard')}
-                            >
-                                STANDARD
-                            </div>
+                        {/* Display the Shipping Type Information */}
+                        <h2>Shipping Information</h2>
+                        <div className={styles.shippingInfo}>
+                            <p><strong>Shipping Type:</strong> {shippingType}</p>
+                            <p><strong>Id tuyến đường:</strong> {routeId || 'Không có dữ liệu'}</p>
                         </div>
-
                         {distance !== null && shippingCost !== null && (
                             <div className={styles.shippingInfo}>
                                 <p><strong>Tổng số km:</strong> {distance.toFixed(2)} km</p>
@@ -410,3 +425,4 @@ const BookingOrder = () => {
 };
 
 export default BookingOrder;
+
