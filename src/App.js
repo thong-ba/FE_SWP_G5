@@ -12,6 +12,7 @@ import Payment from './assets/user/payment/Payment';
 import Service from './assets/user/services/Service';
 import UserInfo from './assets/user/userinfo/UserInfo';
 import TrackOrder from './assets/user/trackorder/TrackOrder';
+import  UpdateProfile  from './assets/user/updateprofile/UpdateProfile';
 
 import VerifyAccount from './assets/user/verify/VerifyAccount';
 
@@ -279,6 +280,15 @@ function App() {
         }
       />
 
+      <Route
+        path="/updateprofile"
+        element={
+          <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+            <UpdateProfile />
+          </LayoutUtils>
+        }
+      />
+
       {/* Routes cho manager và staff */}
       <Route
         path="/manager"
@@ -292,8 +302,8 @@ function App() {
       />
 
       {/* Redirect nếu không phù hợp */}
-      {/* <Route
-        path="/staff"
+     {/* <Route
+        path="/driver"
         element={
           userRole === 'DeliveringStaff' ? (
             <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
@@ -303,7 +313,9 @@ function App() {
             <Navigate to="/home" />
           )
         }
-      />
+      /> */}
+
+      {/*
       <Route
         path="/staff"
         element={
@@ -316,7 +328,7 @@ function App() {
           )
         }
       /> */}
-      <Route path="*" element={<Navigate to="/home" />} />
+      {/* <Route path="*" element={<Navigate to="/home" />} />
       <Route path="/" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
       <Route path="/home" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
       <Route path="/login" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Login setIsLoggedIn={setIsLoggedIn} /></LayoutUtils>} />
@@ -324,7 +336,7 @@ function App() {
       <Route path="/bookingorder" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><BookingOrder /></LayoutUtils>} />
       <Route path="/shippingoption" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><ShippingOption /></LayoutUtils>} />
       <Route path="/payment" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Payment /></LayoutUtils>} />
-      <Route path="/service" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Service /></LayoutUtils>} />
+      <Route path="/service" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Service /></LayoutUtils>} /> */}
 
       <Route path="/staff" element={<Staff />} />
       <Route path="/manager" element={<Manager />} />
@@ -332,6 +344,8 @@ function App() {
       <Route path="/driver" element={<DriverLayout isLoggedIn={isLoggedIn} handleLogout={handleLogout} ><MapView location={location} /> </DriverLayout>} />
       <Route path="/paymentsuccess" element={<PaymentSuccess></PaymentSuccess>} />
       <Route path="/paymentfail" element={<PaymentFail></PaymentFail>} />
+
+
       <Route
         path="/pendingorder"
         element={
@@ -344,6 +358,8 @@ function App() {
           )
         }
       />
+
+
     </Routes>
 
 

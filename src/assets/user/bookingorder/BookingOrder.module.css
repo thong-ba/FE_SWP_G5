@@ -248,6 +248,7 @@ ul li {
 
 .fishItem input[type="checkbox"] {
     margin-right: 10px;
+    width: 30px;
 }
 
 .fishItem span {
