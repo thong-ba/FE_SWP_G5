@@ -356,51 +356,68 @@ const BookingOrder = () => {
             newFish,
             newFishQualification,
         };
-
+    
+        // Log the selected fish for debugging
+        console.log("Selected Fish:", selectedProducts.filter((fish, index) => selectedIndexes.includes(index)));
+    
         // Save the order data to sessionStorage
-        sessionStorage.setItem('orderData', JSON.stringify(orderData));
-
+        sessionStorage.setItem("orderData", JSON.stringify(orderData));
+    
         try {
             // Create the new fish order in the database
             const orderResponse = await CreateOrderFishService({
                 orderInfo,
                 shippingType,
-                selectedProducts,
+                selectedProducts: selectedProducts.filter((fish, index) => selectedIndexes.includes(index)), // Only include selected fish
             });
-
+    
             if (orderResponse && orderResponse.id) {
-
-                
-                console.log("Order created successfully:", orderResponse);
-
+                const orderId = orderResponse.id;
+                console.log("Order created successfully. Order ID:", orderId);
+    
                 // Save new fish qualifications if any
-                if (newFishQualification && newFishQualification.length > 0) {
-                    await Promise.all(
-                        newFishQualification.map((qualification) =>
-                            CreateFishQualificationService({
-                                fishId: qualification.fishId,
-                                qualification: qualification.qualification,
-                            })
-                        )
-                    );
-                    console.log("Fish qualifications saved successfully.");
+                if (newFishQualification && newFishQualification.name) {
+                    const qualificationPayload = {
+                        orderId,  // Link qualification to the created order
+                        name: newFishQualification.name,
+                        certificateImage: newFishQualification.certificateImage,
+                    };
+    
+                    await CreateFishQualificationService(qualificationPayload);
+                    console.log("Fish qualification saved successfully.");
                 }
-
+    
                 // Save new fish if any
-                if (newFish && newFish.length > 0) {
-                    await Promise.all(
-                        newFish.map((fish) =>
-                            CreateFishQualificationService({
-                                fishId: fish.fishId,
-                                qualification: fish.qualification,
-                            })
-                        )
-                    );
+                if (newFish && newFish.name) {
+                    const { name, age, image, weight } = newFish; // Exclude quantity from the payload
+                    const fishPayload = {
+                        orderId, // Link new fish to the created order
+                        name,
+                        age,
+                        image,
+                        weight,
+                    };
+    
+                    await CreateOrderFishService(fishPayload); // Use CreateFishService for saving fish
                     console.log("New fish saved successfully.");
                 }
-
+    
+                // Now add the selected fish to the database
+                const selectedFishPayload = selectedProducts.filter((fish, index) => selectedIndexes.includes(index)).map(fish => ({
+                    orderId,  // Link fish to the created order
+                    name: fish.name,
+                    age: fish.age,
+                    weight: fish.weight,
+                    length: fish.length, // Include length if applicable
+                }));
+    
+                for (const fishPayload of selectedFishPayload) {
+                    await CreateOrderFishService(fishPayload); // Add each selected fish to the database
+                    console.log("Selected fish saved successfully.");
+                }
+    
                 // Navigate to payment page
-                navigate('/payment');
+                navigate("/payment");
             } else {
                 alert("Failed to create the order. Please try again.");
             }
@@ -408,7 +425,6 @@ const BookingOrder = () => {
             console.error("Error submitting order and data:", error);
             alert("An error occurred while submitting the order. Please try again.");
         }
-
     };
 
     return (
