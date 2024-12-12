@@ -80,7 +80,7 @@ import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
 import './Payment.css';
 
-const PaymentPage = () => {
+const PaymentPage = (orderId) => {
     const [orderData, setOrderData] = useState(null);
     const [paymentMethod, setPaymentMethod] = useState(''); // For payment method selection
     const [cashPayer, setCashPayer] = useState(''); // For selecting payer in cash payment
