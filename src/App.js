@@ -283,8 +283,8 @@ function App() {
       />
 
       {/* Redirect nếu không phù hợp */}
-      {/* <Route
-        path="/staff"
+     {/* <Route
+        path="/driver"
         element={
           userRole === 'DeliveringStaff' ? (
             <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
@@ -294,7 +294,9 @@ function App() {
             <Navigate to="/home" />
           )
         }
-      />
+      /> */}
+
+      {/*
       <Route
         path="/staff"
         element={
@@ -307,7 +309,7 @@ function App() {
           )
         }
       /> */}
-      <Route path="*" element={<Navigate to="/home" />} />
+      {/* <Route path="*" element={<Navigate to="/home" />} />
       <Route path="/" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
       <Route path="/home" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
       <Route path="/login" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Login setIsLoggedIn={setIsLoggedIn} /></LayoutUtils>} />
@@ -315,7 +317,7 @@ function App() {
       <Route path="/bookingorder" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><BookingOrder /></LayoutUtils>} />
       <Route path="/shippingoption" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><ShippingOption /></LayoutUtils>} />
       <Route path="/payment" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Payment /></LayoutUtils>} />
-      <Route path="/service" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Service /></LayoutUtils>} />
+      <Route path="/service" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Service /></LayoutUtils>} /> */}
 
       <Route path="/staff" element={<Staff />} />
       <Route path="/manager" element={<Manager />} />

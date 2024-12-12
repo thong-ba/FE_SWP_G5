@@ -14,7 +14,7 @@ const HeadDriver = ({ handleLogout}) => {
                 <ul className="nav-list">
                     <li className="nav-item">
                         <Link to="/driverInfo">
-                            <img className="user-avatar profile-icon" src="hack.png" alt="Profile" />
+                            <img className="user-avatar profile-icon" src="shipment.png" alt="Profile" />
                         </Link>
                     </li>
                     <li className="nav-item">
