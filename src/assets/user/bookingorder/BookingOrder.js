@@ -147,8 +147,8 @@ const BookingOrder = () => {
     }, [selectedProducts]);
 
     useEffect(() => {
-        setTotalAmount(totalFishCost + (shippingCost || 0));
-    }, [totalFishCost, shippingCost]);
+        setTotalAmount(totalFishCost /*+ (shippingCost || 0) */ );
+    }, [totalFishCost   /* , shippingCost */] );
 
 
     useEffect(() => {
@@ -224,12 +224,12 @@ const BookingOrder = () => {
                         <h2>Shipping Information</h2>
                         <div className={styles.shippingInfo}>
                             <p><strong>Shipping Type:</strong> {shippingType}</p>
-                            <p><strong>Id tuyến đường:</strong> {routeId || 'Không có dữ liệu'}</p>
+                            <p><strong>Transport ID:</strong> {routeId || 'Không có dữ liệu'}</p>
                         </div>
-                        {distance !== null && shippingCost !== null && (
+                        {distance !== null  /*&& shippingCost !== null */ && (
                             <div className={styles.shippingInfo}>
-                                <p><strong>Tổng số km:</strong> {distance.toFixed(2)} km</p>
-                                <p><strong>Số tiền vận chuyển:</strong> {shippingCost.toFixed(2)} VND</p>
+                                <p><strong>Total Distance:</strong> {distance.toFixed(2)} km</p>
+                                {/* <p><strong>Transport Feed:</strong> {shippingCost.toFixed(2)} VND</p> */}
                             </div>
                         )}
                     </div>
@@ -238,18 +238,18 @@ const BookingOrder = () => {
                 {/* Step 2: Add Products */}
                 {step === 2 && (
                     <div className={styles.step}>
-                        <h2>Thêm Thông Tin Cá</h2>
+                        <h2>Fish Adding Information</h2>
                         <input
                             type="text"
                             name="name"
-                            placeholder="Tên cá"
+                            placeholder="Fish's Name"
                             value={newFish.name}
                             onChange={(e) => handleInputChange(e, setNewFish)}
                         />
                         <input
                             type="number"
                             name="age"
-                            placeholder="Tuổi cá"
+                            placeholder="Fish's Age"
                             value={newFish.age}
                             onChange={(e) => handleInputChange(e, setNewFish)}
                         />
@@ -261,7 +261,7 @@ const BookingOrder = () => {
                         <input
                             type="number"
                             name="weight"
-                            placeholder="Cân nặng cá"
+                            placeholder="Fish's Weight"
                             value={newFish.weight}
                             onChange={(e) => handleInputChange(e, setNewFish)}
                         />
@@ -271,11 +271,11 @@ const BookingOrder = () => {
                             onChange={(e) => handleFileChange(e, 'certificateImage')}
                         />
 
-                        <button onClick={handleAddFish}>Thêm Cá</button>
+                        <button onClick={handleAddFish}>Add Fish</button>
 
                         {/* Hiển thị danh sách sản phẩm đã chọn */}
                         <div>
-                            <h3>Sản phẩm đã chọn:</h3>
+                            <h3>Selected Fish:</h3>
                             <ul className={styles.fishList}>
                                 {selectedProducts.map((fish, index) => (
                                     <li key={index} className={styles.fishItem}>
@@ -285,7 +285,7 @@ const BookingOrder = () => {
                                             onChange={() => handleCheckboxChange(index)}
                                         />
                                         <span>
-                                            {fish.name} - {fish.age} tuổi - {fish.weight}kg
+                                            {fish.name} - {fish.age} Age - {fish.weight}kg
                                         </span>
                                     </li>
                                 ))}
@@ -295,7 +295,7 @@ const BookingOrder = () => {
                                 className={styles.deleteSelectedButton}
                                 disabled={selectedIndexes.length === 0}
                             >
-                                Xóa mục đã chọn
+                                Delete Selected
                             </button>
                         </div>
                     </div>
