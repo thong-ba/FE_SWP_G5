@@ -42,8 +42,12 @@ const BookingOrder = () => {
     const [age, setAge] = useState(null);
     const [weight, setWeight] = useState(null);
     const [length, setLength] = useState(null);
-    
-    
+
+    const [qname, setQName] = useState(null);
+    const [qfile, setQFile] = useState(null);
+    const [orderfishId, setOrderFishId] = useState(null);
+
+
 
     const handleAddFish = () => {
         setSelectedProducts([...selectedProducts, newFish]);
@@ -111,12 +115,12 @@ const BookingOrder = () => {
             // Create the order data to be sent
             const token = sessionStorage.getItem('token');
             console.log("Token:", token);
-            
+
             if (!token) {
                 alert('Bạn cần đăng nhập để thực hiện hành động này.');
                 return; // Return early if no token is found
             }
-    
+
             const orderData = {
                 fromAddress: orderInfo.fromAddress, // Sender's address
                 toAddress: orderInfo.toAddress,     // Receiver's address
@@ -125,7 +129,7 @@ const BookingOrder = () => {
                 notes: orderInfo.notes,
                 transportServiceId: routeId,
             };
-    
+
             // Make the API call to create the order
             const response = await axios.post('https://localhost:7046/api/Order/create-order', orderData, {
                 headers: {
@@ -142,6 +146,8 @@ const BookingOrder = () => {
                 setOrderId(response.data.result);
             }
 
+            
+
             // } else {
             //     alert('Failed to create the order. Please try again.');
             // }
@@ -151,6 +157,7 @@ const BookingOrder = () => {
         }
     };
     
+
     const handlePrevStep = () => setStep(prev => prev - 1);
 
     const handleCheckboxChange = (index) => {
@@ -190,10 +197,10 @@ const BookingOrder = () => {
 
             if (data.length > 0) {
                 return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-            // } else {
-            //     console.error(`No coordinates found for the address: ${address}`);
-            //     alert('Unable to find coordinates for the given address.');
-            //     return null;
+                // } else {
+                //     console.error(`No coordinates found for the address: ${address}`);
+                //     alert('Unable to find coordinates for the given address.');
+                //     return null;
             }
         } catch (error) {
             console.error('Geocoding error:', error);
@@ -364,13 +371,13 @@ const BookingOrder = () => {
     //         newFish,
     //         newFishQualification,
     //     };
-    
+
     //     // Log the selected fish for debugging
     //     console.log("Selected Fish:", selectedProducts.filter((fish, index) => selectedIndexes.includes(index)));
-    
+
     //     // Save the order data to sessionStorage
     //     sessionStorage.setItem("orderData", JSON.stringify(orderData));
-    
+
     //     try {
     //         // Create the new fish order in the database
     //         const orderResponse = await CreateOrderFishService({
@@ -378,11 +385,11 @@ const BookingOrder = () => {
     //             shippingType,
     //             selectedProducts: selectedProducts.filter((fish, index) => selectedIndexes.includes(index)), // Only include selected fish
     //         });
-    
+
     //         if (orderResponse && orderResponse.id) {
     //             const orderId = orderResponse.id;
     //             console.log("Order created successfully. Order ID:", orderId);
-    
+
     //             // Save new fish qualifications if any
     //             if (newFishQualification && newFishQualification.name) {
     //                 const qualificationPayload = {
@@ -390,11 +397,11 @@ const BookingOrder = () => {
     //                     name: newFishQualification.name,
     //                     certificateImage: newFishQualification.certificateImage,
     //                 };
-    
+
     //                 await CreateFishQualificationService(qualificationPayload);
     //                 console.log("Fish qualification saved successfully.");
     //             }
-    
+
     //             // Save new fish if any
     //             if (newFish && newFish.name) {
     //                 const { name, age, image, weight } = newFish; // Exclude quantity from the payload
@@ -405,11 +412,11 @@ const BookingOrder = () => {
     //                     image,
     //                     weight,
     //                 };
-    
+
     //                 await CreateOrderFishService(fishPayload); // Use CreateFishService for saving fish
     //                 console.log("New fish saved successfully.");
     //             }
-    
+
     //             // Now add the selected fish to the database
     //             const selectedFishPayload = selectedProducts.filter((fish, index) => selectedIndexes.includes(index)).map(fish => ({
     //                 orderId,  // Link fish to the created order
@@ -418,12 +425,12 @@ const BookingOrder = () => {
     //                 weight: fish.weight,
     //                 length: fish.length, // Include length if applicable
     //             }));
-    
+
     //             for (const fishPayload of selectedFishPayload) {
     //                 await CreateOrderFishService(fishPayload); // Add each selected fish to the database
     //                 console.log("Selected fish saved successfully.");
     //             }
-    
+
     //             // Navigate to payment page
     //             navigate("/payment");
     //         } else {
@@ -437,6 +444,7 @@ const BookingOrder = () => {
 
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
+        setQFile(e.target.files[0])
     };
 
     const handleSubmit = async (e) => {
@@ -452,9 +460,9 @@ const BookingOrder = () => {
 
         for (let pair of formData.entries()) {
             console.log(pair[0], pair[1]);
-          }
+        }
 
-          
+
         try {
             const response = await axios.post("https://localhost:7046/api/OrderFish/GetCreateOrderFish", formData, {
                 headers: {
@@ -462,14 +470,55 @@ const BookingOrder = () => {
                 },
             });
             console.log("Success", response.data);
+<<<<<<< HEAD
+
+
+
+            if (response.data.result) {
+                const orderFishId = response.data.result; // Ensure the ID is saved correctly
+                console.log("Fish Order ID:", orderFishId);
+    
+                const formQualification = new FormData();
+                formQualification.append("Name", qname); // Qualification name
+                formQualification.append("OrderFishId", orderFishId); // Use the correct orderFishId here
+                if (qfile) formQualification.append("File", qfile); // Qualification file if available
+    
+                // Log the qualification FormData to ensure it's populated
+                for (let pair of formQualification.entries()) {
+                    console.log(pair[0], pair[1]);
+                }
+    
+                // Send qualification data after the order creation is successful
+                const qualificationResponse = await axios.post(
+                    "https://localhost:7046/api/FishQualification/create-fishQualification", // Adjust endpoint if necessary
+                    formQualification,
+                    {
+                        headers: {
+                            'Content-Type': 'multipart/form-data',
+                        },
+                    }
+                );
+    
+                console.log("Qualification Success:", qualificationResponse.data);
+    
+                // Navigate to the payment page upon success
+                navigate('/payment');
+            } else {
+                console.error("Order creation failed, no order ID returned.");
+            }
+        } catch (error) {
+            console.error("Error:", error.response?.data || error.message);
+=======
             navigate(`/payment?orderId=${orderId}`);
         }
         catch (error) {
             console.error("Error", error.response?.data || error.message);
+>>>>>>> 85226231dcfb757a9d15999a6aab276b80bff840
         }
 
 
     };
+
 
     return (
         <div className={styles.bookingOrderContainer}>
@@ -535,44 +584,44 @@ const BookingOrder = () => {
                     <div className={styles.step}>
                         <h2>Thêm Thông Tin Cá</h2>
                         <form onSubmit={handleSubmit}>
-                        <input
-                            type="text"
-                            name="name"
-                            placeholder="Tên cá"
-                            value={name}
-                            onChange={(e) => setName(e.target.value)} />
-                        <input
-                            type="number"
-                            name="age"
-                            placeholder="Tuổi cá"
-                            value={age}
-                            onChange={(e) => setAge(e.target.value)}
-                        />
-                        <input
-                            type="number"
-                            name="weight"
-                            placeholder="Cân nặng cá"
-                            value={weight}
-                            onChange={(e) => setWeight(e.target.value)}
-                        />
-                        <input
-                            type="number"
-                            name="length"
-                            placeholder="Cân nặng cá"
-                            value={length}
-                            onChange={(e) => setLength(e.target.value)}
-                        />
-                        <input type="file" onChange={handleFileChange} />
-                        {/* <input
+                            <input
+                                type="text"
+                                name="name"
+                                placeholder="Tên cá"
+                                value={name}
+                                onChange={(e) => setName(e.target.value)} />
+                            <input
+                                type="number"
+                                name="age"
+                                placeholder="Tuổi cá"
+                                value={age}
+                                onChange={(e) => setAge(e.target.value)}
+                            />
+                            <input
+                                type="number"
+                                name="weight"
+                                placeholder="Cân nặng cá"
+                                value={weight}
+                                onChange={(e) => setWeight(e.target.value)}
+                            />
+                            <input
+                                type="number"
+                                name="length"
+                                placeholder="Cân nặng cá"
+                                value={length}
+                                onChange={(e) => setLength(e.target.value)}
+                            />
+                            <input type="file" onChange={handleFileChange} />
+                            {/* <input
                             type="file"
                             name="certificateImage"
                             onChange={(e) => handleFileChange(e, 'certificateImage')}
                         /> */}
-                        <button type="submit">Submit</button>
+                            <button type="submit">Submit</button>
                         </form>
 
                         <button onClick={handleAddFish}>Thêm Cá</button>
-                        
+
                         {/* Hiển thị danh sách sản phẩm đã chọn */}
                         <div>
                             <h3>Selected Fish:</h3>
@@ -616,47 +665,29 @@ const BookingOrder = () => {
                 {step === 3 && (
                     <div className={styles.step}>
                         <h2>Thêm Thông Tin Chứng Nhận Cá</h2>
-
                         {/* Fish Qualification Name */}
                         <div className={styles.inputGroup}>
                             <label htmlFor="qualificationName">Tên Chứng Nhận</label>
-                            <input
-                                id="qualificationName"
-                                name="name"
-                                type="text"
-                                value={newFishQualification.name}
-                                onChange={(e) => handleInputChange(e, setNewFishQualification)}
-                                placeholder="Nhập tên chứng nhận"
-                            />
+                            <form onSubmit={handleSubmit}>
+                                {/* Name input */}
+                                <input
+                                    type="text"  // Use type "text" instead of "string"
+                                    name="Name"
+                                    placeholder="Tên chứng chỉ"
+                                    value={qname}
+                                    onChange={(e) => setQName(e.target.value)}
+                                />
+
+                                {/* File input */}
+                                <input
+                                    type="file"
+                                    onChange={handleFileChange}  // Ensure this function updates the file state
+                                    required  // This ensures the file input is required before submitting
+                                />
+
+                                <button type="submit">Submit</button>
+                            </form>
                         </div>
-
-
-                        {/* Certificate Image Upload */}
-                        <div className={styles.fileInputGroup}>
-                            <label htmlFor="certificateImage">Tải lên chứng nhận cá</label>
-                            <input
-                                type="file"
-                                name="certificateImage"
-                                onChange={(e) => handleFileChange(e, 'certificateImage')}
-                            />
-                        </div>
-
-                        {/* Display the Selected Qualification */}
-                        {newFishQualification.name && (
-                            <div className={styles.selectedQualification}>
-                                <h3>Thông tin chứng nhận đã nhập:</h3>
-                                <p>{newFishQualification.name}</p>
-                                {newFishQualification.certificateImage && (
-                                    <img
-                                        src={URL.createObjectURL(newFishQualification.certificateImage)}
-                                        alt="Certificate"
-                                        className={styles.certificateImage}
-                                    />
-                                )}
-                            </div>
-                        )}
-
-
                     </div>
                 )}
                 {/* Navigation */}
