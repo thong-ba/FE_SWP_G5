@@ -470,7 +470,6 @@ const BookingOrder = () => {
                 },
             });
             console.log("Success", response.data);
-<<<<<<< HEAD
 
 
 
@@ -502,18 +501,12 @@ const BookingOrder = () => {
                 console.log("Qualification Success:", qualificationResponse.data);
     
                 // Navigate to the payment page upon success
-                navigate('/payment');
+                navigate(`/payment?orderId=${orderId}`);
             } else {
                 console.error("Order creation failed, no order ID returned.");
             }
         } catch (error) {
             console.error("Error:", error.response?.data || error.message);
-=======
-            navigate(`/payment?orderId=${orderId}`);
-        }
-        catch (error) {
-            console.error("Error", error.response?.data || error.message);
->>>>>>> 85226231dcfb757a9d15999a6aab276b80bff840
         }
 
 
