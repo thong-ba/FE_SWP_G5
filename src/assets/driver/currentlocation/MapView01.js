@@ -1,7 +1,6 @@
 // import { useEffect, useState } from "react";
 // import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
 // import Route from "../route/Route";
-// import './MapView.module.css';
 
 // function MapView({ location }) {
 //   const [mapLocation, setMapLocation] = useState({
@@ -89,9 +88,10 @@
 
 
 
+
 // import { useEffect, useState } from "react";
 // import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-// import styles from './MapView.module.css';
+// import Route from "../route/Route";
 
 // function MapView({ location }) {
 //   const [mapLocation, setMapLocation] = useState({
@@ -143,52 +143,38 @@
 //     }
 //   };
 
-//   const sampleAddresses = [
-//     "District 1", "District 2", "District 3", "District 4",
-//     "District 5", "District 6", "District 7", "District 8",
-//     "District 9", "District 10"
-//   ];
-
 //   if (mapLocation.latitude === null || mapLocation.longitude === null) {
 //     return <p>Loading location...</p>;
 //   }
 
 //   return (
-//     <div className={styles.container}>
-//       <div className={styles.infoTable}>
+//     <div style={{ display: "flex", justifyContent: "space-between", gap: "20px" }}>
+//       {/* Left Side: Information */}
+//       <div style={{ flex: 1, minWidth: "300px" }}>
 //         <h2>Driver Information</h2>
-//         <table className={styles.table}>
-//           <thead>
-//             <tr>
-//               <th>Point</th>
-//               <th>Address</th>
-//             </tr>
-//           </thead>
-//           <tbody>
-//             {sampleAddresses.map((address, index) => (
-//               <tr key={index}>
-//                 <td>{index + 1}</td>
-//                 <td>{address}</td>
-//               </tr>
-//             ))}
-//           </tbody>
-//         </table>
+//         <p>Driver ID: {driverId}</p>
+//         <p>Latitude: {mapLocation.latitude}</p>
+//         <p>Longitude: {mapLocation.longitude}</p>
+//         {/* Add other information as needed */}
+//         <Route driverId={driverId} />
 //       </div>
 
-//       <div className={styles.map}>
+//       {/* Right Side: Map */}
+//       <div style={{ flex: 2 }}>
 //         <MapContainer
 //           center={[mapLocation.latitude, mapLocation.longitude]}
-//           zoom={13}
-//           style={{ height: "100%", width: "100%" }}
+//           zoom={15}
+//           style={{ height: "80vh", width: "100%" }}
 //           whenCreated={(map) => {
 //             map.invalidateSize();
-//             map.setView([mapLocation.latitude, mapLocation.longitude], 13);
+//             map.setView([mapLocation.latitude, mapLocation.longitude], 15);
 //           }}
 //         >
 //           <TileLayer
 //             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
 //             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 //           />
+
 //           <Marker position={[mapLocation.latitude, mapLocation.longitude]}>
 //             <Popup>Your Location</Popup>
 //           </Marker>
@@ -203,24 +189,20 @@
 
 
 
-
-
 import { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer } from "react-leaflet";
-import styles from './MapView.module.css';
+import Route from "../route/Route";
 
 function MapView({ location }) {
   const [mapLocation, setMapLocation] = useState({
-    latitude: 10.8231, // Default latitude for Ho Chi Minh City
-    longitude: 106.6297, // Default longitude for Ho Chi Minh City
+    latitude: null,
+    longitude: null,
   });
 
-  const driverId = localStorage.getItem("driverId") || "SampleDriverId";
-  const [sampleAddresses, setSampleAddresses] = useState([
-    "District 1", "District 2", "District 3", "District 4",
-    "District 5", "District 6", "District 7", "District 8",
-    "District 9", "District 10"
-  ]);
+  const [stop1Visible, setStop1Visible] = useState(true);
+  const [stop2Visible, setStop2Visible] = useState(true);
+
+  const driverId = localStorage.getItem("driverId");
 
   useEffect(() => {
     if (
@@ -264,53 +246,51 @@ function MapView({ location }) {
     }
   };
 
-  const handleRemoveStop = () => {
-    if (sampleAddresses.length > 0) {
-      setSampleAddresses((prevAddresses) => prevAddresses.slice(1));
-    } else {
-      console.log("All stops completed");
-    }
+  const toggleStop1 = () => {
+    setStop1Visible(!stop1Visible);
   };
 
+  const toggleStop2 = () => {
+    setStop2Visible(!stop2Visible);
+  };
+
+  if (mapLocation.latitude === null || mapLocation.longitude === null) {
+    return <p>Loading location...</p>;
+  }
+
   return (
-    <div className={styles.container}>
-      <div className={styles.infoTable}>
+    <div className="container">
+      {/* Left Side: Information */}
+      <div className="infoTable">
         <h2>Driver Information</h2>
-        <table className={styles.table}>
-          <thead>
-            <tr>
-              <th>Point</th>
-              <th>Address</th>
-            </tr>
-          </thead>
-          <tbody>
-            {sampleAddresses.map((address, index) => (
-              <tr key={index}>
-                <td>{index + 1}</td>
-                <td>{address}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <button onClick={handleRemoveStop} className={styles.removeButton}>
-          Complete Stop
-        </button>
+        <p>Driver ID: {driverId}</p>
+        <p>Latitude: {mapLocation.latitude}</p>
+        <p>Longitude: {mapLocation.longitude}</p>
+        <Route driverId={driverId} />
+
+        <button className="toggleButton" onClick={toggleStop1}>Toggle Stop 1</button>
+        {stop1Visible && <p>Stop 1 is visible</p>}
+
+        <button className="toggleButton" onClick={toggleStop2}>Toggle Stop 2</button>
+        {stop2Visible && <p>Stop 2 is visible</p>}
       </div>
 
-      <div className={styles.map}>
+      {/* Right Side: Map */}
+      <div className="map">
         <MapContainer
           center={[mapLocation.latitude, mapLocation.longitude]}
-          zoom={13}
-          style={{ height: "100%", width: "100%" }}
+          zoom={15}
+          style={{ height: "80vh", width: "100%" }}
           whenCreated={(map) => {
             map.invalidateSize();
-            map.setView([mapLocation.latitude, mapLocation.longitude], 13);
+            map.setView([mapLocation.latitude, mapLocation.longitude], 15);
           }}
         >
           <TileLayer
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           />
+
           <Marker position={[mapLocation.latitude, mapLocation.longitude]}>
             <Popup>Your Location</Popup>
           </Marker>
