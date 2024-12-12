@@ -130,22 +130,22 @@ function PersonalInfo({ onLogout }) {
       <div className="personal-info-details">
         <h2>Personal Info</h2>
         <p>
-          <strong>Họ và tên:</strong> John Doe
+          <strong>Full Name:</strong> John Doe
         </p>
         <p>
-          <strong>Mã tài xế:</strong> TX12345
+          <strong>Driver ID:</strong> TX12345
         </p>
         <p>
-          <strong>Giới tính:</strong> Nam
+          <strong>Gender:</strong> Nam
         </p>
         <p>
-          <strong>Số điện thoại:</strong> 123-456-7890
+          <strong>Phone Number:</strong> 123-456-7890
         </p>
         <p>
           <strong>Email:</strong> johndoe@example.com
         </p>
         <p>
-          <strong>Địa chỉ nhà:</strong> 123 Main Street, City, Country
+          <strong>Address:</strong> 123 Main Street, City, Country
         </p>
         <div className="personal-info-buttons">
           <button className="btn-edit">Edit</button>

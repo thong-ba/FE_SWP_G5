@@ -88,7 +88,7 @@ function PendingPickUpOrderTab() {
       <table className="order-table">
         <thead>
           <tr>
-            <th>STT</th>
+            <th>No.</th>
             <th>From Address</th>
             <th>To Address</th>
             <th>Receiver Name</th>
