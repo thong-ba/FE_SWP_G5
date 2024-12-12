@@ -4,6 +4,9 @@ import L from 'leaflet';
 import 'leaflet/dist/leaflet.css';
 import styles from './BookingOrder.module.css'; // Importing CSS module
 import { useNavigate, useLocation } from 'react-router-dom';
+import { CreateOrderFishService } from '../../../api/OrderFishApi';
+import { CreateFishQualificationService } from '../../../api/FishQualification';
+import { CreateOrderService } from '../../../api/OrderApi';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -14,8 +17,9 @@ L.Icon.Default.mergeOptions({
 
 const BookingOrder = () => {
     const [step, setStep] = useState(1); // Start with Step 1
-    const [senderInfo, setSenderInfo] = useState({ fullName: '', phone: '', address: '' });
-    const [receiverInfo, setReceiverInfo] = useState({ fullName: '', phone: '', address: '' });
+    // const [senderInfo, setSenderInfo] = useState({ fullName: '', phone: '', address: '' });
+    // const [receiverInfo, setReceiverInfo] = useState({ fullName: '', phone: '', address: '' });
+    const [orderInfo, setOrderInfo] = useState({ fromAddress: '', toAddress: '', receiverPhone: '', receiverName: '', notes: '', });
     const [newFish, setNewFish] = useState({ name: '', age: '', image: null, weight: '', quantity: 1 });
     const [newFishQualification, setNewFishQualification] = useState({ name: '', certificateImage: null });
     const [shippingType, setShippingType] = useState('');
@@ -55,7 +59,31 @@ const BookingOrder = () => {
         setNewFish(prevFish => ({ ...prevFish, [field]: file }));
     };
 
-    const handleNextStep = () => setStep(prev => prev + 1);
+    const handleNextStep = async () => {
+        try {
+            // Create the order data to be sent
+            const orderData = {
+                fromAddress: orderInfo.fromAddress, // Sender's address
+                toAddress: orderInfo.toAddress,    // Receiver's address
+                receiverPhone: orderInfo.receiverPhone, // Receiver's phone
+                receiverName: orderInfo.receiverName,   // Receiver's name
+                notes: orderInfo.notes,
+            };
+
+            // Call the API to create the order in the database
+            const response = await CreateOrderService(orderData);
+
+            // If the order is created successfully, handle the response
+            if (response && response.orderId) {
+                console.log('Order created successfully:', response);
+                // After successfully creating the order, move to the next step
+                setStep((prevStep) => prevStep + 1);
+            }
+        } catch (error) {
+            console.error('Error creating order:', error);
+            alert('An error occurred while creating the order. Please try again.');
+        }
+    }
     const handlePrevStep = () => setStep(prev => prev - 1);
 
     const handleCheckboxChange = (index) => {
@@ -92,7 +120,7 @@ const BookingOrder = () => {
         try {
             const response = await fetch(url);
             const data = await response.json();
-    
+
             if (data.length > 0) {
                 return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
             } else {
@@ -196,9 +224,9 @@ const BookingOrder = () => {
 
     useEffect(() => {
         const fetchCoordinates = async () => {
-            if (senderInfo.address && receiverInfo.address) {
-                const senderCoords = await geocodeAddress(senderInfo.address);
-                const receiverCoords = await geocodeAddress(receiverInfo.address);
+            if (orderInfo.fromAddress && orderInfo.toAddress) {
+                const senderCoords = await geocodeAddress(orderInfo.fromAddress);
+                const receiverCoords = await geocodeAddress(orderInfo.toAddress);
 
                 if (senderCoords) setSenderCoordinates(senderCoords);
                 if (receiverCoords) setReceiverCoordinates(receiverCoords);
@@ -218,7 +246,7 @@ const BookingOrder = () => {
             }
         };
         fetchCoordinates();
-    }, [senderInfo.address, receiverInfo.address]);
+    }, [orderInfo.fromAddress, orderInfo.toAddress]);
     useEffect(() => {
         if (location.state && location.state.shippingType) {
             setShippingType(location.state.shippingType); // Lấy shippingType từ state
@@ -261,21 +289,65 @@ const BookingOrder = () => {
     }, [location]);
 
 
-    const handleSubmit = () => {
+    const handleSubmit = async () => {
         const orderData = {
-            senderInfo,
-            receiverInfo,
+            orderInfo,
             shippingType,
             selectedProducts,
             newFish,
             newFishQualification,
         };
 
-        // Save to sessionStorage
+        // Save the order data to sessionStorage
         sessionStorage.setItem('orderData', JSON.stringify(orderData));
 
-        // Navigate to payment page
-        navigate('/payment');
+        try {
+            // Create the new fish order in the database
+            const orderResponse = await CreateOrderFishService({
+                orderInfo,
+                shippingType,
+                selectedProducts,
+            });
+
+            if (orderResponse && orderResponse.id) {
+                console.log("Order created successfully:", orderResponse);
+
+                // Save new fish qualifications if any
+                if (newFishQualification && newFishQualification.length > 0) {
+                    await Promise.all(
+                        newFishQualification.map((qualification) =>
+                            CreateFishQualificationService({
+                                fishId: qualification.fishId,
+                                qualification: qualification.qualification,
+                            })
+                        )
+                    );
+                    console.log("Fish qualifications saved successfully.");
+                }
+
+                // Save new fish if any
+                if (newFish && newFish.length > 0) {
+                    await Promise.all(
+                        newFish.map((fish) =>
+                            CreateFishQualificationService({
+                                fishId: fish.fishId,
+                                qualification: fish.qualification,
+                            })
+                        )
+                    );
+                    console.log("New fish saved successfully.");
+                }
+
+                // Navigate to payment page
+                navigate('/payment');
+            } else {
+                alert("Failed to create the order. Please try again.");
+            }
+        } catch (error) {
+            console.error("Error submitting order and data:", error);
+            alert("An error occurred while submitting the order. Please try again.");
+        }
+
     };
 
     return (
@@ -284,50 +356,42 @@ const BookingOrder = () => {
                 {/* Step 1: Sender, Receiver, and Shipping */}
                 {step === 1 && (
                     <div className={styles.step}>
-                        <h2>Sender Information</h2>
-                        <input
-                            type="text"
-                            name="fullName"
-                            placeholder="Sender's Full Name"
-                            value={senderInfo.fullName}
-                            onChange={(e) => handleInputChange(e, setSenderInfo)}
-                        />
-                        <input
-                            type="text"
-                            name="phone"
-                            placeholder="Sender's Phone"
-                            value={senderInfo.phone}
-                            onChange={(e) => handleInputChange(e, setSenderInfo)}
-                        />
-                        <input
-                            type="text"
-                            name="address"
-                            placeholder="Sender's Address"
-                            value={senderInfo.address}
-                            onChange={(e) => handleInputChange(e, setSenderInfo)}
-                        />
 
-                        <h2>Receiver Information</h2>
+                        {/* New input fields for the additional details */}
+                        <h2>Order Information</h2>
                         <input
                             type="text"
-                            name="fullName"
-                            placeholder="Receiver's Full Name"
-                            value={receiverInfo.fullName}
-                            onChange={(e) => handleInputChange(e, setReceiverInfo)}
+                            name="fromAddress"
+                            placeholder="Sender's From Address"
+                            value={orderInfo.fromAddress}
+                            onChange={(e) => handleInputChange(e, setOrderInfo)}
                         />
                         <input
                             type="text"
-                            name="phone"
+                            name="toAddress"
+                            placeholder="Receiver's To Address"
+                            value={orderInfo.toAddress}
+                            onChange={(e) => handleInputChange(e, setOrderInfo)}
+                        />
+                        <input
+                            type="text"
+                            name="receiverPhone"
                             placeholder="Receiver's Phone"
-                            value={receiverInfo.phone}
-                            onChange={(e) => handleInputChange(e, setReceiverInfo)}
+                            value={orderInfo.receiverPhone}
+                            onChange={(e) => handleInputChange(e, setOrderInfo)}
                         />
                         <input
                             type="text"
-                            name="address"
-                            placeholder="Receiver's Address"
-                            value={receiverInfo.address}
-                            onChange={(e) => handleInputChange(e, setReceiverInfo)}
+                            name="receiverName"
+                            placeholder="Receiver's Name"
+                            value={orderInfo.receiverName}
+                            onChange={(e) => handleInputChange(e, setOrderInfo)}
+                        />
+                        <textarea
+                            name="notes"
+                            placeholder="Additional Notes"
+                            value={orderInfo.notes}
+                            onChange={(e) => handleInputChange(e, setOrderInfo)}
                         />
 
                         {/* Display the Shipping Type Information */}
