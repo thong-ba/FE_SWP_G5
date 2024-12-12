@@ -7,6 +7,7 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import { CreateOrderFishService } from '../../../api/OrderFishApi';
 import { CreateFishQualificationService } from '../../../api/FishQualification';
 import { CreateOrderService } from '../../../api/OrderApi';
+import axios from 'axios';
 
 delete L.Icon.Default.prototype._getIconUrl;
 L.Icon.Default.mergeOptions({
@@ -35,6 +36,7 @@ const BookingOrder = () => {
     const [totalAmount, setTotalAmount] = useState(0);
     const navigate = useNavigate();
     const location = useLocation();
+    
 
     const handleAddFish = () => {
         setSelectedProducts([...selectedProducts, newFish]);
@@ -59,31 +61,88 @@ const BookingOrder = () => {
         setNewFish(prevFish => ({ ...prevFish, [field]: file }));
     };
 
+    // const handleNextStep = async () => {
+    //     try {
+    //         // Create the order data to be sent
+    //         const token = sessionStorage.getItem('token');
+    //         console.log("Token:", token);
+    //         if (!token) {
+    //             alert('Bạn cần đăng nhập để thực hiện hành động này.');
+    //         return;
+    //         }
+
+    //         const orderData = {
+    //             fromAddress: orderInfo.fromAddress, // Sender's address
+    //             toAddress: orderInfo.toAddress,    // Receiver's address
+    //             receiverPhone: orderInfo.receiverPhone, // Receiver's phone
+    //             receiverName: orderInfo.receiverName,   // Receiver's name
+    //             notes: orderInfo.notes,
+    //             transportServiceId: routeId,
+    //         };
+
+    //         const response = await axios.post('https://localhost:7046/api/Order/create-order', orderData, {
+    //             headers: {
+    //                 'Content-Type': 'application/json',
+    //                 Authorization: `Bearer ${token}`, // Gửi token trong Authorization header
+    //             },
+    //         });
+
+    //         if (response.data && response.data.orderId) {
+    //             console.log('Order created successfully:', response.data);
+    //             setStep(prevStep => prevStep + 1);
+    //         }
+    //     } catch (error) {
+    //         console.error('Error creating order:', error);
+    //         alert('An error occurred while creating the order. Please try again.');
+    //     }
+    // }
+
+
+
     const handleNextStep = async () => {
         try {
             // Create the order data to be sent
+            const token = sessionStorage.getItem('token');
+            console.log("Token:", token);
+            
+            if (!token) {
+                alert('Bạn cần đăng nhập để thực hiện hành động này.');
+                return; // Return early if no token is found
+            }
+    
             const orderData = {
                 fromAddress: orderInfo.fromAddress, // Sender's address
-                toAddress: orderInfo.toAddress,    // Receiver's address
+                toAddress: orderInfo.toAddress,     // Receiver's address
                 receiverPhone: orderInfo.receiverPhone, // Receiver's phone
-                receiverName: orderInfo.receiverName,   // Receiver's name
+                receiverName: orderInfo.receiverName,  // Receiver's name
                 notes: orderInfo.notes,
+                transportServiceId: routeId,
             };
+    
+            // Make the API call to create the order
+            const response = await axios.post('https://localhost:7046/api/Order/create-order', orderData, {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`,
+                },
+            });
+            console.log("response", response);
 
-            // Call the API to create the order in the database
-            const response = await CreateOrderService(orderData);
+            setStep(prevStep => prevStep + 1);
 
-            // If the order is created successfully, handle the response
-            if (response && response.orderId) {
-                console.log('Order created successfully:', response);
-                // After successfully creating the order, move to the next step
-                setStep((prevStep) => prevStep + 1);
-            }
+            // if (response.result && response.data.orderId) {
+            //     console.log('Order created successfully:', response.result);
+            //     setStep(prevStep => prevStep + 1);
+
+            // } else {
+            //     alert('Failed to create the order. Please try again.');
+            // }
         } catch (error) {
             console.error('Error creating order:', error);
             alert('An error occurred while creating the order. Please try again.');
         }
-    }
+    };
+    
     const handlePrevStep = () => setStep(prev => prev - 1);
 
     const handleCheckboxChange = (index) => {
@@ -123,10 +182,10 @@ const BookingOrder = () => {
 
             if (data.length > 0) {
                 return [parseFloat(data[0].lat), parseFloat(data[0].lon)];
-            } else {
-                console.error(`No coordinates found for the address: ${address}`);
-                alert('Unable to find coordinates for the given address.');
-                return null;
+            // } else {
+            //     console.error(`No coordinates found for the address: ${address}`);
+            //     alert('Unable to find coordinates for the given address.');
+            //     return null;
             }
         } catch (error) {
             console.error('Geocoding error:', error);
@@ -310,6 +369,8 @@ const BookingOrder = () => {
             });
 
             if (orderResponse && orderResponse.id) {
+
+                
                 console.log("Order created successfully:", orderResponse);
 
                 // Save new fish qualifications if any
