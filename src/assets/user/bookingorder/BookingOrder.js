@@ -470,6 +470,7 @@ const BookingOrder = () => {
                 },
             });
             console.log("Success", response.data);
+<<<<<<< HEAD
 
 
 
@@ -507,6 +508,12 @@ const BookingOrder = () => {
             }
         } catch (error) {
             console.error("Error:", error.response?.data || error.message);
+=======
+            navigate(`/payment?orderId=${orderId}`);
+        }
+        catch (error) {
+            console.error("Error", error.response?.data || error.message);
+>>>>>>> 85226231dcfb757a9d15999a6aab276b80bff840
         }
 
 
