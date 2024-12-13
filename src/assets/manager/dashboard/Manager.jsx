@@ -1,8 +1,9 @@
 import React, { useState } from 'react';
 import TransportService from '../transportservice/TransportService.jsx';
 import AccountManagement from '../accountmanage/AccountManager.jsx';
-import AddtionalService from '../additionalservice/AdditionalService.jsx';
+// import AddtionalService from '../additionalservice/AdditionalService.jsx';
 import OrderManagement from '../order/OrderManagement.jsx';
+import Profile from '../profile/Profile.jsx';
 // import RouteManagement from '../route/RouteManagement.jsx';
 import { Modal } from 'antd'; // Import Modal from antd
 import NewDriver from '../newdriver/NewDriver.jsx';
@@ -32,10 +33,10 @@ function Manager() {
         return <TransportService onDetailClick={handleDetailClick} />;
       case 'accountManagement':
         return <AccountManagement selectedAccountId={selectedAccountId} />;
-      case 'additionalserviceManagement':
-        return <AddtionalService selectedAdditionalServiceId={selectedAdditionalServiceId} />;
-      // case 'managerRoute':
-      //   return <RouteManagement selectedRouteId={selectedRouteId} />;
+      // case 'additionalserviceManagement':
+      //   return <AddtionalService selectedAdditionalServiceId={selectedAdditionalServiceId} />;
+      case 'profile':
+        return <Profile />;
       case 'orderManagement':
         return <OrderManagement selectedOrderId={selectedOrderId} />;
       case 'newdriver':
@@ -103,11 +104,11 @@ function Manager() {
               Manage Accounts
             </button>
           </li>
-          <li>
+          {/* <li>
             <button onClick={() => handleAccountClick('additionalserviceManagement')} className={activeComponent === 'additionalserviceManagement' ? 'active' : ''}>
               Manage Additional Service
             </button>
-          </li>
+          </li> */}
           {/* <li>
             <button onClick={() => setActiveComponent('managerRoute')} className={activeComponent === 'manageRoute' ? 'active' : ''}>
               Manage Route
