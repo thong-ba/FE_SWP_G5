@@ -23,6 +23,7 @@ import Staff from './assets/staff/dashboard/Staff';
 import PendingOrderTab from './assets/staff/order/PendingOrderTab/PendingOrderTab';
 import PaymentSuccess from './assets/user/payment/paymentStatus/paymentSuccess';
 import PaymentFail from './assets/user/payment/paymentStatus/paymentFail';
+
 import TransportPage from './assets/user/transportservice/TransportService';
 
 function App() {
@@ -271,6 +272,15 @@ function App() {
           </LayoutUtils>
         }
       />
+            <Route
+        path="/transport"
+        element={
+          <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+            <TransportPage />
+          </LayoutUtils>
+        }
+      />
+{/* 
       <Route
         path="/transport"
         element={
@@ -278,7 +288,7 @@ function App() {
             <TransportPage />
           </LayoutUtils>
         }
-      />
+      /> */}
 
       <Route
         path="/updateprofile"
