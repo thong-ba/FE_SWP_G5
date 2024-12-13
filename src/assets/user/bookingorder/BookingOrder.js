@@ -21,7 +21,7 @@ const BookingOrder = () => {
     // const [senderInfo, setSenderInfo] = useState({ fullName: '', phone: '', address: '' });
     // const [receiverInfo, setReceiverInfo] = useState({ fullName: '', phone: '', address: '' });
     const [orderInfo, setOrderInfo] = useState({ fromAddress: '', toAddress: '', receiverPhone: '', receiverName: '', notes: '', });
-    const [newFish, setNewFish] = useState({ name: '', age: '', image: null, weight: '', quantity: 1 });
+    const [newFish, setNewFish] = useState({ name: '', age: '', image: null, weight: '', length: '', quantity: 1 });
     const [newFishQualification, setNewFishQualification] = useState({ name: '', certificateImage: null });
     const [shippingType, setShippingType] = useState('');
     const [routeId, setRouteId] = useState('');
@@ -50,8 +50,29 @@ const BookingOrder = () => {
 
 
     const handleAddFish = () => {
-        setSelectedProducts([...selectedProducts, newFish]);
-        setNewFish({ name: '', age: '', image: null, weight: '', quantity: 1 });
+        if (!name || !age || !weight || !length || !file) {
+            alert("Vui lòng nhập đầy đủ thông tin cá!");
+            return;
+        }
+
+        // Create a new fish object
+        const newFish = {
+            name,
+            age,
+            weight,
+            length,
+            file: file, // Optional: Include the file name if uploaded
+        };
+
+        // Add the new fish to the list
+        setSelectedProducts((prevProducts) => [...prevProducts, newFish]);
+
+        // Clear input fields after adding
+        setName("");
+        setAge("");
+        setWeight("");
+        setLength("");
+        setFile(null);
     };
 
     const handleGoToAddFishQualification = () => {
@@ -146,7 +167,7 @@ const BookingOrder = () => {
                 setOrderId(response.data.result);
             }
 
-            
+
 
             // } else {
             //     alert('Failed to create the order. Please try again.');
@@ -156,7 +177,7 @@ const BookingOrder = () => {
             alert('An error occurred while creating the order. Please try again.');
         }
     };
-    
+
 
     const handlePrevStep = () => setStep(prev => prev - 1);
 
@@ -443,79 +464,97 @@ const BookingOrder = () => {
     // };
 
     const handleFileChange = (e) => {
-        setFile(e.target.files[0]);
-        setQFile(e.target.files[0])
+        const selectedFile = e.target.files[0];
+        if (selectedFile) {
+            setFile(selectedFile);
+        }
+
+    };
+    const handleQFileChange = (e) => {
+        const selectedQFile = e.target.files[0];
+        if (selectedQFile) {
+            setQFile(selectedQFile);
+        };
     };
 
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        const formData = new FormData();
-        formData.append("Name", name);
-        formData.append("Age", age);
-        formData.append("Weight", weight);
-        formData.append("Length", length);
-        formData.append("OrderId", orderId);
-        if (file) formData.append("File", file);
-
-        for (let pair of formData.entries()) {
-            console.log(pair[0], pair[1]);
+        if (selectedProducts.length === 0) {
+            alert("Không có sản phẩm nào để lưu!");
+            return;
         }
 
-
         try {
-            const response = await axios.post("https://localhost:7046/api/OrderFish/GetCreateOrderFish", formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
-            console.log("Success", response.data);
-<<<<<<< HEAD
+            // Iterate through each selected product
+            for (const fish of selectedProducts) {
+                const formData = new FormData();
+                formData.append("Name", fish.name);
+                formData.append("Age", fish.age);
+                formData.append("Weight", fish.weight);
+                formData.append("Length", fish.length);
+                formData.append("OrderId", orderId); // Include the current order ID
 
+                // Ensure fish.file is appended only if it's not null
+                if (fish.file) {
+                    formData.append("File", fish.file); // Include file if uploaded
+                } else {
+                    console.warn("File missing for fish:", fish); // Debug missing file
+                }
 
-
-            if (response.data.result) {
-                const orderFishId = response.data.result; // Ensure the ID is saved correctly
-                console.log("Fish Order ID:", orderFishId);
-    
-                const formQualification = new FormData();
-                formQualification.append("Name", qname); // Qualification name
-                formQualification.append("OrderFishId", orderFishId); // Use the correct orderFishId here
-                if (qfile) formQualification.append("File", qfile); // Qualification file if available
-    
-                // Log the qualification FormData to ensure it's populated
-                for (let pair of formQualification.entries()) {
+                // Log formData for debugging
+                for (let pair of formData.entries()) {
                     console.log(pair[0], pair[1]);
                 }
-    
-                // Send qualification data after the order creation is successful
-                const qualificationResponse = await axios.post(
-                    "https://localhost:7046/api/FishQualification/create-fishQualification", // Adjust endpoint if necessary
-                    formQualification,
+
+                // Send the fish data to the server
+                const response = await axios.post(
+                    "https://localhost:7046/api/OrderFish/GetCreateOrderFish",
+                    formData,
                     {
                         headers: {
-                            'Content-Type': 'multipart/form-data',
+                            "Content-Type": "multipart/form-data",
                         },
                     }
                 );
-    
-                console.log("Qualification Success:", qualificationResponse.data);
-    
-                // Navigate to the payment page upon success
-                navigate('/payment');
-            } else {
-                console.error("Order creation failed, no order ID returned.");
+
+                console.log("Success", response.data);
+
+                if (response.data.result) {
+                    const orderFishId = response.data.result; // ID for the fish order
+                    console.log("Fish Order ID:", orderFishId);
+
+                    // Handle qualification if applicable
+                    if (qname || qfile) {
+                        const formQualification = new FormData();
+                        formQualification.append("Name", qname); // Qualification name
+                        formQualification.append("OrderFishId", orderFishId); // Use the correct fish order ID
+                        if (qfile) formQualification.append("File", qfile); // Include qualification file if available
+
+                        // Send qualification data
+                        const qualificationResponse = await axios.post(
+                            "https://localhost:7046/api/FishQualification/create-fishQualification",
+                            formQualification,
+                            {
+                                headers: {
+                                    "Content-Type": "multipart/form-data",
+                                },
+                            }
+                        );
+
+                        console.log("Qualification Success:", qualificationResponse.data);
+                    }
+                } else {
+                    console.error("Order creation failed, no order ID returned.");
+                }
             }
+
+            // Navigate to the payment page after saving all fish
+            navigate(`/payment?orderId=${orderId}`);
         } catch (error) {
             console.error("Error:", error.response?.data || error.message);
-=======
-            navigate(`/payment?orderId=${orderId}`);
+            alert("Lỗi khi gửi dữ liệu! Vui lòng thử lại.");
         }
-        catch (error) {
-            console.error("Error", error.response?.data || error.message);
->>>>>>> 85226231dcfb757a9d15999a6aab276b80bff840
-        }
-
 
     };
 
@@ -611,7 +650,11 @@ const BookingOrder = () => {
                                 value={length}
                                 onChange={(e) => setLength(e.target.value)}
                             />
-                            <input type="file" onChange={handleFileChange} />
+                            <input
+                                type="file"
+                                onChange={handleFileChange}
+                                required
+                            />
                             {/* <input
                             type="file"
                             name="certificateImage"
@@ -634,8 +677,13 @@ const BookingOrder = () => {
                                             onChange={() => handleCheckboxChange(index)}
                                         />
                                         <span>
-                                            {fish.name} - {fish.age} tuổi - {fish.weight}kg
+                                            {fish.name} - {fish.age} tuổi - {fish.weight}kg - {fish.length}cm
                                         </span>
+                                        {fish.file && (
+                                            <div>
+                                                <small>File: {fish.file.name}</small>
+                                            </div>
+                                        )}
                                     </li>
                                 ))}
                             </ul>
@@ -681,7 +729,7 @@ const BookingOrder = () => {
                                 {/* File input */}
                                 <input
                                     type="file"
-                                    onChange={handleFileChange}  // Ensure this function updates the file state
+                                    onChange={handleQFileChange}  // Ensure this function updates the file state
                                     required  // This ensures the file input is required before submitting
                                 />
 
@@ -695,7 +743,6 @@ const BookingOrder = () => {
                     {step > 1 && <button onClick={handlePrevStep}>Back</button>}
                     {step < 2 && <button onClick={handleNextStep}>Next</button>}
                     {step === 2 && <button onClick={handleSubmit}>Submit</button>}
-                    {step === 3 && <button onClick={handleSubmit}>Submit</button>}
                 </div>
             </div>
 
