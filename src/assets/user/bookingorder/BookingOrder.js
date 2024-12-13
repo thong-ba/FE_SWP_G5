@@ -551,6 +551,7 @@ const BookingOrder = () => {
                             onChange={(e) => handleInputChange(e, setOrderInfo)}
                         />
                         <textarea
+                            className='add-note'
                             name="notes"
                             placeholder="Additional Notes"
                             value={orderInfo.notes}
