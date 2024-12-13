@@ -1,5 +1,6 @@
 .staff-container {
   display: flex;
+  justify-content: center;
   min-height: 100vh;
   padding: 50px;
   font-family: "Noto Sans Variable", system-ui, sans-serif;

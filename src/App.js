@@ -12,7 +12,7 @@ import Payment from './assets/user/payment/Payment';
 import Service from './assets/user/services/Service';
 import UserInfo from './assets/user/userinfo/UserInfo';
 import TrackOrder from './assets/user/trackorder/TrackOrder';
-import UpdateProfile  from './assets/user/updateprofile/UpdateProfile';
+import UpdateProfile from './assets/user/updateprofile/UpdateProfile';
 
 import VerifyAccount from './assets/user/verify/VerifyAccount';
 
@@ -101,13 +101,14 @@ function App() {
   }, []);
 
 
+
   useEffect(() => {
     const checkToken = () => {
       const token = sessionStorage.getItem("token");
       if (token) {
         try {
           const decoded = jwtDecode(token);
-          console.log("Decoded token:", decoded); // Logging decoded token for debugging
+          console.log("Decoded token:", decoded);
           const currentTime = Math.floor(Date.now() / 1000);
 
           if (decoded.exp > currentTime) {
@@ -122,7 +123,6 @@ function App() {
             console.log("User Role:", decoded[roleKey] || null);
           } else {
             sessionStorage.removeItem("token");
-
             setIsLoggedIn(false);
           }
         } catch (error) {
@@ -139,14 +139,14 @@ function App() {
   }, []);
 
 
+
   const handleLogin = (token) => {
-
-
     try {
-      const decoded = jwtDecode(token);
-      sessionStorage.setItem('token', token);
+      const decoded = jwtDecode(token);  // Decode the JWT token
+      console.log("Decoded token:", decoded);  // Log the decoded token to inspect it
+      sessionStorage.setItem('token', token);  // Store the token in session storage
       setIsLoggedIn(true);
-      setUserRole(decoded.Role || null);
+      setUserRole(decoded.Role || null);  // Set the user role from the decoded token
 
       if (decoded.Role === 'Manager') {
         navigate('/manager');
@@ -154,15 +154,16 @@ function App() {
         navigate('/staff');
       } else if (decoded.Role === 'DeliveringStaff') {
         navigate('/staff');
-      }
-
-      else {
+      } else {
         navigate('/home');
       }
     } catch (error) {
       console.error('Login failed:', error);
     }
   };
+
+
+
 
   const handleLogout = () => {
     sessionStorage.removeItem('token');
@@ -195,7 +196,7 @@ function App() {
         element={
           isLoggedIn ? (
             <Navigate
-              to={userRole === 'Manager' ? '/manager' : userRole === 'Staff' ? '/staff' : '/home'}
+              to={userRole === 'Manager' ? '/manager' : userRole === 'SalesStaff' ? '/staff' : '/home'}
             />
           ) : (
             <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
@@ -272,7 +273,7 @@ function App() {
           </LayoutUtils>
         }
       />
-            <Route
+      <Route
         path="/transport"
         element={
           <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
@@ -280,7 +281,7 @@ function App() {
           </LayoutUtils>
         }
       />
-{/* 
+      {/* 
       <Route
         path="/transport"
         element={
@@ -310,34 +311,24 @@ function App() {
           )
         }
       />
-
-      {/* Redirect nếu không phù hợp */}
-     {/* <Route
-        path="/driver"
-        element={
-          userRole === 'DeliveringStaff' ? (
-            <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
-              <Staff />
-            </LayoutUtils>
-          ) : (
-            <Navigate to="/home" />
-          )
-        }
-      /> */}
-
-     
       <Route
         path="/staff"
         element={
-          userRole === 'SalesStaff' ? (
+          isLoggedIn && userRole === 'SalesStaff' ? (
             <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
               <Staff />
             </LayoutUtils>
           ) : (
-            <Navigate to="/home" />
+            <Navigate to="/login" />
           )
         }
-      /> 
+      />
+
+
+
+
+
+
       {/* <Route path="*" element={<Navigate to="/home" />} />
       <Route path="/" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
       <Route path="/home" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
@@ -348,13 +339,13 @@ function App() {
       <Route path="/payment" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Payment /></LayoutUtils>} />
       <Route path="/service" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Service /></LayoutUtils>} /> */}
 
-      <Route path="/staff" element={<Staff />} />
+      {/* <Route path="/staff" element={<Staff />} /> */}
+
       <Route path="/manager" element={<Manager />} />
 
       <Route path="/driver" element={<DriverLayout isLoggedIn={isLoggedIn} handleLogout={handleLogout} ><MapView location={location} /> </DriverLayout>} />
       <Route path="/paymentsuccess" element={<PaymentSuccess></PaymentSuccess>} />
       <Route path="/paymentfail" element={<PaymentFail></PaymentFail>} />
-
 
       <Route
         path="/pendingorder"
@@ -369,12 +360,11 @@ function App() {
         }
       />
 
-
     </Routes>
-
 
 
   );
 }
 
 export default App;
+
