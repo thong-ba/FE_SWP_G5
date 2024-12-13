@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import './Login.css';
 
@@ -9,7 +8,6 @@ function Login({ onLogin }) {
   const [password, setPassword] = useState('');
   const [message, setMessage] = useState('');
   const [isDriverLogin, setIsDriverLogin] = useState(false);
-  const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,17 +25,24 @@ function Login({ onLogin }) {
       const { statusCode, isSuccess, result, errorMessage } = response.data;
 
       if (isSuccess && result) {
-        if (isDriverLogin) {
-          const decoded = jwtDecode(result);
-          localStorage.setItem('token', result);
-          localStorage.setItem('driverId', decoded.DriverId);
-          setTimeout(() => navigate('/driver'), 1000);
-        } else {
-          onLogin(result);
-          setTimeout(() => navigate('/'), 1000);
+        const decoded = jwtDecode(result);
+        const userRole = decoded.role; // Giả sử 'role' chứa vai trò của người dùng
+
+        // Kiểm tra nếu vai trò là DeliveringStaff
+        if (userRole === 'DeliveringStaff') {
+          setMessage('You are not allowed to login as DeliveringStaff.');
+          return;
         }
 
-        setMessage('Login successful! Redirecting...');
+        // Lưu thông tin vào localStorage
+        localStorage.setItem('token', result);
+        if (isDriverLogin) {
+          localStorage.setItem('driverId', decoded.DriverId);
+          setMessage('Login successful! Redirecting...');
+        } else {
+          onLogin(result);
+          setMessage('Login successful! Redirecting...');
+        }
       } else {
         setMessage(errorMessage || 'Login failed. Please try again.');
       }

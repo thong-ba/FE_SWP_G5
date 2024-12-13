@@ -149,9 +149,9 @@ function PersonalInfo({ onLogout }) {
         </p>
         <div className="personal-info-buttons">
           <button className="btn-edit">Edit</button>
-          <button className="btn-logout" onClick={onLogout}>
+          {/* <button className="btn-logout" onClick={onLogout}>
             Logout
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

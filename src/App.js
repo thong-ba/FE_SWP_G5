@@ -325,7 +325,7 @@ function App() {
         }
       /> */}
 
-      {/*
+     
       <Route
         path="/staff"
         element={
@@ -337,7 +337,7 @@ function App() {
             <Navigate to="/home" />
           )
         }
-      /> */}
+      /> 
       {/* <Route path="*" element={<Navigate to="/home" />} />
       <Route path="/" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
       <Route path="/home" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
