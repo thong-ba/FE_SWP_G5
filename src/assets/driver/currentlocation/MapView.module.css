@@ -50,11 +50,11 @@
 
 
 .numberedMarker {
-  width: 50px; /* Tăng kích thước của marker */
-  height: 50px;
+  width: 150px; /* Tăng kích thước của marker */
+  height: 150px;
   background-color: #e43010; /* Màu nền của marker */
   color: white; /* Màu chữ */
-  font-size: 16px; /* Kích thước chữ */
+  font-size: 20px; /* Kích thước chữ */
   font-weight: bold; /* Định dạng chữ đậm */
   border-radius: 50%; /* Làm tròn marker */
   display: flex;
