@@ -47,3 +47,22 @@
 {
   font-size: 20px;
 }
+
+
+.numberedMarker {
+  width: 50px; /* Tăng kích thước của marker */
+  height: 50px;
+  background-color: #e43010; /* Màu nền của marker */
+  color: white; /* Màu chữ */
+  font-size: 16px; /* Kích thước chữ */
+  font-weight: bold; /* Định dạng chữ đậm */
+  border-radius: 50%; /* Làm tròn marker */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 3px solid #e43010; /* Viền marker */
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Đổ bóng để nổi bật */
+}
+.marker-number {
+  margin: 0;
+}
