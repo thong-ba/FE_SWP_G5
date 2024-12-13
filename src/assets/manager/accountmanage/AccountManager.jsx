@@ -124,43 +124,6 @@ function AccountManager() {
             total: filteredData.length,
           }}
         />
-        {/* <Modal
-          title="Edit Account"
-          open={showForm}
-          onCancel={() => setShowForm(false)}
-          footer={null}
-        >
-          <Form
-            form={form}
-            initialValues={formData || {}}
-            onFinish={handleSubmit}
-            layout="horizontal"
-          >
-            <Form.Item name="username" style={{ display: 'none' }} >
-              <Input type="hidden" />
-            </Form.Item>
-            <Form.Item label="Phone" name="phone">
-              <Input />
-            </Form.Item>
-            <Form.Item label="Email" name="email" >
-              <Input />
-            </Form.Item>
-            <Form.Item label="Address" name="address" >
-              <Input />
-            </Form.Item>
-            <Form.Item label="Roles" name="roles">
-              <Checkbox value="customer">Customer</Checkbox>
-              <Checkbox value="delivery">Delivery</Checkbox>
-              <Checkbox value="manager">Manager</Checkbox>
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit" style={{ backgroundColor: '#ff7700', borderColor: '#ff7700' }}>
-                Save
-              </Button>
-            </Form.Item>
-          </Form>
-        </Modal> */}
-
         {/* Role Modal */}
         <Modal
           title="Account Roles"
@@ -187,24 +150,6 @@ function AccountManager() {
             pagination={false}
           />
         </Modal>
-        {/* <Modal
-          title="Driver Details"
-          open={driverModalVisible}
-          onCancel={() => setDriverModalVisible(false)}
-          footer={[
-            <Button key="close" onClick={() => setDriverModalVisible(false)}>
-              Close
-            </Button>,
-          ]}
-        >
-          {driverDetails && (
-            <div>
-              <p>Driver ID: {driverDetails.driverId}</p>
-              <p>Status: {driverDetails.status}</p>
-              <p>Current Province: {driverDetails.currentProvince}</p>
-            </div>
-          )}
-        </Modal> */}
       </div>
     </>
   );
