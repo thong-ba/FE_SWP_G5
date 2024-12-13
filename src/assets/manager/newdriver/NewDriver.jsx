@@ -4,6 +4,7 @@ import axios from 'axios';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { useNavigate } from 'react-router-dom';
+import { getJwtToken } from '../../../api/Url';
 
 function Register() {
   const navigate = useNavigate();
@@ -103,7 +104,7 @@ function Register() {
 
         // Redirect after 3 seconds  
         setTimeout(() => {
-          navigate('/home');
+          navigate('/manager');
         }, 3000);
       } else {
         setPopupMessage(message || 'Invalid activation code. Please try again!');
@@ -117,8 +118,14 @@ function Register() {
   // New function to create a new driver
   const createNewDriver = async (userId) => {
     try {
+      const token = getJwtToken(); // Replace with your actual token retrieval logic
+
       const response = await axios.post('https://localhost:7046/api/Driver/CreateNewDriver', {
         userAccountId: userId, // Use the retrieved user ID
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`, // Add Bearer token to headers
+        },
       });
 
       const { isSuccess, message } = response.data;

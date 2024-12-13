@@ -3,7 +3,7 @@ const localUrl = "https://localhost:7046/api";
 const ngrokUrl = "https://bd85-115-73-106-242.ngrok-free.app/api";
 const getallorderfishUrl = "http://localhost:7046/api/OrderFish/GetAllOrderFish";
 const getJwtToken = () => {
-  const token = sessionStorage.getItem("accessToken")
+  const token = sessionStorage.getItem("token")
   return token
 }
 
