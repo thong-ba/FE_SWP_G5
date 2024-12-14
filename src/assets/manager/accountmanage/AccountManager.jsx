@@ -48,12 +48,25 @@ function AccountManager() {
   }, []);
 
 
+  // ... existing code ...
   const columns = [
     { title: 'ID', dataIndex: 'id', key: 'id', width: '10%' },
-    { title: 'First Name', dataIndex: 'firstName', key: 'firstName' },
-    { title: 'Last Name', dataIndex: 'lastName', key: 'lastName' },
-    { title: 'Email', dataIndex: 'email', key: 'email' },
-    { title: 'Phone Number', dataIndex: 'phoneNumber', key: 'phoneNumber' },
+    {
+      title: 'First Name', dataIndex: 'firstName', key: 'firstName',
+      render: (text) => text === null ? <span style={{ color: 'red' }}>X</span> : text
+    },
+    {
+      title: 'Last Name', dataIndex: 'lastName', key: 'lastName',
+      render: (text) => text === null ? <span style={{ color: 'red' }}>X</span> : text
+    },
+    {
+      title: 'Email', dataIndex: 'email', key: 'email',
+      render: (text) => text === null ? <span style={{ color: 'red' }}>X</span> : text
+    },
+    {
+      title: 'Phone Number', dataIndex: 'phoneNumber', key: 'phoneNumber',
+      render: (text) => text === null ? <span style={{ color: 'red' }}>X</span> : text
+    },
     {
       title: 'Role',
       dataIndex: 'role',
@@ -76,7 +89,7 @@ function AccountManager() {
       onFilter: (value, record) => record.role === value,
     },
   ];
-
+  // ... existing code ...
 
   const filteredData = Array.isArray(data)
     ? data.filter((account) =>
