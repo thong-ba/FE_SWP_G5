@@ -1,4 +1,3 @@
-
 import axios from "axios";
 
 // Base URL cho Order API
@@ -115,11 +114,11 @@ export const UpdateOrderStatusCompleted = async (orderId) => {
 };
 
 // 9. Tạo Feedback cho Order
-export const CreateFeedBackService = async (feedbackData) => {
+export const CreateFeedBackService = async (id, feedbackData) => {
   try {
-    const response = await axios.put(
+    const response = await axios.post(
       `${baseOrderUrl}/CreateFeedBackAsync`,
-      feedbackData
+      { id, ...feedbackData }
     );
     return response.data;
   } catch (error) {
