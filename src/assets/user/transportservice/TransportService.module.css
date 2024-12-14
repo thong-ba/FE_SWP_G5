@@ -1,0 +1,95 @@
+/* TransportService.module.css */
+
+.pageContainer {
+    margin: 20px;
+    font-family: 'Poppins', sans-serif;
+  }
+  
+  .sectionTitle {
+    color: #4CAF50;
+    text-align: center;
+    margin-bottom: 20px;
+    text-transform: uppercase;
+  }
+  
+  .sectionContent {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    justify-content: center;
+  }
+  
+  .paginationContainer {
+    display: flex;
+    justify-content: center;
+    margin: 20px 0;
+  }
+  
+  .loadingSpinner {
+    display: block;
+    margin: 50px auto;
+  }
+  
+  .errorMessage {
+    color: red;
+    text-align: center;
+  }
+  
+  .card {
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.3s, box-shadow 0.3s;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    cursor: pointer;
+    background: #fff;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    border: 1px solid #eaeaea;
+  }
+  
+  .card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
+  }
+  
+  .cardHeader {
+    background-color: #000;
+    color: #fff;
+    text-align: center;
+    font-size: 14px;
+    font-weight: bold;
+    padding: 10px;
+    text-transform: uppercase;
+  }
+  
+  .cardTitle {
+    color: #333;
+    margin: 15px;
+    font-size: 18px;
+    font-weight: 600;
+    text-align: center;
+  }
+  
+  .cardParagraph {
+    color: #666;
+    font-size: 14px;
+    margin: 0 15px 15px;
+    line-height: 1.5;
+  }
+  
+  .domestic {
+    background-color: #E3FCEC;
+    border-left: 5px solid #4CAF50;
+  }
+  
+  .local {
+    background-color: #FFF3E3;
+    border-left: 5px solid #FF9800;
+  }
+  
+  .international {
+    background-color: #E3ECFF;
+    border-left: 5px solid #2196F3;
+  }
+  

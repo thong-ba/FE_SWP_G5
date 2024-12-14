@@ -1,6 +1,7 @@
+// Header.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import './Header.css';
+import styles from './Header.module.css';
 
 const Header = ({ isLoggedIn, handleLogout }) => {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -13,79 +14,74 @@ const Header = ({ isLoggedIn, handleLogout }) => {
 
   const confirmLogout = () => {
     handleLogout();
-    setShowLogoutConfirm(false); // Ẩn popup sau khi đăng xuất
+    setShowLogoutConfirm(false);
     navigate('/home');
   };
 
   const cancelLogout = () => {
-    setShowLogoutConfirm(false); // Đóng popup nếu người dùng hủy
+    setShowLogoutConfirm(false);
   };
 
   return (
-    <header className="header-container">
-
-      <div className="header-logo-container">
-        <Link to="/home"  >
-        <img src="koi-login.png" alt="Logo" className="header-logo-image" />
+    <header className={styles.headerContainer}>
+      <div className={styles.logoContainer}>
+        <Link to="/home">
+          <img src="koi-login.png" alt="Logo" className={styles.logoImage} />
         </Link>
-        <h1 className="header-logo-text">Koi Ordering</h1>
+        <h1 className={styles.logoText}>Koi Ordering</h1>
       </div>
-      
-      <nav className="header-navigation">
-        <ul className="header-nav-list">
-          <li className="header-nav-item">
-            <Link to="/home" className="header-nav-link">Home</Link>
+
+      <nav className={styles.navigation}>
+        <ul className={styles.navList}>
+          <li className={styles.navItem}>
+            <Link to="/home" className={styles.navLink}>Home</Link>
           </li>
           <li
-            className="header-nav-item services-dropdown"
+            className={`${styles.navItem} ${styles.dropdown}`}
             onMouseEnter={toggleDropdown}
             onMouseLeave={toggleDropdown}
           >
-            <Link to="/service" className="header-nav-link">Services</Link>
+            <Link to="/service" className={styles.navLink}>Services</Link>
             {isDropdownOpen && (
-              <ul className="header-dropdown-list">
-                <li className="header-dropdown-item">
-                  <Link to="/shippingoption" className="header-dropdown-link">Booking Order</Link>
+              <ul className={styles.dropdownList}>
+                <li className={styles.dropdownItem}>
+                  <Link to="/shippingoption" className={styles.dropdownLink}>Booking Order</Link>
                 </li>
               </ul>
             )}
           </li>
-          <li className="nav-item"><Link to="/trackorder">Track Order</Link></li>
-          <li className="nav-item"><Link to="/abouts">About Koi Fish</Link></li>
-          <li className="nav-item"><Link to="/support">Support</Link></li>
-          <li className="nav-item"><Link to="/transport">Transport Fee</Link></li>
+          <li className={styles.navItem}><Link to="/trackorder" className={styles.navLink}>Track Order</Link></li>
+          <li className={styles.navItem}><Link to="/transport" className={styles.navLink}>Transport Fee</Link></li>
+          <li className={styles.navItem}><Link to="/abouts" className={styles.navLink}>About Koi Fish</Link></li>
+          <li className={styles.navItem}><Link to="/support" className={styles.navLink}>Support</Link></li>
+
 
           {!isLoggedIn ? (
             <>
-              <li className="header-nav-item">
-                <Link to="/register" className="header-nav-link">Register</Link>
-              </li>
-              <li className="header-nav-item">
-                <Link to="/login" className="header-nav-link">Login</Link>
-              </li>
+              <li className={styles.navItem}><Link to="/register" className={styles.navLink}>Register</Link></li>
+              <li className={styles.navItem}><Link to="/login" className={styles.navLink}>Login</Link></li>
             </>
           ) : (
             <>
-              <li className="header-nav-item">
-                <Link to="/userinfo" className="header-nav-link">
-                  <img className="header-user-avatar" src="hacker.png" alt="Profile" />
+              <li className={styles.navItem}>
+                <Link to="/userinfo" className={styles.navLink}>
+                  <img src="hacker.png" alt="Profile" className={styles.userAvatar} />
                 </Link>
               </li>
-              <li className="header-nav-item">
-                <button onClick={() => setShowLogoutConfirm(true)} className="header-logout-button">Logout</button>
+              <li className={styles.navItem}>
+                <button onClick={() => setShowLogoutConfirm(true)} className={styles.logoutButton}>Logout</button>
               </li>
             </>
           )}
         </ul>
       </nav>
 
-      {/* Hiển thị popup xác nhận đăng xuất */}
       {showLogoutConfirm && (
-        <div className="header-logout-popup">
-          <div className="header-logout-popup-content">
-            <h3 className="header-logout-popup-text">Are you sure you want to logout?</h3>
-            <button onClick={confirmLogout} className="header-confirm-button">Yes</button>
-            <button onClick={cancelLogout} className="header-cancel-button">No</button>
+        <div className={styles.logoutPopup}>
+          <div className={styles.logoutPopupContent}>
+            <h3 className={styles.logoutPopupText}>Are you sure you want to logout?</h3>
+            <button onClick={confirmLogout} className={styles.confirmButton}>Yes</button>
+            <button onClick={cancelLogout} className={styles.cancelButton}>No</button>
           </div>
         </div>
       )}
