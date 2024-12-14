@@ -101,68 +101,83 @@ function App() {
   }, []);
 
 
+  // useEffect(() => {
+  //   const checkToken = () => {
+  //     const token = sessionStorage.getItem("token");
+  //     if (token) {
+  //       try {
+  //         const decoded = jwtDecode(token);
+  //         console.log("Decoded token:", decoded); // Logging decoded token for debugging
+  //         const currentTime = Math.floor(Date.now() / 1000);
+
+  //         if (decoded.exp > currentTime) {
+  //           setIsLoggedIn(true);
+
+  //           // Dynamically find the Role key in the decoded token
+  //           const roleKey = Object.keys(decoded).find((key) =>
+  //             key.toLowerCase().includes("role")
+  //           );
+  //           setUserRole(decoded[roleKey] || null);
+
+  //           console.log("User Role:", decoded[roleKey] || null);
+  //         } else {
+  //           sessionStorage.removeItem("token");
+
+  //           setIsLoggedIn(false);
+  //         }
+  //       } catch (error) {
+  //         console.error("Token decoding failed:", error);
+  //         sessionStorage.removeItem("token");
+  //         setIsLoggedIn(false);
+  //       }
+  //     } else {
+  //       setIsLoggedIn(false);
+  //     }
+  //   };
+
+  //   checkToken();
+  // }, []);
+
+
+
   useEffect(() => {
-    const checkToken = () => {
-      const token = sessionStorage.getItem("token");
-      if (token) {
-        try {
-          const decoded = jwtDecode(token);
-          console.log("Decoded token:", decoded); // Logging decoded token for debugging
-          const currentTime = Math.floor(Date.now() / 1000);
-
-          if (decoded.exp > currentTime) {
-            setIsLoggedIn(true);
-
-            // Dynamically find the Role key in the decoded token
-            const roleKey = Object.keys(decoded).find((key) =>
-              key.toLowerCase().includes("role")
-            );
-            setUserRole(decoded[roleKey] || null);
-
-            console.log("User Role:", decoded[roleKey] || null);
-          } else {
-            sessionStorage.removeItem("token");
-
-            setIsLoggedIn(false);
-          }
-        } catch (error) {
-          console.error("Token decoding failed:", error);
-          sessionStorage.removeItem("token");
-          setIsLoggedIn(false);
-        }
+    if (userRole) {
+      if (userRole === 'Manager') {
+        navigate('/manager');
+      } else if (userRole === 'SalesStaff') {
+        navigate('/staff');
+      } else if (userRole === 'DeliveringStaff') {
+        navigate('/driver');
       } else {
-        setIsLoggedIn(false);
+        navigate('/home');
       }
-    };
-
-    checkToken();
-  }, []);
-
+    }
+  }, [userRole, navigate]);
+  
 
   const handleLogin = (token) => {
-
-
     try {
       const decoded = jwtDecode(token);
       sessionStorage.setItem('token', token);
       setIsLoggedIn(true);
-      setUserRole(decoded.Role || null);
-
-      if (decoded.Role === 'Manager') {
+  
+      const role = decoded.Role || null;
+      setUserRole(role);
+  
+      if (role === 'Manager') {
         navigate('/manager');
-      } else if (decoded.Role === 'SalesStaff') {
+      } else if (role === 'SalesStaff') {
         navigate('/staff');
-      } else if (decoded.Role === 'DeliveringStaff') {
+      } else if (role === 'DeliveringStaff') {
         navigate('/driver');
-      }
-
-      else {
+      } else {
         navigate('/home');
       }
     } catch (error) {
       console.error('Login failed:', error);
     }
   };
+  
 
   const handleLogout = () => {
     sessionStorage.removeItem('token');

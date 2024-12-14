@@ -553,7 +553,7 @@ const BookingOrder = () => {
             navigate(`/payment?orderId=${orderId}`);
         } catch (error) {
             console.error("Error:", error.response?.data || error.message);
-            alert("Lỗi khi gửi dữ liệu! Vui lòng thử lại.");
+            alert("Error when sending data. Please try again");
         }
 
     };
@@ -607,7 +607,7 @@ const BookingOrder = () => {
                         <h2>Shipping Information</h2>
                         <div className={styles.shippingInfo}>
                             <p><strong>Shipping Type:</strong> {shippingType}</p>
-                            <p><strong>Transport ID:</strong> {routeId || 'Không có dữ liệu'}</p>
+                            <p><strong>Transport ID:</strong> {routeId || 'There is no data'}</p>
                         </div>
                         {distance !== null  /*&& shippingCost !== null */ && (
                             <div className={styles.shippingInfo}>
@@ -677,7 +677,7 @@ const BookingOrder = () => {
                                             onChange={() => handleCheckboxChange(index)}
                                         />
                                         <span>
-                                            {fish.name} - {fish.age} tuổi - {fish.weight}kg - {fish.length}cm
+                                            {fish.name} - {fish.age} Age - {fish.weight}kg - {fish.length}cm
                                         </span>
                                         {fish.file && (
                                             <div>
