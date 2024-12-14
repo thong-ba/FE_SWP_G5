@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { jwtDecode } from 'jwt-decode'; 
+import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import './UserInfo.css';
 
@@ -14,11 +14,16 @@ function UserInfo() {
   });
   const [orders, setOrders] = useState([]); // State để lưu danh sách đơn hàng
   const [loading, setLoading] = useState(true);
+  const [routeDetails, setRouteDetails] = useState({});
+  const [driverDetails, setDriverDetails] = useState({});
+  const [driverProfiles, setDriverProfiles] = useState({}); // Lưu thông tin userProfile của từng driver
   const [error, setError] = useState(null);
   const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
   const itemsPerPage = 7; // Số lượng phần tử mỗi trang
 
   const navigate = useNavigate();
+
+
 
   useEffect(() => {
     const token = sessionStorage.getItem('token');
@@ -60,9 +65,9 @@ function UserInfo() {
           .then((response) => {
             const data = response.data.result.map(order => {
               const { id, fromAddress, toAddress, transportService, paymentMethod, distance, orderStatus } = order;
-              const totalPrice = (distance * transportService.pricePerKm) + 
-                                 (order.orderFishes.reduce((sum, fish) => sum + fish.weight, 0) * transportService.pricePerKg) + 
-                                 transportService.transportPrice;
+              const totalPrice = (distance * transportService.pricePerKm) +
+                (order.orderFishes.reduce((sum, fish) => sum + fish.weight, 0) * transportService.pricePerKg) +
+                transportService.transportPrice;
 
               const statusText = ['Processing', 'Pickup', 'Delivering', 'Completed'][orderStatus];
 
@@ -77,7 +82,53 @@ function UserInfo() {
                 orderStatus: statusText
               };
             });
+
             setOrders(data);
+
+            // Fetch routeId for each order
+            data.forEach(order => {
+              axios.get(`https://localhost:7046/api/RouteStop?orderId=${order.id}`)
+                .then(response => {
+                  const routeId = response.data.result.find(stop => stop.orderId === order.id)?.routeId;
+                  setRouteDetails(prevDetails => ({
+                    ...prevDetails,
+                    [order.id]: routeId
+                  }));
+
+                  if (routeId) {
+                    // Fetch driverId for the route
+                    axios.get(`https://localhost:7046/api/Route/${routeId}`)
+                      .then(response => {
+                        const driverId = response.data.result.driverId;
+                        setDriverDetails(prevDetails => ({
+                          ...prevDetails,
+                          [order.id]: driverId
+                        }));
+                      })
+                      .catch(error => {
+                        console.error("Error fetching driver details:", error);
+                      });
+                  }
+                })
+                .catch(error => {
+                  console.error("Error fetching route details:", error);
+                });
+            });
+
+            // Fetch userProfile for each driver
+            Object.keys(driverDetails).forEach(driverId => {
+              axios.get(`https://localhost:7046/api/Driver/GetDriverBy/${driverId}`)
+                .then(response => {
+                  const userProfile = response.data.result.userProfile; // Lấy thông tin userProfile
+                  setDriverProfiles(prevProfiles => ({
+                    ...prevProfiles,
+                    [driverId]: userProfile
+                  }));
+                })
+                .catch(error => {
+                  console.error("Error fetching driver profile:", error);
+                });
+            });
           })
           .catch((error) => {
             setError('Error fetching order data');
@@ -86,7 +137,10 @@ function UserInfo() {
         setError('Error decoding token');
       }
     }
-  }, []);
+  }, [driverDetails]); // Re-fetch userProfile when driverDetails changes
+
+
+
 
   const handleEditProfile = () => {
     navigate('/updateprofile');
@@ -146,6 +200,9 @@ function UserInfo() {
               <th>Payment Method</th>
               <th>Total Price</th>
               <th>Status</th>
+              <th>Route ID</th>
+              <th>Driver ID</th>
+              <th>User Profile</th> {/* New column for User Profile */}
             </tr>
           </thead>
           <tbody>
@@ -158,10 +215,14 @@ function UserInfo() {
                 <td>{order.paymentMethod}</td>
                 <td>{order.totalPrice.toLocaleString()} VND</td>
                 <td>{order.orderStatus}</td>
+                <td>{routeDetails[order.id] || 'N/A'}</td>
+                <td>{driverDetails[order.id] || 'N/A'}</td>
+                <td>{driverProfiles[driverDetails[order.id]] || 'N/A'}</td> {/* Display User Profile */}
               </tr>
             ))}
           </tbody>
         </table>
+
 
         {/* Pagination */}
         <div className="pagination">

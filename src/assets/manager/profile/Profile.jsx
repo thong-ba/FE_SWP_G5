@@ -3,7 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import { Card, Avatar, Button, Spin, Typography, message } from 'antd';
-import './Profile.css';
+import './Profile.module.css';
 
 const { Title, Paragraph } = Typography;
 
