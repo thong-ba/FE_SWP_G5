@@ -8,6 +8,7 @@ import PendingPickUpOrderTab from "../order/PendingPickUpOrderTab/PendingPickUpO
 import CompletedOrderTab from "../order/CompletedOrderTab/CompletedOrderTab";
 import DriverTab from "../order/DriverAvaibleTab/DriverAvaibleTab";
 import CancelOrderTab from "../order/CancelOrderTab/CancelOrderTab";
+import FishHealthTab from "../order/FishHealthTab/FishHealthTab"
 
 function Staff() {
   const [activeTab, setActiveTab] = useState("pendingOrders");
@@ -25,6 +26,8 @@ function Staff() {
         return <CancelOrderTab />;
       case "driverTab":
         return <DriverTab />;
+        case "fishTab":
+        return <FishHealthTab />;
       case "personalInfo":
         return <PersonalInfo onLogout={handleLogout} />;
       case "createRouteAndRouteStop":
@@ -89,6 +92,14 @@ function Staff() {
               className={activeTab === "driverTab" ? "active" : ""}
             >
               Driver Tabs
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => setActiveTab("fishTab")}
+              className={activeTab === "fishTab" ? "active" : ""}
+            >
+              Fish Health Tabs
             </button>
           </li>
           <li>
