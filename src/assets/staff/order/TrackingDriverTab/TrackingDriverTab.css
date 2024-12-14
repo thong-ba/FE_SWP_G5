@@ -1,0 +1,97 @@
+/* General container styling */
+.tracking-driver-container {
+    font-family: Arial, sans-serif;
+    padding: 20px;
+    background-color: #f9f9f9;
+    border-radius: 10px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    max-width: 1500px;
+    margin: 20px auto;
+  }
+  
+  /* Title styling */
+  .tracking-driver-title {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  
+  /* Table styling */
+  .tracking-driver-table {
+    width: 100%;
+    border-collapse: collapse;
+    background-color: #fff;
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .tracking-driver-header {
+    background-color: #007bff;
+    color: #fff;
+  }
+  
+  .tracking-driver-header-row {
+    font-size: 16px;
+    font-weight: bold;
+    text-align: left;
+  }
+  
+  .tracking-driver-header-cell {
+    padding: 10px;
+    text-transform: uppercase;
+  }
+  
+  .tracking-driver-body {
+    font-size: 14px;
+    color: #555;
+  }
+  
+  .tracking-driver-row {
+    border-bottom: 1px solid #e0e0e0;
+    transition: background-color 0.3s;
+  }
+  
+  .tracking-driver-row:hover {
+    background-color: #f1f1f1;
+  }
+  
+  .tracking-driver-cell {
+    padding: 10px;
+    width: 100px;
+  }
+  
+  /* Status styling */
+  .tracking-driver-cell:last-child {
+    font-weight: bold;
+    text-align: center;
+  }
+  
+  .tracking-driver-cell:contains('Available') {
+    color: #28a745;
+  }
+  
+  .tracking-driver-cell:contains('On Route') {
+    color: #ffc107;
+  }
+  
+  .tracking-driver-cell:contains('Inactive') {
+    color: #dc3545;
+  }
+  
+  /* Loading and error styling */
+  .tracking-driver-loading,
+  .tracking-driver-error {
+    text-align: center;
+    font-size: 16px;
+    color: #555;
+    margin-top: 20px;
+  }
+  
+  .tracking-driver-error {
+    color: #dc3545;
+    font-weight: bold;
+  }
+  
