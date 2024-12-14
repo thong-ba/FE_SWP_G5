@@ -1,13 +1,14 @@
-import { getJwtToken, Url, headers } from "./Url";
+import { getJwtToken, getHeaders, localUrl } from "./Url";
 import axios from "axios";
 
 //URL For Swagger API
-const baseAccountUrl = `${Url}/account`;
+const baseAccountUrl = `${localUrl}/UserAccount`;
+
 
 // Create a reusable function to update an account
 export const GetAllAccount = async () => {
   try {
-    const response = await axios.get(`${baseAccountUrl}`, headers);
+    const response = await axios.get(`${baseAccountUrl}/GetAllAccountAsync`, { headers: getHeaders() });
     return response.data;
 
   } catch (error) {

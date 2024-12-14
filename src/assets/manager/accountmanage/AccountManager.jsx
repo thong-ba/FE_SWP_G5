@@ -1,129 +1,122 @@
 import React, { useState, useEffect } from 'react';
-import { Button, Table, Modal, Form, Input, Checkbox } from 'antd';
+import { Button, Table, Modal, Input } from 'antd';
 import { toast, ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { GetAllAccount } from '../../../api/AccountApi.js'
+import { GetAllAccount } from '../../../api/AccountApi.js';
+import { checkToken } from '../../../api/Url.js'; // Import the checkToken function
 
 function AccountManager() {
   const [data, setData] = useState([]);
-  const [showForm, setShowForm] = useState(false);
-  const [formData, setFormData] = useState(null);
-  const [roleModalVisible, setRoleModalVisible] = useState(false);
-  const [selectedRoles, setSelectedRoles] = useState([]);
   const [loading, setLoading] = useState(true);
   const [searchTerm, setSearchTerm] = useState('');
+  const [roleModalVisible, setRoleModalVisible] = useState(false);
+  const [selectedRoles, setSelectedRoles] = useState([]);
+  const [userRole, setUserRole] = useState(null); // State to store the user's role
 
-  const [form] = Form.useForm();
+  // Fetch the role from token on page load
+  useEffect(() => {
+    const { isValid, userRole } = checkToken(); // Extract role using checkToken
+    if (isValid) {
+      setUserRole(userRole);
+    } else {
+      toast.error('Unauthorized access! Redirecting...');
+      // Redirect or prevent access logic can be implemented here
+      window.location.href = '/unauthorized';
+    }
+  }, []);
 
-  //Effect to set the data and loading state
+  // Fetch data for the table
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const apiData = await GetAllAccount(); // Fetch data from API
-        setData(apiData);
+        const apiData = await GetAllAccount();
+        console.log("API Response:", apiData); // Log for debugging
+        if (apiData && apiData.result) {
+          setData(apiData.result); // Set the data to the result array
+        } else {
+          setData([]); // Default to an empty array if result is undefined
+        }
         setLoading(false);
       } catch (error) {
         toast.error("Error fetching accounts: " + error.message);
+        setData([]); // Prevent crash by defaulting to an empty array
+        setLoading(false);
       }
     };
 
-    fetchData(); // Call the fetch function
-  }, []); // Empty dependency array to run once on mount
+    fetchData();
+  }, []);
 
-  // const openAddModal = () => {
-  //   form.resetFields();
-  //   setFormData(null);
-  //   setShowForm(true);
-  // };
-
-  // const openEditModal = (record) => {
-  //   setFormData(record);
-  //   form.setFieldsValue(record);
-  //   setShowForm(true);
-  // };
-
-  // const handleEdit = async (values) => {
-  //   // Construct profileData using the values from the form
-  //   const profileData = {
-  //     phone: values.phone,
-  //     email: values.email,
-  //     address: values.address,
-  //   };
-
-  //   try {
-  //     // Call the UpdateAccount function with the account ID and profileData
-  //     const response = await UpdateProfile(profileData); // Ensure formData contains the accountId
-
-  //     if (response.success) {
-  //       toast.success("Account updated successfully!");
-  //       setShowForm(false);
-  //       GetAllAccount(); // Refresh the data to reflect changes
-  //     } else {
-  //       toast.error("Failed to update account.");
-  //     }
-  //   } catch (error) {
-  //     console.error('Error updating account:', error);
-  //     toast.error("Error updating account: " + error.message);
-  //   }
-  // };
-
-  // const handleSubmit = async (values) => {
-  //   await handleEdit(values);
-  // };
 
   const columns = [
-    { title: 'Account ID', dataIndex: 'accountId', width: '19%' },
-    { title: 'First Name', dataIndex: 'firstName' },
-    { title: 'Last Name', dataIndex: 'lastName' },
-    { title: 'Email', dataIndex: 'email' },
-    { title: 'Phone', dataIndex: 'phone' },
-    {
-      title: 'Verified',
-      dataIndex: 'isEmailVerified',
-      render: (verified) => (verified ? 'Yes' : 'No'),
-    },
+    { title: 'ID', dataIndex: 'id', key: 'id', width: '10%' },
+    { title: 'First Name', dataIndex: 'firstName', key: 'firstName' },
+    { title: 'Last Name', dataIndex: 'lastName', key: 'lastName' },
+    { title: 'Email', dataIndex: 'email', key: 'email' },
+    { title: 'Phone Number', dataIndex: 'phoneNumber', key: 'phoneNumber' },
     {
       title: 'Role',
       dataIndex: 'role',
-      filters: [
-        { text: 'manager', value: 'manager' },
-        { text: 'delivery', value: 'delivery' },
-        { text: 'customer', value: 'customer' },
-      ],
-      onFilter: (value, record) => {
-        return record.role && record.role === value;
+      key: 'role',
+      render: (role) => {
+        switch (role) {
+          case 0: return 'Customer';
+          case 1: return 'Sales Staff';
+          case 2: return 'Delivering Staff';
+          case 3: return 'Manager';
+          default: return 'Unknown';
+        }
       },
-    }
+      filters: [
+        { text: 'Customer', value: 0 },
+        { text: 'Sales Staff', value: 1 },
+        { text: 'Delivering Staff', value: 2 },
+        { text: 'Manager', value: 3 },
+      ],
+      onFilter: (value, record) => record.role === value,
+    },
   ];
 
-  const filteredData = data.filter(account =>
-    account.email.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+
+  const filteredData = Array.isArray(data)
+    ? data.filter((account) =>
+      account.email.toLowerCase().includes(searchTerm.toLowerCase())
+    )
+    : [];
+
+
 
   return (
     <>
       <ToastContainer />
       <div>
-        <h1 className='section-title'>Manage Accounts</h1>
+        {userRole === 'Manager' ? (
+          <>
+            <h1 className="section-title">Manage Accounts</h1>
 
-        <Input
-          placeholder="Search by email..."
-          value={searchTerm}
-          onChange={(e) => setSearchTerm(e.target.value)}
-          style={{ marginBottom: '20px', width: '30%' }}
-        />
+            <Input
+              placeholder="Search by email..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              style={{ marginBottom: '20px', width: '30%' }}
+            />
 
-        <Table
-          columns={columns}
-          dataSource={filteredData}
-          loading={loading}
-          rowKey="accountId"
-          pagination={{
-            pageSize: 5,
-            showSizeChanger: false,
-            total: filteredData.length,
-          }}
-        />
+            <Table
+              columns={columns}
+              dataSource={filteredData}
+              loading={loading}
+              rowKey="id"
+              pagination={{
+                pageSize: 5,
+                showSizeChanger: false,
+                total: filteredData.length,
+              }}
+            />
+          </>
+        ) : (
+          <h2 style={{ color: 'red' }}>You are not authorized to access this page.</h2>
+        )}
+
         {/* Role Modal */}
         <Modal
           title="Account Roles"
@@ -154,6 +147,5 @@ function AccountManager() {
     </>
   );
 }
-
 
 export default AccountManager;
