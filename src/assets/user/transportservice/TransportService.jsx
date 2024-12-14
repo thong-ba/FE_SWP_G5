@@ -36,8 +36,8 @@ const TransportPage = () => {
     fetchData();
   }, []);
 
-  const domestic = transportData.filter((item) => item.transportType === 0);
-  const local = transportData.filter((item) => item.transportType === 1);
+  const domestic = transportData.filter((item) => item.transportType === 1);
+  const local = transportData.filter((item) => item.transportType === 0);
   const international = transportData.filter((item) => item.transportType === 2);
 
   const CardComponent = ({ name, description, pricePerKm, pricePerKg, pricePerAmount, transportPrice, fromProvince, toProvince, isActive, category }) => (

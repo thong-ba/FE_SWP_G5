@@ -1,7 +1,7 @@
 /* Container của UserInfo */
 .user-info-container {
     width: 100%;
-    max-width: 800px;
+    max-width: 1500px;
     margin: 0 auto;
     padding: 20px;
     background-color: #f4f4f4;
@@ -55,5 +55,23 @@
   
   .user-info-details strong {
     color: #6a4c93;
+  }
+  .pagination {
+    margin: 20px 0;
+    display: flex;
+    justify-content: center;
+  }
+  
+  .page-button {
+    margin: 0 5px;
+    width: fit-content;
+    padding: 5px 10px;
+    cursor: pointer;
+  }
+  
+  .page-button.active {
+    font-weight: bold;
+    color: white;
+    background-color: blue;
   }
   
