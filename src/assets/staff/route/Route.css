@@ -94,4 +94,9 @@
   .submit-button {
     background-color: #007bff;
   }
-  
+  .route-select {
+    width: 950px; /* Đặt chiều rộng của dropdown */
+    height: 50px; /* Đặt chiều cao của dropdown */
+    font-size: 16px; /* Điều chỉnh kích thước chữ */
+    padding: 5px; /* Khoảng cách bên trong */
+  }

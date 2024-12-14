@@ -7,8 +7,7 @@ import PendingOrderTab from "../order/PendingOrderTab/PendingOrderTab";
 import PendingPickUpOrderTab from "../order/PendingPickUpOrderTab/PendingPickUpOrderTab";
 import CompletedOrderTab from "../order/CompletedOrderTab/CompletedOrderTab";
 import CancelOrderTab from "../order/CancelOrderTab/CancelOrderTab";
-import TrackingDriverTab from "../order/TrackingDriverTab/TrackingDriverTab";
-import PersonalInfo from "../order/PersonalInfo/PersonalInfo";
+import DriverTab from "../order/DriverLoadingTab/DriverLoadingTab";
 
 function Staff() {
   const [activeTab, setActiveTab] = useState("pendingOrders");
@@ -24,8 +23,8 @@ function Staff() {
         return <CompletedOrderTab />;
       case "cancelOrders":
         return <CancelOrderTab />;
-      case "trackingDriver":
-        return <TrackingDriverTab />; // New tab case
+      case "driverloading":
+        return <DriverTab />;
       case "personalInfo":
         return <PersonalInfo />;
       case "createRouteAndRouteStop":
@@ -86,10 +85,10 @@ function Staff() {
           </li>
           <li>
             <button
-              onClick={() => setActiveTab("trackingDriver")}
-              className={activeTab === "trackingDriver" ? "active" : ""}
+              onClick={() => setActiveTab("driverloading")}
+              className={activeTab === "driverloading" ? "active" : ""}
             >
-              Tracking Driver
+              Driver Loading Avaible
             </button>
           </li>
           <li>
@@ -129,6 +128,43 @@ function Staff() {
           </div>
         </div>
       )}
+    </div>
+  );
+}
+
+function PersonalInfo({ onLogout }) {
+  return (
+    <div className="personal-info-container">
+      <div className="personal-info-image">
+        <img src="person.png" alt="Profile" />
+      </div>
+      <div className="personal-info-details">
+        <h2>Personal Info</h2>
+        <p>
+          <strong>Full Name:</strong> John Doe
+        </p>
+        <p>
+          <strong>Driver ID:</strong> TX12345
+        </p>
+        <p>
+          <strong>Gender:</strong> Nam
+        </p>
+        <p>
+          <strong>Phone Number:</strong> 123-456-7890
+        </p>
+        <p>
+          <strong>Email:</strong> johndoe@example.com
+        </p>
+        <p>
+          <strong>Address:</strong> 123 Main Street, City, Country
+        </p>
+        <div className="personal-info-buttons">
+          <button className="btn-edit">Edit</button>
+          {/* <button className="btn-logout" onClick={onLogout}>
+            Logout
+          </button> */}
+        </div>
+      </div>
     </div>
   );
 }
