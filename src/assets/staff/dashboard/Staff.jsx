@@ -6,6 +6,7 @@ import Route from "../route/Route";
 import PendingOrderTab from "../order/PendingOrderTab/PendingOrderTab";
 import PendingPickUpOrderTab from "../order/PendingPickUpOrderTab/PendingPickUpOrderTab";
 import CompletedOrderTab from "../order/CompletedOrderTab/CompletedOrderTab";
+import DriverTab from "../order/DriverAvaibleTab/DriverAvaibleTab";
 import CancelOrderTab from "../order/CancelOrderTab/CancelOrderTab";
 
 function Staff() {
@@ -22,6 +23,8 @@ function Staff() {
         return <CompletedOrderTab />;
       case "cancelOrders":
         return <CancelOrderTab />;
+      case "driverTab":
+        return <DriverTab />;
       case "personalInfo":
         return <PersonalInfo onLogout={handleLogout} />;
       case "createRouteAndRouteStop":
@@ -78,6 +81,14 @@ function Staff() {
               className={activeTab === "cancelOrders" ? "active" : ""}
             >
               Cancel Orders
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => setActiveTab("driverTab")}
+              className={activeTab === "driverTab" ? "active" : ""}
+            >
+              Driver Tabs
             </button>
           </li>
           <li>

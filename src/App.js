@@ -153,7 +153,7 @@ function App() {
       } else if (decoded.Role === 'SalesStaff') {
         navigate('/staff');
       } else if (decoded.Role === 'DeliveringStaff') {
-        navigate('/staff');
+        navigate('/driver');
       }
 
       else {
