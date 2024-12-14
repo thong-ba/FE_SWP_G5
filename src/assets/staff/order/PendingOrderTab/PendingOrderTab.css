@@ -1,83 +1,73 @@
-.pending-orders-container {
-    padding: 20px;
-    background-color: #f9f9f9;
-  }
-  
-  .pending-orders-title {
-    font-size: 24px;
-    margin-bottom: 20px;
-  }
-  
-  .pending-orders-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-bottom: 20px;
-  }
-  
-  .pending-orders-header {
-    background-color: #f1f1f1;
-  }
-  
-  .pending-orders-header-cell {
-    padding: 10px;
-    text-align: left;
-    font-weight: bold;
-    border: 1px solid #ddd;
-  }
-  
-  .pending-orders-body {
-    background-color: #fff;
-  }
-  
-  .pending-orders-row {
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .pending-orders-cell {
-    padding: 10px;
-    border: 1px solid #ddd;
-  }
-  
-  .loading-message {
-    text-align: center;
-    font-size: 18px;
-    padding: 20px;
-  }
-  
-  .pagination-container {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    margin-top: 20px;
-  }
-  
-  .pagination-button {
-    padding: 25px;
-    width: 120px;
-    margin: 30px;
-    font-size: 16px;
-    background-color: #007bff;
-    color: white;
-    border: none;
-    cursor: pointer;
-  }
-  
-  .pagination-button:disabled {
-    background-color: #ccc;
-    cursor: not-allowed;
-  }
-  
-  .pagination-info {
-    font-size: 16px;
-  }
+/* src/assets/staff/order/PendingOrderTab/PendingOrderTab.css */
 
-  .action-button-update{
-    background-color: #007bff;
-    color: white;
-  }
-  
-  .action-button-delete
-  {
-    background-color: red;
-    color: white;
-  }
+body {
+  font-family: Arial, sans-serif;
+  background-color: #f4f4f4;
+}
+
+h2 {
+  text-align: center;
+  color: #333;
+}
+
+.order-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin: 20px 0;
+  background-color: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+.order-table th, .order-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.order-table th {
+  background-color: #4CAF50;
+  color: white;
+}
+.ant-pagination {
+  display: flex;
+  align-items: center; /* Center items vertically */
+  justify-content: center; /* Center items horizontally */
+  margin: 20px 0;
+}
+.order-table tr:hover {
+  background-color: #f1f1f1;
+}
+
+.btn-detail, .btn-cancel {
+  padding: 8px 12px;
+  margin: 5px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+}
+
+.btn-detail {
+  background-color: #007bff;
+  color: white;
+}
+
+.btn-cancel {
+  background-color: #dc3545;
+  color: white;
+}
+
+.btn-detail:hover {
+  background-color: #0056b3;
+}
+
+.btn-cancel:hover {
+  background-color: #c82333;
+}
+
+.ant-pagination-item,
+.ant-pagination-next,
+.ant-pagination-prev {
+  margin: 0 5px; /* Adjust spacing */
+  line-height: 1; /* Ensure consistent line height */
+  font-size: 14px; /* Ensure consistent font size */
+}

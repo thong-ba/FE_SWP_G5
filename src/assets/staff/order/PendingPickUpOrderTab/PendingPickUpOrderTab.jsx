@@ -1,11 +1,16 @@
 import axios from "axios";
 import { getPendingPickUpOrder } from "../getOrder/getOrder";
 import React, { useEffect, useState } from "react";
+import { Modal, Pagination } from "antd";
 
 function PendingPickUpOrderTab() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isModalVisible, setIsModalVisible] = useState(false);
+  const [selectedOrder, setSelectedOrder] = useState(null);
+  const pageSize = 5;
 
   const cancelOrder = async (orderId) => {
     try {
@@ -57,6 +62,22 @@ function PendingPickUpOrderTab() {
     }
   };
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const paginatedOrders = orders.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
+  const showModal = (order) => {
+    setSelectedOrder(order);
+    setIsModalVisible(true);
+  };
+
+  const handleCancel = () => {
+    setIsModalVisible(false);
+    setSelectedOrder(null);
+  };
+
   useEffect(() => {
     const fetchOrders = async () => {
       try {
@@ -99,9 +120,9 @@ function PendingPickUpOrderTab() {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order, index) => (
+          {paginatedOrders.map((order, index) => (
             <tr key={order.id}>
-              <td>{index + 1}</td>
+              <td>{(currentPage - 1) * pageSize + index + 1}</td>
               <td>{order.fromAddress}</td>
               <td>{order.toAddress}</td>
               <td>{order.receiverName}</td>
@@ -109,24 +130,36 @@ function PendingPickUpOrderTab() {
               <td>{order.notes}</td>
               <td>{order.totalPrice}</td>
               <td>
-                <button className="btn-detail">View Details</button>
-                {/* <button
-                  className="btn-confirm"
-                  onClick={() => pendingPickUpOrder(order.id)}
-                >
-                  Confirm
-                </button> */}
-                <button
-                  className="btn-cancel"
-                  onClick={() => cancelOrder(order.id)}
-                >
-                  Cancel
-                </button>
+                <button className="btn-detail" onClick={() => showModal(order)}>View Details</button>
+                <button className="btn-cancel" onClick={() => cancelOrder(order.id)}>Cancel</button>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
+      <Pagination
+        current={currentPage}
+        pageSize={pageSize}
+        total={orders.length}
+        onChange={handlePageChange}
+      />
+      <Modal
+        title="Order Details"
+        visible={isModalVisible}
+        onCancel={handleCancel}
+        footer={null}
+      >
+        {selectedOrder && (
+          <div>
+            <p>From Address: {selectedOrder.fromAddress}</p>
+            <p>To Address: {selectedOrder.toAddress}</p>
+            <p>Receiver Name: {selectedOrder.receiverName}</p>
+            <p>Receiver Phone: {selectedOrder.receiverPhone}</p>
+            <p>Notes: {selectedOrder.notes}</p>
+            <p>Total Price: {selectedOrder.totalPrice}</p>
+          </div>
+        )}
+      </Modal>
     </div>
   );
 }
