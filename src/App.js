@@ -195,7 +195,7 @@ function App() {
         element={
           isLoggedIn ? (
             <Navigate
-              to={userRole === 'Manager' ? '/manager' : userRole === 'Staff' ? '/staff' : '/home'}
+              to={userRole === 'Manager' ? '/manager' : userRole === 'SalesStaff' ? '/staff' : '/home'}
             />
           ) : (
             <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
@@ -348,7 +348,16 @@ function App() {
       <Route path="/payment" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Payment /></LayoutUtils>} />
       <Route path="/service" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Service /></LayoutUtils>} /> */}
 
-      <Route path="/staff" element={<Staff />} />
+      {/* <Route path="/staff" element={<Staff />} /> */}
+      
+      <Route
+        path="/staff"
+        element={
+          <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+            <Staff />
+          </LayoutUtils>
+        }
+      />
       <Route path="/manager" element={<Manager />} />
 
       <Route path="/driver" element={<DriverLayout isLoggedIn={isLoggedIn} handleLogout={handleLogout} ><MapView location={location} /> </DriverLayout>} />
