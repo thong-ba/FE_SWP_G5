@@ -27,28 +27,54 @@ const Route = ({ driverId }) => {
     }
   }, [driverId]);
 
-  const completeStop = async (routeId) => {
+  const completeStop = async (stopId) => {
     try {
       setUpdating(true);
-      await axios.put(
-        `https://localhost:7046/api/Route/UpdateStopOrderAndStatus?RouteId=${routeId}`
-      );
+      const response = await axios.put(`https://localhost:7046/api/RouteStop`, {
+        id: stopId,
+        routeStatus: 1,
+      });
 
-      setRoutes((prevRoutes) =>
-        prevRoutes.map((route) =>
-          route.id === routeId
-            ? {
-                ...route,
-                isCompleted: true,
-              }
-            : route
-        )
-      );
+      // setRoutes((prevRoutes) =>
+      //   prevRoutes.map((route) =>
+      //     route.id === routeId
+      //       ? {
+      //           ...route,
+      //           isCompleted: true,
+      //         }
+      //       : route
+      //   )
+      // );
+      console.log(response.data);
+      alert("Route stop completed!");
     } catch (error) {
       console.error("Error completing stop: ", error);
       alert("Failed to complete the stop");
     } finally {
       setUpdating(false);
+    }
+  };
+
+  const cancelRouteStop = async (routeStopId, reason) => {
+    if (!reason) {
+      alert("Please provide a cancellation reason");
+      return;
+    }
+
+    try {
+      const response = await axios.put(
+        `https://localhost:7046/api/RouteStop/UpdateRouteStopByIdAsync`,
+        {
+          Id: routeStopId,
+          RouteStatus: 2,
+          Reason: reason,
+        }
+      );
+      console.log(response.data);
+      alert("Route stop canceled!");
+    } catch (error) {
+      console.error(error);
+      alert("Error canceling the route stop");
     }
   };
 
@@ -87,6 +113,7 @@ const Route = ({ driverId }) => {
                 ))}
               </ul>
             </div>
+
             {!route.isCompleted && allStopsCompleted && (
               <button
                 onClick={() => completeStop(route.id)}
@@ -95,9 +122,24 @@ const Route = ({ driverId }) => {
                 {updating ? "Completing Order..." : "Complete Order"}
               </button>
             )}
-            {!allStopsCompleted && (
-              <p>Please complete all stops before finishing the route.</p>
+
+            {!route.isCompleted && !allStopsCompleted && (
+              <div>
+                <button
+                  onClick={() => {
+                    const reason = prompt(
+                      "Please provide a cancellation reason:"
+                    );
+                    if (reason) {
+                      cancelRouteStop(route.id, reason);
+                    }
+                  }}
+                >
+                  Cancel Order
+                </button>
+              </div>
             )}
+            
             {route.isCompleted && <p>Order Completed!</p>}
           </div>
         );
