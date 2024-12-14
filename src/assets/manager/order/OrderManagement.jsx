@@ -43,6 +43,15 @@ function TransportService() {
   const handleModalClose = () => {
     setSelectedOrder(null);
   };
+
+  const statusFilters = [
+    { text: 'Processing', value: 0 },
+    { text: 'Delivering', value: 1 },
+    { text: 'Canceled', value: 2 },
+    { text: 'Completed', value: 3 },
+    { text: 'PendingPickUp', value: 4 },
+  ];
+
   const columns = [
     { title: 'Order ID', dataIndex: 'id' },
     { title: 'Distance', dataIndex: 'distance', render: (distance) => ` ${distance.toLocaleString()} Km` },
@@ -52,6 +61,8 @@ function TransportService() {
     {
       title: 'Status',
       dataIndex: 'orderStatus',
+      filters: statusFilters,
+      onFilter: (value, record) => record.orderStatus === value,
       render: (orderStatus) => {
         switch (orderStatus) {
           case 0:

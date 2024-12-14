@@ -1,40 +1,42 @@
-/* Phong cách tổng quát cho Header */
-.header-container {
+/* Header.module.css */
+
+.headerContainer {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 20px;
-  background-color: rgb(146, 68, 146); /* Màu nền Header */
+  background-color: rgb(146, 68, 146);
   color: white;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   z-index: 100;
 }
 
-/* Logo và tên website */
-.header-logo-container {
+.logoContainer {
   display: flex;
   align-items: center;
 }
 
-.header-logo-image {
-  width: 40px; /* Kích thước ảnh */
+.logoImage {
+  width: 40px;
   height: 40px;
-  border-radius: 50%; /* Bo tròn hình ảnh */
-  object-fit: cover; /* Đảm bảo ảnh được căn chỉnh đúng trong khu vực bo tròn */
+  border-radius: 50%;
+  object-fit: cover;
   margin-right: 10px;
-  cursor: pointer; /* Chỉnh con trỏ khi di chuột vào avatar */
+  cursor: pointer;
 }
 
-.header-logo-text {
+.logoText {
   font-size: 28px;
   font-weight: bold;
   color: white;
-  padding-bottom: 10px;
+  padding-top: 5px;
   letter-spacing: 1px;
 }
 
-/* Menu navigation */
-.header-nav-list {
+.navigation {
+  display: flex;
+}
+
+.navList {
   list-style-type: none;
   display: flex;
   gap: 40px;
@@ -42,12 +44,12 @@
   padding: 0;
 }
 
-.header-nav-item {
+.navItem {
   font-size: 16px;
   position: relative;
 }
 
-.header-nav-link {
+.navLink {
   color: white;
   text-decoration: none;
   padding: 10px 15px;
@@ -56,17 +58,16 @@
   transition: all 0.3s ease-in-out;
 }
 
-.header-nav-link:hover {
+.navLink:hover {
   background-color: rgba(255, 255, 255, 0.2);
   color: #ffa500;
 }
 
-/* Dropdown menu */
-.services-dropdown {
+.dropdown {
   position: relative;
 }
 
-.header-dropdown-list {
+.dropdownList {
   position: absolute;
   top: 100%;
   left: 0;
@@ -79,26 +80,28 @@
   display: none;
 }
 
-.services-dropdown:hover .header-dropdown-list {
+.dropdown:hover .dropdownList {
   display: flex;
   flex-direction: column;
 }
 
-.header-dropdown-item a {
+.dropdownItem {
+  width: 200px;
+}
+
+.dropdownLink {
   color: white;
   display: block;
   padding: 10px 20px;
-  width: 200px;
   transition: background-color 0.3s ease-in-out;
 }
 
-.header-dropdown-item a:hover {
+.dropdownLink:hover {
   background-color: rgba(255, 255, 255, 0.2);
   color: #ffa500;
 }
 
-/* Avatar và logout */
-.header-user-avatar {
+.userAvatar {
   width: 30px;
   height: 30px;
   border-radius: 50%;
@@ -106,7 +109,7 @@
   margin-right: 10px;
 }
 
-.header-logout-button {
+.logoutButton {
   background-color: rgb(255, 87, 87);
   color: white;
   padding: 10px 15px;
@@ -116,12 +119,11 @@
   transition: background-color 0.3s ease-in-out;
 }
 
-.header-logout-button:hover {
+.logoutButton:hover {
   background-color: rgb(255, 69, 0);
 }
 
-/* Popup xác nhận logout */
-.header-logout-popup {
+.logoutPopup {
   position: fixed;
   top: 0;
   left: 0;
@@ -134,7 +136,7 @@
   z-index: 10000;
 }
 
-.header-logout-popup-content {
+.logoutPopupContent {
   background-color: white;
   padding: 20px;
   border-radius: 8px;
@@ -142,12 +144,14 @@
   text-align: center;
 }
 
-.header-logout-popup-text {
+.logoutPopupText {
   margin-bottom: 15px;
   color: rgb(146, 68, 146);
 }
 
-.header-logout-popup-content button {
+.confirmButton {
+  background-color: rgb(255, 87, 87);
+  color: white;
   padding: 10px 20px;
   margin: 5px;
   border: none;
@@ -156,51 +160,51 @@
   transition: background-color 0.3s ease-in-out;
 }
 
-.header-confirm-button {
-  background-color: rgb(255, 87, 87);
-  color: white;
-}
-
-.header-confirm-button:hover {
+.confirmButton:hover {
   background-color: rgb(255, 69, 0);
 }
 
-.header-cancel-button {
+.cancelButton {
   background-color: rgb(201, 201, 201);
   color: black;
+  padding: 10px 20px;
+  margin: 5px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s ease-in-out;
 }
 
-.header-cancel-button:hover {
+.cancelButton:hover {
   background-color: rgb(170, 170, 170);
 }
 
-/* Responsive */
 @media (max-width: 768px) {
-  .header-nav-list {
+  .navList {
     flex-direction: column;
     gap: 20px;
   }
 
-  .header-nav-item {
+  .navItem {
     text-align: center;
   }
 
-  .header-logo-container {
+  .logoContainer {
     flex-direction: column;
     align-items: center;
   }
 
-  .header-logo-text {
+  .logoText {
     font-size: 22px;
   }
 
-  .header-nav-item .header-nav-link {
+  .navLink {
     padding: 15px;
     width: 100%;
     text-align: center;
   }
 
-  .header-dropdown-list {
+  .dropdownList {
     width: 100%;
   }
 }
