@@ -59,14 +59,18 @@ const BookingOrder = () => {
             setStep(3);
         }
     };
-    // const handleInputChange = (e, field) => {
-    //     const { name, value } = e.target;
-    //     setNewFish(prevFish => ({ ...prevFish, [name]: value }));
-    // };
+
     const handleInputChange = (e, setStateFunction) => {
         const { name, value } = e.target;
         setStateFunction((prev) => ({ ...prev, [name]: value }));
     };
+
+
+    {/*// 
+    // const handleInputChange = (e, field) => {
+    //     const { name, value } = e.target;
+    //     setNewFish(prevFish => ({ ...prevFish, [name]: value }));
+    // };
     // const handleFileChange = (e, field) => {
     //     const file = e.target.files[0];
     //     setNewFish(prevFish => ({ ...prevFish, [field]: file }));
@@ -107,6 +111,8 @@ const BookingOrder = () => {
     //         alert('An error occurred while creating the order. Please try again.');
     //     }
     // }
+ */}
+
 
 
 
@@ -117,7 +123,7 @@ const BookingOrder = () => {
             console.log("Token:", token);
 
             if (!token) {
-                alert('Bạn cần đăng nhập để thực hiện hành động này.');
+                alert('You need to login as customer first!!!!');
                 return; // Return early if no token is found
             }
 
@@ -146,7 +152,7 @@ const BookingOrder = () => {
                 setOrderId(response.data.result);
             }
 
-            
+
 
             // } else {
             //     alert('Failed to create the order. Please try again.');
@@ -156,7 +162,7 @@ const BookingOrder = () => {
             alert('An error occurred while creating the order. Please try again.');
         }
     };
-    
+
 
     const handlePrevStep = () => setStep(prev => prev - 1);
 
@@ -220,7 +226,9 @@ const BookingOrder = () => {
         const distance = R * c;
         return distance;
     };
-
+{ /* 
+    
+    
     // useEffect(() => {
     //     const fetchCoordinates = async () => {
     //         if (senderInfo.address && receiverInfo.address) {
@@ -241,6 +249,9 @@ const BookingOrder = () => {
     //     };
     //     fetchCoordinates();
     // }, [senderInfo.address, receiverInfo.address]);
+    // 
+    // */}
+    
 
     useEffect(() => {
         if (navigator.permissions) {
@@ -346,8 +357,8 @@ const BookingOrder = () => {
     }, [selectedProducts]);
 
     useEffect(() => {
-        setTotalAmount(totalFishCost /*+ (shippingCost || 0) */ );
-    }, [totalFishCost   /* , shippingCost */] );
+        setTotalAmount(totalFishCost /*+ (shippingCost || 0) */);
+    }, [totalFishCost   /* , shippingCost */]);
 
 
     useEffect(() => {
@@ -362,7 +373,7 @@ const BookingOrder = () => {
         }
     }, [location]);
 
-
+    {/*
     // const handleSubmit = async () => {
     //     const orderData = {
     //         orderInfo,
@@ -442,6 +453,8 @@ const BookingOrder = () => {
     //     }
     // };
 
+
+    */}
     const handleFileChange = (e) => {
         setFile(e.target.files[0]);
         setQFile(e.target.files[0])
@@ -476,17 +489,17 @@ const BookingOrder = () => {
             if (response.data.result) {
                 const orderFishId = response.data.result; // Ensure the ID is saved correctly
                 console.log("Fish Order ID:", orderFishId);
-    
+
                 const formQualification = new FormData();
                 formQualification.append("Name", qname); // Qualification name
                 formQualification.append("OrderFishId", orderFishId); // Use the correct orderFishId here
                 if (qfile) formQualification.append("File", qfile); // Qualification file if available
-    
+
                 // Log the qualification FormData to ensure it's populated
                 for (let pair of formQualification.entries()) {
                     console.log(pair[0], pair[1]);
                 }
-    
+
                 // Send qualification data after the order creation is successful
                 const qualificationResponse = await axios.post(
                     "https://localhost:7046/api/FishQualification/create-fishQualification", // Adjust endpoint if necessary
@@ -497,9 +510,9 @@ const BookingOrder = () => {
                         },
                     }
                 );
-    
+
                 console.log("Qualification Success:", qualificationResponse.data);
-    
+
                 // Navigate to the payment page upon success
                 navigate(`/payment?orderId=${orderId}`);
             } else {
@@ -551,6 +564,7 @@ const BookingOrder = () => {
                             onChange={(e) => handleInputChange(e, setOrderInfo)}
                         />
                         <textarea
+                            className='add-note'
                             name="notes"
                             placeholder="Additional Notes"
                             value={orderInfo.notes}
@@ -560,8 +574,8 @@ const BookingOrder = () => {
                         {/* Display the Shipping Type Information */}
                         <h2>Shipping Information</h2>
                         <div className={styles.shippingInfo}>
-                            <p><strong>Shipping Type:</strong> {shippingType}</p>
-                            <p><strong>Transport ID:</strong> {routeId || 'Không có dữ liệu'}</p>
+                            <h3><strong>Shipping Type:</strong> {shippingType}</h3>
+                            <h3><strong>Transport ID:</strong> {routeId || 'No input data'}</h3>
                         </div>
                         {distance !== null  /*&& shippingCost !== null */ && (
                             <div className={styles.shippingInfo}>
@@ -575,32 +589,32 @@ const BookingOrder = () => {
                 {/* Step 2: Add Products */}
                 {step === 2 && (
                     <div className={styles.step}>
-                        <h2>Thêm Thông Tin Cá</h2>
+                        <h2>Adding Fish Section</h2>
                         <form onSubmit={handleSubmit}>
                             <input
                                 type="text"
                                 name="name"
-                                placeholder="Tên cá"
+                                placeholder="Fish's Name"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)} />
                             <input
                                 type="number"
                                 name="age"
-                                placeholder="Tuổi cá"
+                                placeholder="Fish Age"
                                 value={age}
                                 onChange={(e) => setAge(e.target.value)}
                             />
                             <input
                                 type="number"
                                 name="weight"
-                                placeholder="Cân nặng cá"
+                                placeholder="Weight"
                                 value={weight}
                                 onChange={(e) => setWeight(e.target.value)}
                             />
                             <input
                                 type="number"
                                 name="length"
-                                placeholder="Cân nặng cá"
+                                placeholder="Length"
                                 value={length}
                                 onChange={(e) => setLength(e.target.value)}
                             />
@@ -613,7 +627,7 @@ const BookingOrder = () => {
                             <button type="submit">Submit</button>
                         </form>
 
-                        <button onClick={handleAddFish}>Thêm Cá</button>
+                        <button onClick={handleAddFish}>Add Fish</button>
 
                         {/* Hiển thị danh sách sản phẩm đã chọn */}
                         <div>
@@ -627,7 +641,7 @@ const BookingOrder = () => {
                                             onChange={() => handleCheckboxChange(index)}
                                         />
                                         <span>
-                                            {fish.name} - {fish.age} Age - {fish.weight}kg
+                                            {fish.name} - {fish.age} Age - {fish.weight}kg - {fish.length}cm
                                         </span>
                                     </li>
                                 ))}
@@ -644,7 +658,7 @@ const BookingOrder = () => {
                                 className={styles.deleteSelectedButton}
                                 disabled={selectedIndexes.length === 0}
                             >
-                                Thêm chứng nhận cho mục đã chọn
+                                Adding Certifiacte Section
                             </button>
                         </div>
                     </div>
@@ -657,16 +671,16 @@ const BookingOrder = () => {
                 {/* Step 3: Add Fish Qualification */}
                 {step === 3 && (
                     <div className={styles.step}>
-                        <h2>Thêm Thông Tin Chứng Nhận Cá</h2>
+                        <h2>Adding Certifiacte</h2>
                         {/* Fish Qualification Name */}
                         <div className={styles.inputGroup}>
-                            <label htmlFor="qualificationName">Tên Chứng Nhận</label>
+                            <label htmlFor="qualificationName">Certificate's Name:</label>
                             <form onSubmit={handleSubmit}>
                                 {/* Name input */}
                                 <input
                                     type="text"  // Use type "text" instead of "string"
                                     name="Name"
-                                    placeholder="Tên chứng chỉ"
+                                    placeholder="Enter ceritificate for fish"
                                     value={qname}
                                     onChange={(e) => setQName(e.target.value)}
                                 />

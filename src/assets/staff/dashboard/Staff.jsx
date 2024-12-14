@@ -7,6 +7,7 @@ import PendingOrderTab from "../order/PendingOrderTab/PendingOrderTab";
 import PendingPickUpOrderTab from "../order/PendingPickUpOrderTab/PendingPickUpOrderTab";
 import CompletedOrderTab from "../order/CompletedOrderTab/CompletedOrderTab";
 import CancelOrderTab from "../order/CancelOrderTab/CancelOrderTab";
+import DriverTab from "../order/DriverLoadingTab/DriverLoadingTab";
 
 function Staff() {
   const [activeTab, setActiveTab] = useState("pendingOrders");
@@ -22,8 +23,10 @@ function Staff() {
         return <CompletedOrderTab />;
       case "cancelOrders":
         return <CancelOrderTab />;
+      case "driverloading":
+        return <DriverTab />;
       case "personalInfo":
-        return <PersonalInfo onLogout={handleLogout} />;
+        return <PersonalInfo />;
       case "createRouteAndRouteStop":
         return <Route />;
       default:
@@ -59,7 +62,7 @@ function Staff() {
           <li>
             <button
               onClick={() => setActiveTab("pendingPickUpOrders")}
-              className={activeTab === "processingOrders" ? "active" : ""}
+              className={activeTab === "pendingPickUpOrders" ? "active" : ""}
             >
               Pending Pick Up Orders
             </button>
@@ -78,6 +81,14 @@ function Staff() {
               className={activeTab === "cancelOrders" ? "active" : ""}
             >
               Cancel Orders
+            </button>
+          </li>
+          <li>
+            <button
+              onClick={() => setActiveTab("driverloading")}
+              className={activeTab === "driverloading" ? "active" : ""}
+            >
+              Driver Loading Avaible
             </button>
           </li>
           <li>
@@ -149,9 +160,9 @@ function PersonalInfo({ onLogout }) {
         </p>
         <div className="personal-info-buttons">
           <button className="btn-edit">Edit</button>
-          <button className="btn-logout" onClick={onLogout}>
+          {/* <button className="btn-logout" onClick={onLogout}>
             Logout
-          </button>
+          </button> */}
         </div>
       </div>
     </div>

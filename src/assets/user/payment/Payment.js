@@ -75,6 +75,38 @@
 
 // export default Payment;
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 import { useEffect, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
@@ -91,14 +123,14 @@ const PaymentPage = () => {
     const queryParams = new URLSearchParams(location.search);
     const orderId = queryParams.get('orderId');
     const navigate = useNavigate();
-    
+
     useEffect(() => {
         const fetchOrderData = async () => {
             try {
                 console.log("orderId", orderId);
-                const response = await 
-                axios.get(`https://localhost:7046/api/Order/GetOrderByIdAsyncAsync/${orderId}`);
-                
+                const response = await
+                    axios.get(`https://localhost:7046/api/Order/GetOrderByIdAsyncAsync/${orderId}`);
+
                 console.log("response", response.data);
                 setOrderData(response.data);
 
@@ -126,7 +158,7 @@ const PaymentPage = () => {
         setLoading(true);
         try {
             const token = sessionStorage.getItem('token');
-            
+
             const response = await axios.post('https://localhost:7046/api/Payment',
                 { orderId: orderId },
                 {
@@ -141,7 +173,7 @@ const PaymentPage = () => {
             if (response.data.isSuccess) {
                 const paymentUrl = response.data.result;
 
-                window.location.href = paymentUrl;  
+                window.location.href = paymentUrl;
             } else {
                 console.error("Payment request failed:", response.data.errorMessage);
             }
@@ -152,11 +184,23 @@ const PaymentPage = () => {
         finally {
             setLoading(false);
         }
-        // Proceed to payment logic (e.g., API call, payment gateway redirection)
-        setTimeout(() => {
-            setLoading(false);
-        }, 10);
     };
+
+
+    const getShippingMethod = (shippingType) => {
+        switch (shippingType) {
+            case 0:
+                return 'Local';
+            case 1:
+                return 'Domestic';
+            case 2:
+                return 'International';
+            default:
+                return 'Local';
+        }
+    };
+
+
 
     const handleVnPay = async () => {
         setLoading(true);
@@ -202,55 +246,56 @@ const PaymentPage = () => {
 
     return (
         <div className="payment-contain Set the fetched data into stateer">
-            <h2 className="heading">Xác Nhận Thanh Toán</h2>
+            <h2 className="heading">CONFIRM ORDER PAYMENT PAGE</h2> 
 
             <div className="order-summary">
-                <h3>Thông Tin Đặt Hàng:</h3>
-                <p className='text'><strong>Người giao hàng:</strong>{orderData.result?.fromAddress}</p>
-                <p className='text'><strong>Người nhận hàng:</strong> {orderData.result?.receiverName} - {orderData.result?.receiverPhone} - {orderData.result?.toAddress}</p>
-                <p className='text'><strong>Số lượng cá:</strong> {orderFishes?.length} con</p>
-                <p className='text'><strong>Hình thức giao hàng:</strong> {orderData.result?.transportService?.transportType}</p>
-                <p className='text'><strong>Tổng chi phí:</strong> {formatCurrency(totalAmount)} VND</p>
+                <h3>Order Information:</h3>
+                <p className='text'><strong>Sender:</strong>{orderData.result?.fromAddress}</p>
+                <p className='text'><strong>Receiver:</strong> {orderData.result?.receiverName} - {orderData.result?.receiverPhone} - {orderData.result?.toAddress}</p>
+                <p className='text'><strong>Number of fishes:</strong> {orderFishes?.length} fish</p>
+                <p className='text'><strong>Shipping method:</strong> {getShippingMethod(orderData.result?.shippingType)}</p>
+                <p className='text'><strong>Total cost:</strong> {formatCurrency(totalAmount)} VND</p>
             </div>
 
-            <h3>Hình Thức Thanh Toán</h3>
+
+            <h3>Payment Method</h3>
             <div className="payment-options">
                 <div className={`option-button ${paymentMethod === 'cash' ? 'selected' : ''}`} onClick={handleCash}>
-                    Tiền mặt
+                    Cash
                 </div>
                 <div className={`option-button ${paymentMethod === 'transfer' ? 'selected' : ''}`} onClick={handleVnPay}>
-                    Chuyển khoản
+                    Bank Transfer
                 </div>
             </div>
 
             <div className="payment-method-container">
                 {paymentMethod === 'cash' && (
                     <div className="cash-options">
-                        <h4>Người trả tiền mặt:</h4>
+                        <h4>Cash Payer:</h4>
                         <div className="cash-option-container">
                             <div className={`cash-option ${cashPayer === 'sender' ? 'selected' : ''}`} onClick={() => setCashPayer('sender')}>
-                                Người giao hàng
+                                Sender
                             </div>
                             <div className={`cash-option ${cashPayer === 'receiver' ? 'selected' : ''}`} onClick={() => setCashPayer('receiver')}>
-                                Người nhận hàng
+                                Receiver
                             </div>
                             {cashPayer === 'receiver' && (
-                                <p>Số tiền cần cọc: <strong>{formatCurrency(totalAmount * 0.1)} VND</strong></p>
+                                <h3>Deposit Amount: <strong>{formatCurrency(totalAmount * 0.1)} VND</strong></h3>
                             )}
                         </div>
                     </div>
                 )}
 
-                {paymentMethod === 'transfer' && (  
-                    <div className="qr-payment">  
-                        <h4>Scan QR Code to Pay via VNPay:</h4>  
-                        <img src="ma-qr.jpg" alt="QR Code VNPay" />  
-                    </div>  
-                )}  
-            </div>  
+                {paymentMethod === 'transfer' && (
+                    <div className="qr-payment">
+                        <h2> Click "Confirm Payment" to checkout payment via VNPay</h2>
+                        {/* <img src="ma-qr.jpg" alt="QR Code VNPay" />   */}
+                    </div>
+                )}
+            </div>
 
             <button className="confirm-button" onClick={handlePayment} disabled={loading}>
-                {loading ? 'Đang xử lý...' : 'Xác Nhận Thanh Toán'}
+                {loading ? 'Processing...' : 'Confirm Payment'}
             </button>
         </div>
     );

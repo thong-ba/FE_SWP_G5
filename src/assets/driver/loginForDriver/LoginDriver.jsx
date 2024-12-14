@@ -2,8 +2,8 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import jwtDecode from 'jwt-decode';
-import './Login.css';
+import {jwtDecode} from 'jwt-decode';
+import '../../user/login/Login.css';
 
 function LoginDriver({ onLogin }) {
   const [email, setEmail] = useState('');
@@ -24,8 +24,8 @@ function LoginDriver({ onLogin }) {
 
       if (isSuccess) {
         const decoded = jwtDecode(result);
-        localStorage.setItem('token', result);
-        localStorage.setItem('driverId', decoded.DriverId);
+        sessionStorage.setItem('token', result);
+        sessionStorage.setItem('driverId', decoded.DriverId);
 
         setMessage('Login successful! Redirecting...');
         setTimeout(() => navigate('/driver'), 1000);

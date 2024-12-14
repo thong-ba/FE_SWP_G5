@@ -12,10 +12,10 @@ import Payment from './assets/user/payment/Payment';
 import Service from './assets/user/services/Service';
 import UserInfo from './assets/user/userinfo/UserInfo';
 import TrackOrder from './assets/user/trackorder/TrackOrder';
-import UpdateProfile  from './assets/user/updateprofile/UpdateProfile';
+import UpdateProfile from './assets/user/updateprofile/UpdateProfile';
 
 import VerifyAccount from './assets/user/verify/VerifyAccount';
-
+import LoginDriver from './assets/driver/loginForDriver/LoginDriver';
 import MapView from './assets/driver/currentlocation/MapView';
 import DriverLayout from './assets/driver/layout/DriverLayout';
 import Manager from './assets/manager/dashboard/Manager';
@@ -100,6 +100,68 @@ function App() {
     }
   }, []);
 
+  const updateDriverLocation = async (driverId, latitude, longitude) => {
+    try {
+      const response = await fetch(
+        `https://localhost:7046/api/Location/${driverId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            DriverId: driverId,
+            Latitude: latitude,
+            Longitude: longitude,
+          }),
+        }
+      );
+
+      if (!response.ok) {
+        console.error("Failed to update driver location: ", await response.text());
+      }
+    } catch (error) {
+      console.error("Error updating driver location: ", error);
+    }
+  };
+
+  // useEffect(() => {
+  //   const checkToken = () => {
+  //     const token = sessionStorage.getItem("token");
+  //     if (token) {
+  //       try {
+  //         const decoded = jwtDecode(token);
+  //         console.log("Decoded token:", decoded);
+  //         const currentTime = Math.floor(Date.now() / 1000);
+
+  //         if (decoded.exp > currentTime) {
+  //           setIsLoggedIn(true);
+
+  //           // Dynamically find the Role key in the decoded token
+  //           const roleKey = Object.keys(decoded).find((key) =>
+  //             key.toLowerCase().includes("role")
+  //           );
+  //           setUserRole(decoded[roleKey] || null);
+
+  //           console.log("User Role:", decoded[roleKey] || null);
+  //         } else {
+  //           sessionStorage.removeItem("token");
+  //           setIsLoggedIn(false);
+  //         }
+  //       } catch (error) {
+  //         console.error("Token decoding failed:", error);
+  //         sessionStorage.removeItem("token");
+  //         setIsLoggedIn(false);
+  //       }
+  //     } else {
+  //       setIsLoggedIn(false);
+  //     }
+  //   };
+
+  //   checkToken();
+  // }, []);
+
+
 
   useEffect(() => {
     const checkToken = () => {
@@ -107,22 +169,16 @@ function App() {
       if (token) {
         try {
           const decoded = jwtDecode(token);
-          console.log("Decoded token:", decoded); // Logging decoded token for debugging
           const currentTime = Math.floor(Date.now() / 1000);
 
           if (decoded.exp > currentTime) {
             setIsLoggedIn(true);
-
-            // Dynamically find the Role key in the decoded token
             const roleKey = Object.keys(decoded).find((key) =>
               key.toLowerCase().includes("role")
             );
             setUserRole(decoded[roleKey] || null);
-
-            console.log("User Role:", decoded[roleKey] || null);
           } else {
             sessionStorage.removeItem("token");
-
             setIsLoggedIn(false);
           }
         } catch (error) {
@@ -139,30 +195,78 @@ function App() {
   }, []);
 
 
+
+
+
+
+
+
+
   const handleLogin = (token) => {
-
-
     try {
-      const decoded = jwtDecode(token);
-      sessionStorage.setItem('token', token);
+      const decoded = jwtDecode(token);  // Decode the JWT token
+      console.log("Decoded token:", decoded);  // Log the decoded token to inspect it
+      sessionStorage.setItem('token', token);  // Store the token in session storage
       setIsLoggedIn(true);
-      setUserRole(decoded.Role || null);
+      setUserRole(decoded.Role || null);  // Set the user role from the decoded token
 
       if (decoded.Role === 'Manager') {
         navigate('/manager');
       } else if (decoded.Role === 'SalesStaff') {
         navigate('/staff');
-      } else if (decoded.Role === 'DeliveringStaff') {
-        navigate('/staff');
-      }
-
-      else {
+      } else if (decoded.Role === 'DeliveringStaff' ) {
+        navigate('/driver');
+      } else {
         navigate('/home');
       }
     } catch (error) {
       console.error('Login failed:', error);
     }
   };
+
+
+
+  // const handleLogin = (token) => {
+  //   try {
+  //     const decoded = jwtDecode(token);
+  //     sessionStorage.setItem('token', token);
+  //     setIsLoggedIn(true);
+  //     setUserRole(decoded.Role || null);
+
+  //     if (decoded.Role === 'Manager') {
+  //       navigate('/manager');
+  //     } else if (decoded.Role === 'SalesStaff') {
+  //       navigate('/staff');
+  //     } else if (decoded.Role === 'Customer') {
+  //       navigate('/home');
+  //     }
+  //   } catch (error) {
+  //     console.error('Login failed:', error);
+  //   }
+  // };
+
+
+
+
+  // const handleDriverLogin = (token) => {
+  //   try {
+  //     const decoded = jwtDecode(token);
+  //     sessionStorage.setItem('token', token);
+  //     setIsLoggedIn(true);
+  //     setUserRole(decoded.Role || null);
+
+  //     if (decoded.Role === 'DeliveringStaff') {
+  //       navigate('/driver');  // Ensure this part works as expected
+  //     } else {
+  //       console.error("Unauthorized role for driver login");
+  //       setIsLoggedIn(false);
+  //       sessionStorage.removeItem('token');
+  //     }
+  //   } catch (error) {
+  //     console.error('Driver login failed:', error);
+  //   }
+  // };
+
 
   const handleLogout = () => {
     sessionStorage.removeItem('token');
@@ -189,13 +293,14 @@ function App() {
             <HomePage />
           </LayoutUtils>
         }
+
       />
       <Route
         path="/login"
         element={
           isLoggedIn ? (
             <Navigate
-              to={userRole === 'Manager' ? '/manager' : userRole === 'Staff' ? '/staff' : '/home'}
+              to={userRole === 'Manager' ? '/manager' : userRole === 'SalesStaff' ? '/staff' : '/home'}
             />
           ) : (
             <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
@@ -204,6 +309,16 @@ function App() {
           )
         }
       />
+      {/* <Route
+        path="/logindriver"
+        element={
+          isLoggedIn && userRole === 'DeliveringStaff' ? (
+            <Navigate to="/driver" />
+          ) : (
+            <LoginDriver onLogin={handleDriverLogin} />
+          )
+        }
+      /> */}
       <Route
         path="/register"
         element={
@@ -272,7 +387,7 @@ function App() {
           </LayoutUtils>
         }
       />
-            <Route
+      <Route
         path="/transport"
         element={
           <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
@@ -280,7 +395,7 @@ function App() {
           </LayoutUtils>
         }
       />
-{/* 
+      {/* 
       <Route
         path="/transport"
         element={
@@ -310,9 +425,22 @@ function App() {
           )
         }
       />
+      {/* <Route
+        path="/staff"
+        element={
+          <LayoutUtils  isLoggedIn={isLoggedIn}  handleLogout={handleLogout} >
+            <Staff />
+            </LayoutUtils>
+        }
+      />
 
-      {/* Redirect nếu không phù hợp */}
-     {/* <Route
+
+
+{/*    
+
+
+      Redirect nếu không phù hợp 
+     <Route
         path="/driver"
         element={
           userRole === 'DeliveringStaff' ? (
@@ -320,12 +448,12 @@ function App() {
               <Staff />
             </LayoutUtils>
           ) : (
-            <Navigate to="/home" />
+            <Navigate to="/login" />
           )
         }
-      /> */}
+      /> 
 
-      {/*
+     
       <Route
         path="/staff"
         element={
@@ -337,8 +465,8 @@ function App() {
             <Navigate to="/home" />
           )
         }
-      /> */}
-      {/* <Route path="*" element={<Navigate to="/home" />} />
+      /> 
+      <Route path="*" element={<Navigate to="/home" />} />
       <Route path="/" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
       <Route path="/home" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><HomePage /></LayoutUtils>} />
       <Route path="/login" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Login setIsLoggedIn={setIsLoggedIn} /></LayoutUtils>} />
@@ -346,15 +474,51 @@ function App() {
       <Route path="/bookingorder" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><BookingOrder /></LayoutUtils>} />
       <Route path="/shippingoption" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><ShippingOption /></LayoutUtils>} />
       <Route path="/payment" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Payment /></LayoutUtils>} />
-      <Route path="/service" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Service /></LayoutUtils>} /> */}
+      <Route path="/service" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Service /></LayoutUtils>} /> 
+
+
+
+*/} 
+      
+
+
 
       <Route path="/staff" element={<Staff />} />
+      {/* <Route
+        path="/staff"
+        element={
+          userRole === 'SalesStaff' ? (
+            <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+              <Staff />
+            </LayoutUtils>
+          ) : (
+            <Navigate to="/home" />
+          )
+        }
+      />  */}
       <Route path="/manager" element={<Manager />} />
 
-      <Route path="/driver" element={<DriverLayout isLoggedIn={isLoggedIn} handleLogout={handleLogout} ><MapView location={location} /> </DriverLayout>} />
+      {/* <Route path="/driver" 
+      element={<DriverLayout isLoggedIn={isLoggedIn}  handleLogout={handleLogout} ><MapView location={location} /> </DriverLayout>} /> */}
+
+      <Route path="/driver"
+        element={<DriverLayout isLoggedIn={isLoggedIn} handleLogout={handleLogout} ><MapView location={location} /> </DriverLayout>} /><Route
+        path="/driver"
+        element={
+          isLoggedIn && userRole === "DeliveringStaff" ? (
+            <DriverLayout isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+              <MapView location={location} />
+            </DriverLayout>
+          ) : (
+            <Navigate to="/login" />
+          )
+        }
+      />
+
+
+
       <Route path="/paymentsuccess" element={<PaymentSuccess></PaymentSuccess>} />
       <Route path="/paymentfail" element={<PaymentFail></PaymentFail>} />
-
 
       <Route
         path="/pendingorder"
@@ -369,12 +533,11 @@ function App() {
         }
       />
 
-
     </Routes>
-
 
 
   );
 }
 
 export default App;
+
