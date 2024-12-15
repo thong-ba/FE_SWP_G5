@@ -11,6 +11,10 @@ function MapView({ location }) {
   const [routeDetails, setRouteDetails] = useState(null);
   const [status, setStatus] = useState("Loading...");
   const [stopCoordinates, setStopCoordinates] = useState([]);
+  const [selectedStops, setSelectedStops] = useState([]); // Lưu trữ stopOrder được chọn
+  const [showCancelPopup, setShowCancelPopup] = useState(false);
+  const [cancelReason, setCancelReason] = useState("");
+  const [image, setImage] = useState(null);
   const driverId = localStorage.getItem("driverId");
 
   useEffect(() => {
@@ -147,13 +151,31 @@ function MapView({ location }) {
     }
   };
 
+  const handleDelete = () => {
+    if (cancelReason && image) {
+      // Implement delete logic here, make API call to delete the stop
+      alert("Stop order deleted!");
+      setShowCancelPopup(false); // Close popup
+    } else {
+      alert("Please provide a reason and upload an image.");
+    }
+  };
+
+  const handleSelectStop = (stopOrder) => {
+    setSelectedStops((prevSelected) =>
+      prevSelected.includes(stopOrder)
+        ? prevSelected.filter((item) => item !== stopOrder)
+        : [...prevSelected, stopOrder]
+    );
+  };
+
   const NumberedMarker = ({ position, number }) => {
     const map = useMap();
 
     useEffect(() => {
       const icon = L.divIcon({
         className: styles.numberedMarker,
-        html: `<div class='marker-number'>${number}</div>`
+        html: `<div class='marker-number'>${number}</div>`,
       });
       const marker = L.marker(position, { icon }).addTo(map);
 
@@ -193,10 +215,11 @@ function MapView({ location }) {
         {routeDetails && (
           <>
             <h3>Route Details</h3>
-            <p><strong>Route Notes:</strong> {routeDetails.notes}</p>
+            <h3><strong>Route Notes:</strong> {routeDetails.notes}</h3>
             <table className={styles.table}>
               <thead>
                 <tr>
+                  <th>Select</th>
                   <th>Stop Order</th>
                   <th>Address</th>
                   <th>Status</th>
@@ -207,6 +230,13 @@ function MapView({ location }) {
                   .filter((stop) => stop.stopOrder > 0)
                   .map((stop) => (
                     <tr key={stop.id}>
+                      <td>
+                        <input
+                          type="checkbox"
+                          checked={selectedStops.includes(stop.stopOrder)}
+                          onChange={() => handleSelectStop(stop.stopOrder)}
+                        />
+                      </td>
                       <td>{stop.stopOrder}</td>
                       <td>{stop.address}</td>
                       <td>{stop.routeStopStatus === 0 ? "Pending" : "Completed"}</td>
@@ -216,37 +246,68 @@ function MapView({ location }) {
             </table>
           </>
         )}
-        <button className={styles.routeButton} onClick={handleUpdateStatus}>
-          Update Stop Order Status
-        </button>
+        <div className={styles.buttonGroup}>
+          <button className={styles.routeButton} onClick={handleUpdateStatus}>
+            Update Stop Order Status
+          </button>
+          <button
+            className={styles.deleteButton}
+            onClick={() => setShowCancelPopup(true)}
+          >
+            Delete
+          </button>
+        </div>
       </div>
 
-      <div className={styles.map}>
-        <MapContainer
-          center={[mapLocation.latitude, mapLocation.longitude]}
-          zoom={15}
-          style={{ height: "80vh", width: "100%" }}
-        >
-          <TileLayer
-            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+      {showCancelPopup && (
+        <div className={styles.cancelPopup}>
+          <h3>Confirm Deletion</h3>
+          <label>Reason for cancellation:</label>
+          <textarea
+            value={cancelReason}
+            onChange={(e) => setCancelReason(e.target.value)}
+            placeholder="Enter reason"
           />
+          <label>Upload image:</label>
+          <input
+            type="file"
+            accept="image/*"
+            onChange={(e) => setImage(e.target.files[0])}
+          />
+          <div className={styles.popupActions}>
+            <button onClick={handleDelete}>Confirm Delete</button>
+            <button onClick={() => setShowCancelPopup(false)}>Cancel</button>
+          </div>
+        </div>
+      )}
 
-          <Marker position={[mapLocation.latitude, mapLocation.longitude]}>
-            <Popup>Driver Location</Popup>
+      <MapContainer
+        center={[mapLocation.latitude, mapLocation.longitude]}
+        zoom={13}
+        style={{ height: "900px", width: "50%" }}
+      >
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+        />
+        <NumberedMarker
+          position={[mapLocation.latitude, mapLocation.longitude]}
+          number={1}
+        />
+        {stopCoordinates.map((stop, index) => (
+          <Marker
+            key={index}
+            position={[stop.latitude, stop.longitude]}
+            icon={L.divIcon({
+              className: styles.numberedMarker,
+              html: `<div class='marker-number'>${stop.stopOrder}</div>`,
+            })}
+          >
+            <Popup>
+              <div>{stop.address}</div>
+            </Popup>
           </Marker>
-
-          {stopCoordinates
-            .filter((stop) => stop.stopOrder > 0 && stop.latitude && stop.longitude)
-            .map((stop) => (
-              <NumberedMarker
-                key={stop.id}
-                position={[stop.latitude, stop.longitude]}
-                number={stop.stopOrder}
-              />
-            ))}
-        </MapContainer>
-      </div>
+        ))}
+      </MapContainer>
     </div>
   );
 }

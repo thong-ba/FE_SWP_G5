@@ -51,7 +51,7 @@ const Header = ({ isLoggedIn, handleLogout }) => {
             )}
           </li>
           <li className={styles.navItem}><Link to="/trackorder" className={styles.navLink}>Track Order</Link></li>
-          <li className={styles.navItem}><Link to="/transport" className={styles.navLink}>Transport Fee</Link></li>
+          {/* <li className={styles.navItem}><Link to="/transport" className={styles.navLink}>Transport Fee</Link></li> */}
           <li className={styles.navItem}><Link to="/abouts" className={styles.navLink}>About Koi Fish</Link></li>
           <li className={styles.navItem}><Link to="/support" className={styles.navLink}>Support</Link></li>
 

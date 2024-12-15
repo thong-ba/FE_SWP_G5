@@ -1,0 +1,136 @@
+/* Container for the whole personal info page */
+.personalInfoContainer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #f4f7fa;
+    padding: 40px;
+    border-radius: 10px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    width: 80%;
+    max-width: 800px;
+    margin: 40px auto;
+  }
+  
+  /* Avatar styling */
+  .avatarContainer {
+    margin-bottom: 20px;
+  }
+  
+  .avatarImage {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    border: 3px solid #4CAF50;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .avatarImage:hover {
+    transform: scale(1.05);
+  }
+  
+  /* Styling for text information */
+  .personalInfoText {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin: 10px 0;
+    text-align: center;
+  }
+  
+  /* Button for logging out */
+  .logoutButton {
+    padding: 12px 25px;
+    background-color: #ff4d4d;
+    color: white;
+    font-size: 16px;
+    font-weight: 600;
+    border: none;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease, transform 0.3s ease;
+    margin-top: 20px;
+  }
+  
+  .logoutButton:hover {
+    background-color: #ff2a2a;
+    transform: scale(1.05);
+  }
+  
+  /* Popup for logout confirmation */
+  .logoutPopup {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: rgba(0, 0, 0, 0.6);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 999;
+  }
+  
+  /* Popup content */
+  .logoutPopupContent {
+    background-color: white;
+    padding: 30px;
+    border-radius: 12px;
+    text-align: center;
+    width: 300px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+  }
+  
+  .logoutPopupText {
+    font-size: 18px;
+    color: #333;
+    margin-bottom: 20px;
+    font-weight: 500;
+  }
+  
+  .confirmButton,
+  .cancelButton {
+    padding: 12px 25px;
+    border: none;
+    font-size: 16px;
+    font-weight: 600;
+    border-radius: 30px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    margin: 0 10px;
+  }
+  
+  .confirmButton {
+    background-color: #4CAF50;
+    color: white;
+  }
+  
+  .cancelButton {
+    background-color: #f44336;
+    color: white;
+  }
+  
+  .confirmButton:hover {
+    background-color: #45a049;
+  }
+  
+  .cancelButton:hover {
+    background-color: #e53935;
+  }
+  
+  /* Smooth transition for hover effects */
+  button:focus,
+  button:hover {
+    outline: none;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  }
+  
+  h1 {
+    font-size: 24px;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+  

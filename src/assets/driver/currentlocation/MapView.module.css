@@ -1,68 +1,141 @@
-/* File: MapView.module.css */
+/* MapView.module.css */
 .container {
   display: flex;
-  height: 100vh;
+  justify-content: space-between;
+  gap: 20px;
+  padding: 20px;
 }
 
 .infoTable {
-  flex: 1;
+  flex: 1; /* Chiếm 1 phần của không gian */
   padding: 20px;
-  background-color: #f8f9fa;
-  border-right: 1px solid #ddd;
-  overflow-y: auto;
+  background-color: #f9f9f9;
+  border: 1px solid #ddd;
+  border-radius: 8px;
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
-  margin-bottom: 20px;
+  margin-top: 10px;
 }
 
 .table th,
 .table td {
-  border: 1px solid #ddd;
   padding: 10px;
+  border: 1px solid #ddd;
   text-align: left;
 }
 
 .table th {
-  background-color: #007bff;
+  background-color: #f4f4f4;
+}
+
+.buttonGroup {
+  margin-top: 20px;
+  display: flex;
+  gap: 10px;
+}
+
+.routeButton,
+.deleteButton {
+  padding: 10px 20px;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.routeButton {
+  background-color: #4CAF50;
   color: white;
 }
 
-.table tr:nth-child(even) {
-  background-color: #f2f2f2;
+.deleteButton {
+  background-color: #f44336;
+  color: white;
 }
 
-.table tr:hover {
-  background-color: #ddd;
+.cancelPopup {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: white;
+  border: 2px solid #ccc;
+  padding: 20px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  width: 300px;
+  z-index: 1000;
+}
+
+.cancelPopup h3 {
+  margin-top: 0;
+}
+
+.cancelPopup label {
+  font-size: 14px;
+}
+
+.cancelPopup textarea {
+  width: 100%;
+  padding: 8px;
+  margin-bottom: 10px;
+  font-size: 14px;
+  border: 1px solid #ccc;
+  resize: vertical;
+}
+
+.cancelPopup input[type="file"] {
+  margin-bottom: 10px;
+}
+
+.popupActions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.popupActions button {
+  padding: 8px 15px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.popupActions button:nth-child(1) {
+  background-color: #4CAF50;
+  color: white;
+}
+
+.popupActions button:nth-child(2) {
+  background-color: #f44336;
+  color: white;
+}
+
+.numberedMarker {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 16px;
+  color: white;
+  background-color: #3388ff;
+  border-radius: 50%;
+  width: 30px;
+  height: 30px;
+}
+
+.marker-number {
+  font-size: 14px;
+  font-weight: bold;
+  line-height: 30px;
+}
+
+input[type="checkbox"] {
+  transform: scale(1.5);
+  margin-right: 10px;
 }
 
 .map {
-  flex: 1;
-  height: 100%;
-}
-
-.route-note-csl
-{
-  font-size: 20px;
-}
-
-
-.numberedMarker {
-  width: 150px; /* Tăng kích thước của marker */
-  height: 150px;
-  background-color: #e43010; /* Màu nền của marker */
-  color: white; /* Màu chữ */
-  font-size: 20px; /* Kích thước chữ */
-  font-weight: bold; /* Định dạng chữ đậm */
-  border-radius: 50%; /* Làm tròn marker */
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border: 3px solid #e43010; /* Viền marker */
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2); /* Đổ bóng để nổi bật */
-}
-.marker-number {
-  margin: 0;
+  flex: 1; /* Chiếm phần còn lại của không gian */
+  height: 80vh; /* Chiều cao bản đồ */
+  position: relative;
 }

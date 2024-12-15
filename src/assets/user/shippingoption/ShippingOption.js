@@ -125,7 +125,7 @@ const ShippingOption = () => {
             </td>  
             <td>{route.id}</td>  
             <td>{route.name}</td>  
-            <td>{route.transportType === 0 ? 'Local' : 'International'}</td>  
+            <td>{route.transportType === 2 ? 'International' : 'Local'}</td>  
             <td>{route.description}</td>  
             <td>{route.pricePerKm ? route.pricePerKm + ' VND' : '-'}</td>   
             <td>{route.pricePerKg ? route.pricePerKg + ' VND' : '-'}</td>  
