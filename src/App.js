@@ -152,10 +152,9 @@ function App() {
         navigate('/manager');
       } else if (decoded.Role === 'SalesStaff') {
         navigate('/staff');
-      } else if (decoded.Role === 'DeliveringStaff') {
-        navigate('/driver');
-      }
-
+       } //else if (decoded.Role === 'DeliveringStaff') {
+      //   navigate('/driver');
+      // }
       else {
         navigate('/home');
       }
