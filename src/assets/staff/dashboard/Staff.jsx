@@ -65,7 +65,7 @@ function Staff() {
           <li>
             <button
               onClick={() => setActiveTab("pendingPickUpOrders")}
-              className={activeTab === "processingOrders" ? "active" : ""}
+              className={activeTab === "pendingPickUpOrders" ? "active" : ""}
             >
               Pending Pick Up Orders
             </button>

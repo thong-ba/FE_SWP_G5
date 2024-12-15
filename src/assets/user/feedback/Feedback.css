@@ -1,0 +1,29 @@
+.feedback-container {
+  padding: 20px;
+  background-color: #f9f9f9;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.feedback-button {
+  margin-bottom: 20px;
+}
+
+.feedback-modal-title {
+  font-size: 24px;
+  font-weight: bold;
+}
+
+.feedback-form-item {
+  margin-bottom: 16px;
+}
+
+.feedback-message {
+  margin-top: 20px;
+  font-size: 16px;
+  color: #4caf50; /* Green for success messages */
+}
+
+.feedback-error {
+  color: #f44336; /* Red for error messages */
+}

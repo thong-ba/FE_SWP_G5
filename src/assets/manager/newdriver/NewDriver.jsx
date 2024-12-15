@@ -151,7 +151,7 @@ function Register() {
     <>
       <ToastContainer />
       <div className="register-container">
-        <h2 className='title'>Register Driver</h2>
+        <h2 className='title'>Register Delivering Staff</h2>
         <form onSubmit={handleSubmit}>
           <input
             type="text"

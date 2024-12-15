@@ -1,10 +1,13 @@
 import { useEffect, useState } from "react";
 import { getCancelOrder } from "../getOrder/getOrder";
+import { Modal, Pagination } from 'antd';
 
 function CancelOrderTab() {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1);
+  const pageSize = 5;
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -28,6 +31,12 @@ function CancelOrderTab() {
     fetchOrders();
   }, []);
 
+  const handlePageChange = (page) => {
+    setCurrentPage(page);
+  };
+
+  const paginatedOrders = orders.slice((currentPage - 1) * pageSize, currentPage * pageSize);
+
   if (loading) return <div>Loading pending orders...</div>;
   if (error) return <div>Error: {error}</div>;
 
@@ -48,7 +57,7 @@ function CancelOrderTab() {
           </tr>
         </thead>
         <tbody>
-          {orders.map((order, index) => (
+          {paginatedOrders.map((order, index) => (
             <tr key={order.id}>
               <td>{index + 1}</td>
               <td>{order.fromAddress}</td>
@@ -62,6 +71,12 @@ function CancelOrderTab() {
           ))}
         </tbody>
       </table>
+      <Pagination
+        current={currentPage}
+        pageSize={pageSize}
+        total={orders.length}
+        onChange={handlePageChange}
+      />
     </div>
   )
 }
