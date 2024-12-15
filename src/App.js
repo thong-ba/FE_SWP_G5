@@ -12,7 +12,8 @@ import Payment from './assets/user/payment/Payment';
 import Service from './assets/user/services/Service';
 import UserInfo from './assets/user/userinfo/UserInfo';
 import TrackOrder from './assets/user/trackorder/TrackOrder';
-import UpdateProfile  from './assets/user/updateprofile/UpdateProfile';
+import UpdateProfile from './assets/user/updateprofile/UpdateProfile';
+import FishEstimate from './assets/user/fishestimate/FishEstimate';
 
 import VerifyAccount from './assets/user/verify/VerifyAccount';
 
@@ -272,7 +273,7 @@ function App() {
           </LayoutUtils>
         }
       />
-            <Route
+      <Route
         path="/transport"
         element={
           <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
@@ -280,7 +281,15 @@ function App() {
           </LayoutUtils>
         }
       />
-{/* 
+      <Route
+        path="/fishestimate"
+        element={
+          <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+            <FishEstimate />
+          </LayoutUtils>
+        }
+      />
+      {/* 
       <Route
         path="/transport"
         element={
@@ -312,7 +321,7 @@ function App() {
       />
 
       {/* Redirect nếu không phù hợp */}
-     {/* <Route
+      {/* <Route
         path="/driver"
         element={
           userRole === 'DeliveringStaff' ? (
@@ -349,7 +358,7 @@ function App() {
       <Route path="/service" element={<LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}><Service /></LayoutUtils>} /> */}
 
       {/* <Route path="/staff" element={<Staff />} /> */}
-      
+
       <Route
         path="/staff"
         element={
