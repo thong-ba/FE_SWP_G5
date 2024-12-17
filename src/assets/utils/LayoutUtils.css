@@ -4,6 +4,7 @@ html, body {
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
+  box-sizing: border-box; /* Đảm bảo margin và padding không ảnh hưởng đến kích thước */
 }
 
 /* Bố cục tổng cho toàn trang */
@@ -11,21 +12,25 @@ html, body {
   display: flex;
   flex-direction: column;
   min-height: 100vh;
+  width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng */
 }
 
 /* Nội dung giữa header và footer */
 .content {
   flex: 1;
-  padding: 20px;
+  padding: 2vw; /* Padding theo viewport width */
   background-color: #f9f9f9; /* Nền sáng nhẹ */
+  width: 100%; /* Đảm bảo chiếm toàn bộ chiều rộng */
+  box-sizing: border-box;
 }
 
 /* Styling cho header */
 .header {
   background-color: rgb(146, 68, 146);
   color: white;
-  padding: 20px;
+  padding: 2vw; /* Tùy chỉnh theo viewport */
   text-align: center;
+  font-size: 1.5rem; /* Dùng rem để font dễ dàng thay đổi */
 }
 
 /* Styling cho footer */
@@ -33,7 +38,8 @@ html, body {
   background-color: rgb(146, 68, 146);
   color: white;
   text-align: center;
-  padding: 20px;
+  padding: 2vw; /* Tùy chỉnh theo viewport */
+  font-size: 1rem; /* Dùng rem để font dễ dàng thay đổi */
 }
 
 /* Liên kết trong footer */
@@ -45,4 +51,38 @@ html, body {
 
 .footer a:hover {
   color: #ffa500;
+}
+
+/* Media Queries cho kích thước màn hình nhỏ */
+@media (max-width: 1200px) {
+  .header, .footer {
+    font-size: 1.2rem; /* Giảm font cho màn hình nhỏ */
+    padding: 1.5vw; /* Giảm padding */
+  }
+  
+  .content {
+    padding: 2vw; /* Giảm padding cho màn hình nhỏ */
+  }
+}
+
+@media (max-width: 768px) {
+  .header, .footer {
+    font-size: 1rem; /* Giảm font cho màn hình nhỏ hơn */
+    padding: 1vw; /* Giảm padding */
+  }
+
+  .content {
+    padding: 1.5vw; /* Giảm padding */
+  }
+}
+
+@media (max-width: 480px) {
+  .header, .footer {
+    font-size: 0.9rem; /* Giảm font cho màn hình rất nhỏ */
+    padding: 1vw; /* Giảm padding */
+  }
+
+  .content {
+    padding: 1vw; /* Giảm padding */
+  }
 }

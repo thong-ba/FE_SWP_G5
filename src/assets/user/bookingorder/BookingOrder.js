@@ -553,7 +553,7 @@ const BookingOrder = () => {
             navigate(`/payment?orderId=${orderId}`);
         } catch (error) {
             console.error("Error:", error.response?.data || error.message);
-            alert("Lỗi khi gửi dữ liệu! Vui lòng thử lại.");
+            alert("Error when sending data. Please try again");
         }
 
     };
@@ -607,7 +607,7 @@ const BookingOrder = () => {
                         <h2>Shipping Information</h2>
                         <div className={styles.shippingInfo}>
                             <p><strong>Shipping Type:</strong> {shippingType}</p>
-                            <p><strong>Transport ID:</strong> {routeId || 'Không có dữ liệu'}</p>
+                            <p><strong>Transport ID:</strong> {routeId || 'There is no data'}</p>
                         </div>
                         {distance !== null  /*&& shippingCost !== null */ && (
                             <div className={styles.shippingInfo}>
@@ -621,32 +621,32 @@ const BookingOrder = () => {
                 {/* Step 2: Add Products */}
                 {step === 2 && (
                     <div className={styles.step}>
-                        <h2>Thêm Thông Tin Cá</h2>
+                        <h2>Adding Fish Section</h2>
                         <form onSubmit={handleSubmit}>
                             <input
                                 type="text"
                                 name="name"
-                                placeholder="Tên cá"
+                                placeholder="Fish Name"
                                 value={name}
                                 onChange={(e) => setName(e.target.value)} />
                             <input
                                 type="number"
                                 name="age"
-                                placeholder="Tuổi cá"
+                                placeholder="Age"
                                 value={age}
                                 onChange={(e) => setAge(e.target.value)}
                             />
                             <input
                                 type="number"
                                 name="weight"
-                                placeholder="Cân nặng cá"
+                                placeholder="Weight"
                                 value={weight}
                                 onChange={(e) => setWeight(e.target.value)}
                             />
                             <input
                                 type="number"
                                 name="length"
-                                placeholder="Cân nặng cá"
+                                placeholder="Length"
                                 value={length}
                                 onChange={(e) => setLength(e.target.value)}
                             />
@@ -663,7 +663,7 @@ const BookingOrder = () => {
                             <button type="submit">Submit</button>
                         </form>
 
-                        <button onClick={handleAddFish}>Thêm Cá</button>
+                        <button onClick={handleAddFish}>Add Fish</button>
 
                         {/* Hiển thị danh sách sản phẩm đã chọn */}
                         <div>
@@ -677,7 +677,7 @@ const BookingOrder = () => {
                                             onChange={() => handleCheckboxChange(index)}
                                         />
                                         <span>
-                                            {fish.name} - {fish.age} tuổi - {fish.weight}kg - {fish.length}cm
+                                            {fish.name} - {fish.age} Age - {fish.weight}kg - {fish.length}cm
                                         </span>
                                         {fish.file && (
                                             <div>
@@ -699,7 +699,7 @@ const BookingOrder = () => {
                                 className={styles.deleteSelectedButton}
                                 disabled={selectedIndexes.length === 0}
                             >
-                                Thêm chứng nhận cho mục đã chọn
+                                Adding Certificate For Fish
                             </button>
                         </div>
                     </div>
@@ -712,16 +712,16 @@ const BookingOrder = () => {
                 {/* Step 3: Add Fish Qualification */}
                 {step === 3 && (
                     <div className={styles.step}>
-                        <h2>Thêm Thông Tin Chứng Nhận Cá</h2>
+                        <h2>Adding Fish Certificate</h2>
                         {/* Fish Qualification Name */}
                         <div className={styles.inputGroup}>
-                            <label htmlFor="qualificationName">Tên Chứng Nhận</label>
+                            <label htmlFor="qualificationName">Certificate's Name:</label>
                             <form onSubmit={handleSubmit}>
                                 {/* Name input */}
                                 <input
                                     type="text"  // Use type "text" instead of "string"
                                     name="Name"
-                                    placeholder="Tên chứng chỉ"
+                                    placeholder="Enter Certificate Name"
                                     value={qname}
                                     onChange={(e) => setQName(e.target.value)}
                                 />

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
+import { jwtDecode } from 'jwt-decode';
 import { useNavigate } from 'react-router-dom';
 import './UserInfo.css';
 
@@ -12,21 +12,29 @@ function UserInfo() {
     phoneNumber: '',
     imgUrl: ''
   });
-  const [loading, setLoading] = useState(true);  // State to track loading
-  const [error, setError] = useState(null); // State to track error
+  const [orders, setOrders] = useState([]); // State để lưu danh sách đơn hàng
+  const [loading, setLoading] = useState(true);
+  const [routeDetails, setRouteDetails] = useState({});
+  const [driverDetails, setDriverDetails] = useState({});
+  const [driverProfiles, setDriverProfiles] = useState({}); // Lưu thông tin userProfile của từng driver
+  const [error, setError] = useState(null);
+  const [currentPage, setCurrentPage] = useState(1); // Trang hiện tại
+  const itemsPerPage = 7; // Số lượng phần tử mỗi trang
 
-  const navigate = useNavigate(); // Khởi tạo useNavigate
+  const navigate = useNavigate();
+
+
 
   useEffect(() => {
-    const token = sessionStorage.getItem('token'); // Lấy token từ sessionStorage
+    const token = sessionStorage.getItem('token');
 
     if (token) {
       try {
-        const decodedToken = jwtDecode(token); // Giải mã token
-        const role = decodedToken.Role; // Đọc vai trò
-        const fullname = decodedToken.FullName; // Đọc fullname
+        const decodedToken = jwtDecode(token);
+        const role = decodedToken.Role;
+        const fullname = decodedToken.FullName;
 
-        // Lấy thông tin người dùng từ API
+        // Lấy thông tin người dùng
         axios.get('https://localhost:7046/api/UserAccount/GetUserProfile', {
           headers: {
             Authorization: `Bearer ${token}`
@@ -41,32 +49,119 @@ function UserInfo() {
               phoneNumber,
               imgUrl
             });
-            setLoading(false);  // Set loading to false once data is loaded
+            setLoading(false);
           })
           .catch((error) => {
             setError('Error fetching user data');
-            setLoading(false);  // Set loading to false even if there's an error
-            console.error('Error fetching user data:', error);
+            setLoading(false);
           });
 
+        // Lấy danh sách đơn hàng
+        axios.get('https://localhost:7046/api/Order/Customer', {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        })
+          .then((response) => {
+            const data = response.data.result.map(order => {
+              const { id, fromAddress, toAddress, transportService, paymentMethod, distance, orderStatus } = order;
+              const totalPrice = (distance * transportService.pricePerKm) +
+                (order.orderFishes.reduce((sum, fish) => sum + fish.weight, 0) * transportService.pricePerKg) +
+                transportService.transportPrice;
+
+              const statusText = ['Processing', 'Pickup', 'Delivering', 'Completed'][orderStatus];
+
+              return {
+                id,
+                fromAddress,
+                toAddress,
+                transportServiceId: transportService.id,
+                transportServiceName: transportService.name,
+                paymentMethod: paymentMethod === 1 ? 'Cash' : 'Online',
+                totalPrice,
+                orderStatus: statusText
+              };
+            });
+
+            setOrders(data);
+
+            // Fetch routeId for each order
+            data.forEach(order => {
+              axios.get(`https://localhost:7046/api/RouteStop?orderId=${order.id}`)
+                .then(response => {
+                  const routeId = response.data.result.find(stop => stop.orderId === order.id)?.routeId;
+                  setRouteDetails(prevDetails => ({
+                    ...prevDetails,
+                    [order.id]: routeId
+                  }));
+
+                  if (routeId) {
+                    // Fetch driverId for the route
+                    axios.get(`https://localhost:7046/api/Route/${routeId}`)
+                      .then(response => {
+                        const driverId = response.data.result.driverId;
+                        setDriverDetails(prevDetails => ({
+                          ...prevDetails,
+                          [order.id]: driverId
+                        }));
+                      })
+                      .catch(error => {
+                        console.error("Error fetching driver details:", error);
+                      });
+                  }
+                })
+                .catch(error => {
+                  console.error("Error fetching route details:", error);
+                });
+            });
+
+            // Fetch userProfile for each driver
+            Object.keys(driverDetails).forEach(driverId => {
+              axios.get(`https://localhost:7046/api/Driver/GetDriverBy/${driverId}`)
+                .then(response => {
+                  const userProfile = response.data.result.userProfile; // Lấy thông tin userProfile
+                  setDriverProfiles(prevProfiles => ({
+                    ...prevProfiles,
+                    [driverId]: userProfile
+                  }));
+                })
+                .catch(error => {
+                  console.error("Error fetching driver profile:", error);
+                });
+            });
+          })
+          .catch((error) => {
+            setError('Error fetching order data');
+          });
       } catch (error) {
         setError('Error decoding token');
-        setLoading(false);
-        console.error('Error decoding token:', error);
       }
     }
-  }, []); // Chạy khi component mount
+  }, [driverDetails]); // Re-fetch userProfile when driverDetails changes
+
+
+
 
   const handleEditProfile = () => {
-    navigate('/updateprofile'); // Điều hướng tới trang updateprofile
+    navigate('/updateprofile');
   };
 
+  const handlePageChange = (pageNumber) => {
+    setCurrentPage(pageNumber);
+  };
+
+  const totalPages = Math.ceil(orders.length / itemsPerPage);
+  const currentOrders = orders.slice(
+    (currentPage - 1) * itemsPerPage,
+    currentPage * itemsPerPage
+  );
+
   if (loading) {
-    return <div>Loading...</div>;  // Show loading while fetching data
+    return <div>Loading...</div>;
   }
 
   if (error) {
-    return <div>{error}</div>;  // Show error message if there's an issue
+    return <div>{error}</div>;
   }
 
   return (
@@ -76,11 +171,11 @@ function UserInfo() {
       </div>
       <div className="user-info-body">
         <div className="user-info-avatar">
-        <img
-          src={`${process.env.PUBLIC_URL}/person.png`}
-          alt="User Avatar"
-          className="user-info-avatar-img"
-        />
+          <img
+            src={`${process.env.PUBLIC_URL}/person.png`}
+            alt="User Avatar"
+            className="user-info-avatar-img"
+          />
         </div>
         <div className="user-info-details">
           <p><strong>Email:</strong> {userDetails.email}</p>
@@ -90,6 +185,63 @@ function UserInfo() {
       </div>
       <div className="user-info-footer">
         <button className="edit-profile-button" onClick={handleEditProfile}>Edit Profile</button>
+      </div>
+
+      {/* Hiển thị danh sách đơn hàng */}
+      <div className="order-list">
+        <h2>Your Orders</h2>
+        <table className="order-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>From Address</th>
+              <th>To Address</th>
+              <th>Transport Service</th>
+              <th>Payment Method</th>
+              <th>Total Price</th>
+              <th>Status</th>
+              <th>Route ID</th>
+              <th>Driver ID</th>
+              <th>User Profile</th> {/* New column for User Profile */}
+            </tr>
+          </thead>
+          <tbody>
+            {currentOrders.map(order => (
+              <tr key={order.id}>
+                <td>{order.id}</td>
+                <td>{order.fromAddress}</td>
+                <td>{order.toAddress}</td>
+                <td>{`${order.transportServiceId} - ${order.transportServiceName}`}</td>
+                <td>{order.paymentMethod}</td>
+                <td>{order.totalPrice.toLocaleString()} VND</td>
+                <td>{order.orderStatus}</td>
+                <td>{routeDetails[order.id] || 'N/A'}</td>
+                <td>{driverDetails[order.id] || 'N/A'}</td>
+                <td>{driverProfiles[driverDetails[order.id]] || 'N/A'}</td> {/* Display User Profile */}
+              </tr>
+            ))}
+          </tbody>
+        </table>
+
+
+        {/* Pagination */}
+        <div className="pagination">
+          <button
+            className="page-button"
+            disabled={currentPage === 1}
+            onClick={() => handlePageChange(currentPage - 1)}
+          >
+            Previous
+          </button>
+          <span className="page-info">Page {currentPage} of {totalPages}</span>
+          <button
+            className="page-button"
+            disabled={currentPage === totalPages}
+            onClick={() => handlePageChange(currentPage + 1)}
+          >
+            Next
+          </button>
+        </div>
       </div>
     </div>
   );
