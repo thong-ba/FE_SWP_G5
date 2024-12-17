@@ -25,6 +25,8 @@ import PaymentSuccess from './assets/user/payment/paymentStatus/paymentSuccess';
 import PaymentFail from './assets/user/payment/paymentStatus/paymentFail';
 
 import TransportPage from './assets/user/transportservice/TransportService';
+import SelectDeliveryOption from './assets/user/bookingupdate/SelectDeliveryOption';
+import DeliveryInputPage from './assets/user/bookingupdate/DeliveryInputPage';
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -212,15 +214,29 @@ function App() {
         }
       />
       <Route
+        path="/selectdeliveryoption"
+        element={
+          <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+            <SelectDeliveryOption />
+          </LayoutUtils>
+        }
+      />
+      <Route
+        path="/deliveryinputpage"
+        element={
+          <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+            <DeliveryInputPage />
+          </LayoutUtils>
+        }
+      />
+      <Route
         path="/bookingorder"
         element={
-          isLoggedIn ? (
+        
             <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
               <BookingOrder />
             </LayoutUtils>
-          ) : (
-            <Navigate to="/login" />
-          )
+      
         }
       />
       <Route
