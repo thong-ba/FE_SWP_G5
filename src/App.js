@@ -27,7 +27,7 @@ import PaymentFail from './assets/user/payment/paymentStatus/paymentFail';
 import TransportPage from './assets/user/transportservice/TransportService';
 import SelectDeliveryOption from './assets/user/bookingupdate/SelectDeliveryOption';
 import DeliveryInputPage from './assets/user/bookingupdate/DeliveryInputPage';
-
+import DisplayBox from './assets/user/box/DisplayBox';
 function App() {
   const [isLoggedIn, setIsLoggedIn] = useState(false);
   const [userRole, setUserRole] = useState(null); // Lưu vai trò người dùng
@@ -219,6 +219,14 @@ function App() {
           <LayoutUtils isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
             <SelectDeliveryOption />
           </LayoutUtils>
+        }
+      />
+      <Route
+        path="/boxservices"
+        element={
+          
+            <DisplayBox />
+      
         }
       />
       <Route

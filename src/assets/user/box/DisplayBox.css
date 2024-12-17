@@ -1,0 +1,101 @@
+/* Container */
+.carousel-container {
+    width: 100%;
+    padding: 20px;
+    box-sizing: border-box;
+    background-color: #f9f9f9;
+    font-family: Arial, sans-serif;
+    position: relative;
+    overflow: hidden; /* Ẩn các phần thừa ngoài vùng chứa */
+}
+
+/* Title */
+.carousel-title {
+    text-align: center;
+    margin-bottom: 20px;
+    color: #333;
+    font-size: 32px;
+    font-weight: bold;
+}
+
+/* Slider Wrapper */
+.carousel-slider {
+    display: flex;
+    overflow-x: scroll; /* Cuộn ngang */
+    scroll-snap-type: x mandatory;
+    gap: 30px;
+    padding: 30px 20px 30px;
+    -webkit-overflow-scrolling: touch;
+    transition: transform 0.3s ease-in-out;
+    width: calc(100% - 80px); /* Giảm bớt diện tích để tránh che khuất bởi nút điều hướng */
+}
+
+/* Individual Items */
+.carousel-item {
+    flex: 0 0 auto;
+    width: 350px;
+    height: 60vh;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    scroll-snap-align: start;
+    text-align: center;
+    padding: 15px;
+    transition: transform 0.3s ease-in-out;
+}
+
+.carousel-item:hover {
+    transform: scale(1.1);
+}
+
+/* Box Image */
+.box-image {
+    width: 250px;
+    height: 250px;
+    object-fit: contain;
+    margin: 50px auto 15px;
+
+}
+
+/* Box Information */
+.box-info {
+    margin-top: 15px;
+}
+
+.box-name {
+    font-size: 22px;
+    color: #0073e6;
+    font-weight: bold;
+    margin-bottom: 12px;
+}
+
+.box-price {
+    font-size: 16px;
+    color: #444;
+    font-weight: 500;
+}
+
+/* Navigation Buttons */
+.carousel-nav-button {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: rgba(0, 0, 0, 0.5);
+    color: white;
+    padding: 15px;
+    font-size: 24px;
+    border: none;
+    cursor: pointer;
+    border-radius: 50%;
+    z-index: 10;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.carousel-nav-button.prev {
+    left: 20px;
+}
+
+.carousel-nav-button.next {
+    right: 20px;
+}
