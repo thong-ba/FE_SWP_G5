@@ -128,9 +128,9 @@ const KoiShippingEstimator = () => {
                 Number of boxes you need
               </Title>
               <Text className="box-info">
-                {estimate.boxes.large} large boxes, {estimate.boxes.medium}{' '}
-                medium boxes, {estimate.boxes.extraLarge} extra large boxes and{' '}
-                {estimate.boxes.specialLarge} special large boxes
+                <strong>{estimate.boxes.large}</strong> large boxes, <strong>{estimate.boxes.medium}</strong>{' '}
+                medium boxes, <strong>{estimate.boxes.extraLarge}</strong> extra large boxes and{' '}
+                <strong>{estimate.boxes.specialLarge}</strong> special large boxes
               </Text>
             </Card>
 
