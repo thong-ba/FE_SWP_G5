@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Table, InputNumber, Button, Card, Row, Col, Typography } from 'antd';
 import './FishEstimate.css';
-
+import axios from 'axios';
 const { Title, Text, Link } = Typography;
 
 const KoiShippingEstimator = () => {
@@ -10,7 +10,7 @@ const KoiShippingEstimator = () => {
   const [estimate, setEstimate] = useState({ boxes: {}, cost: 0 });
 
   const koiSizes = [
-    { key: 1, sizeCM: '-19', sizeInch: '7.86' },
+    { key: 1, sizeCM: '19', sizeInch: '7.86' },
     { key: 2, sizeCM: '20-25', sizeInch: '7.87 - 9.84' },
     { key: 3, sizeCM: '25.1 - 30', sizeInch: '9.85 - 11.81' },
     { key: 4, sizeCM: '30.1 - 40', sizeInch: '11.82 - 15.75' },
@@ -36,7 +36,7 @@ const KoiShippingEstimator = () => {
       className: 'table-header',
     },
     {
-      title: '# of KOI',
+      title: 'Number of KOIs',
       dataIndex: 'key',
       key: 'input',
       render: (key) => (
@@ -54,13 +54,40 @@ const KoiShippingEstimator = () => {
 
   const calculateEstimate = () => {
     const totalKoi = Object.values(koiCounts).reduce((a, b) => a + b, 0);
+
+    // Initialize boxes count based on size categories
     const boxes = {
       large: 0,
-      medium: 1,
+      medium: 0,
       extraLarge: 0,
       specialLarge: 0,
     };
-    const cost = 160.0;
+
+    // Define the maximum number of KOI that can fit in each box size
+    const boxCapacity = {
+      large: 5, // Example: 5 KOI for large boxes
+      medium: 3, // Example: 3 KOI for medium boxes
+      extraLarge: 7, // Example: 7 KOI for extra large boxes
+      specialLarge: 4, // Example: 4 KOI for special large boxes
+    };
+
+    // Calculate the number of boxes needed based on total KOI
+    if (totalKoi > 0) {
+      let remainingKoi = totalKoi; // Use a new mutable variable
+
+      boxes.large = Math.floor(remainingKoi / boxCapacity.large);
+      remainingKoi %= boxCapacity.large;
+
+      boxes.medium = Math.floor(remainingKoi / boxCapacity.medium);
+      remainingKoi %= boxCapacity.medium;
+
+      boxes.extraLarge = Math.floor(remainingKoi / boxCapacity.extraLarge);
+      remainingKoi %= boxCapacity.extraLarge;
+
+      boxes.specialLarge = Math.ceil(remainingKoi / boxCapacity.specialLarge);
+    }
+
+    const cost = (boxes.large * 20000) + (boxes.medium * 15000) + (boxes.extraLarge * 25000) + (boxes.specialLarge * 30000); // Example cost calculation
 
     setEstimate({ boxes, cost });
     setShowCard(true);
@@ -116,14 +143,14 @@ const KoiShippingEstimator = () => {
                 style={{ width: '100px', height: 'auto' }}
               />
               <Title level={5} className="cost-title">
-                Total shipping cost
+                Shipping cost
               </Title>
               <Text strong className="cost-amount">
-                ${estimate.cost.toFixed(2)}
+                {estimate.cost} VND
               </Text>
             </Card>
 
-            {/* Card for Suggestions */}
+            {/* Card for Suggestions
             <Card className="suggestions-card" bordered={false} style={{ marginTop: '10px' }}>
               <Text className="suggestion-text">
                 You can purchase this many more koi, of each size, to fit in
@@ -148,7 +175,7 @@ const KoiShippingEstimator = () => {
                 <Link href="#" className="search-link">search for koi</Link> of that size to add to
                 the box.
               </Text>
-            </Card>
+            </Card> */}
           </Col>
         )}
       </Row>
