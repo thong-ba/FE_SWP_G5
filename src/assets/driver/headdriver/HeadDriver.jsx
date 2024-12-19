@@ -2,7 +2,7 @@ import { useState } from "react"
 import { Link } from "react-router-dom";
 import "./HeadDriver.css";
 
-const HeadDriver = ({ handleLogout}) => {
+const HeadDriver = ({ handleLogout }) => {
 
     return (
         <header className="header">
@@ -15,6 +15,11 @@ const HeadDriver = ({ handleLogout}) => {
                     <li className="nav-item">
                         <Link to="/driverInfo">
                             <img className="user-avatar profile-icon" src="shipment.png" alt="Profile" />
+                        </Link>
+                    </li>
+                    <li className="nav-item">
+                        <Link to={`/driverhistory/${sessionStorage.getItem('driverId')}`}>
+                            <h2 style={{ margin: '10px 0', color: "white" }}>History</h2>
                         </Link>
                     </li>
                     <li className="nav-item">

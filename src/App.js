@@ -17,6 +17,7 @@ import FishEstimate from './assets/user/fishestimate/FishEstimate';
 
 import VerifyAccount from './assets/user/verify/VerifyAccount';
 
+import DriverHistory from './assets/driver/history/history.jsx';
 import MapView from './assets/driver/currentlocation/MapView';
 import DriverLayout from './assets/driver/layout/DriverLayout';
 import Manager from './assets/manager/dashboard/Manager';
@@ -289,6 +290,16 @@ function App() {
           </LayoutUtils>
         }
       />
+      <Route
+        path="/driverhistory/:driverId"
+        element={
+          <DriverLayout isLoggedIn={isLoggedIn} handleLogout={handleLogout}>
+            <DriverHistory driverId={sessionStorage.getItem('driverId')} />
+          </DriverLayout>
+        }
+      />
+
+
       {/* 
       <Route
         path="/transport"
