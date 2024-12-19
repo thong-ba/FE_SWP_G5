@@ -115,7 +115,7 @@ const KoiShippingEstimator = () => {
                 className="cost-image"
                 style={{ width: '100px', height: 'auto' }}
               />
-              <Title level={5}>
+              <Title level={5} className="cost-title">
                 Total shipping cost
               </Title>
               <Text strong className="cost-amount">

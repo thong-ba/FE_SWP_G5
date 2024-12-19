@@ -202,7 +202,7 @@ function MapView({ location }) {
   const [stop1Visible, setStop1Visible] = useState(true);
   const [stop2Visible, setStop2Visible] = useState(true);
 
-  const driverId = localStorage.getItem("driverId");
+  const driverId = sessionStorage.getItem("driverId");
 
   useEffect(() => {
     if (

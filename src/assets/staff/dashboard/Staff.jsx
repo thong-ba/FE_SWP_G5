@@ -26,7 +26,7 @@ function Staff() {
         return <CancelOrderTab />;
       case "driverTab":
         return <DriverTab />;
-        case "fishTab":
+      case "fishTab":
         return <FishHealthTab />;
       case "personalInfo":
         return <PersonalInfo onLogout={handleLogout} />;
@@ -46,6 +46,7 @@ function Staff() {
     // Perform the actual logout operation here
     alert("Logged out successfully");
     // Redirect to home page
+    sessionStorage.clear();
     window.location.href = "/";
   };
 

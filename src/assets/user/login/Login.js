@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import {jwtDecode} from 'jwt-decode';
+import { jwtDecode } from 'jwt-decode';
 import axios from 'axios';
 import './Login.css';
 
@@ -29,8 +29,9 @@ function Login({ onLogin }) {
       if (isSuccess && result) {
         if (isDriverLogin) {
           const decoded = jwtDecode(result);
-          localStorage.setItem('token', result);
-          localStorage.setItem('driverId', decoded.DriverId);
+          sessionStorage.setItem('token', result);
+          sessionStorage.setItem('driverId', decoded.DriverId);
+          sessionStorage.setItem('driverName', decoded.FullName); // Ensure this matches the key in the token
           setTimeout(() => navigate('/driver'), 1000);
         } else {
           onLogin(result);

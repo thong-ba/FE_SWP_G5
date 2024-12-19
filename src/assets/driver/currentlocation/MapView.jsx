@@ -1,7 +1,9 @@
 import { useEffect, useState } from "react";
 import { MapContainer, Marker, Popup, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
+import axios from "axios";
 import styles from "./MapView.module.css";
+import { Modal, Input } from "antd";
 
 function MapView({ location }) {
   const [mapLocation, setMapLocation] = useState({
@@ -15,7 +17,9 @@ function MapView({ location }) {
   const [showCancelPopup, setShowCancelPopup] = useState(false);
   const [cancelReason, setCancelReason] = useState("");
   const [image, setImage] = useState(null);
-  const driverId = localStorage.getItem("driverId");
+  const driverId = sessionStorage.getItem("driverId");
+  const driverName = sessionStorage.getItem("driverName");
+
 
   useEffect(() => {
     if (
@@ -92,11 +96,10 @@ function MapView({ location }) {
 
   const fetchDriverStatus = async (driverId) => {
     try {
-      const response = await fetch(
-        `https://localhost:7046/api/DriverStatus/${driverId}`
+      const response = await axios.get(
+        `https://localhost:7046/api/Driver/GetDriverBy/${driverId}`
       );
-      const data = await response.json();
-      setStatus(data.status || "Unavailable");
+      setStatus(response.data.result.status || "Unavailable");
     } catch (error) {
       console.error("Error fetching driver status: ", error);
     }
@@ -152,13 +155,26 @@ function MapView({ location }) {
   };
 
   const handleDelete = () => {
-    if (cancelReason && image) {
-      // Implement delete logic here, make API call to delete the stop
-      alert("Stop order deleted!");
-      setShowCancelPopup(false); // Close popup
-    } else {
-      alert("Please provide a reason and upload an image.");
-    }
+    Modal.confirm({
+      className: 'custom-modal',
+      title: 'Confirm Deletion',
+      content: 'Are you sure you want to delete this stop order?',
+      onOk() {
+        if (cancelReason && image) {
+          // Implement delete logic here, make API call to delete the stop
+          alert("Stop order deleted!");
+          setShowCancelPopup(false); // Close popup
+        } else {
+          alert("Please provide a reason and upload an image.");
+        }
+      },
+      okButtonProps: {
+        className: 'custom-ok-button',
+      },
+      cancelButtonProps: {
+        className: 'custom-cancel-button',
+      },
+    });
   };
 
   const handleSelectStop = (stopOrder) => {
@@ -202,6 +218,10 @@ function MapView({ location }) {
               <td>{driverId}</td>
             </tr>
             <tr>
+              <th>Driver Name</th>
+              <td>{driverName}</td>
+            </tr>
+            <tr>
               <th>Latitude</th>
               <td>{mapLocation.latitude}</td>
             </tr>
@@ -222,7 +242,7 @@ function MapView({ location }) {
                   <th>Select</th>
                   <th>Stop Order</th>
                   <th>Address</th>
-                  <th>Status</th>
+                  <th>Route Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -259,27 +279,25 @@ function MapView({ location }) {
         </div>
       </div>
 
-      {showCancelPopup && (
-        <div className={styles.cancelPopup}>
-          <h3>Confirm Deletion</h3>
-          <label>Reason for cancellation:</label>
-          <textarea
-            value={cancelReason}
-            onChange={(e) => setCancelReason(e.target.value)}
-            placeholder="Enter reason"
-          />
-          <label>Upload image:</label>
-          <input
-            type="file"
-            accept="image/*"
-            onChange={(e) => setImage(e.target.files[0])}
-          />
-          <div className={styles.popupActions}>
-            <button onClick={handleDelete}>Confirm Delete</button>
-            <button onClick={() => setShowCancelPopup(false)}>Cancel</button>
-          </div>
-        </div>
-      )}
+      <Modal
+        title="Confirm Deletion"
+        visible={showCancelPopup}
+        onOk={handleDelete}
+        onCancel={() => setShowCancelPopup(false)}
+      >
+        <label>Reason for cancellation:</label>
+        <Input.TextArea
+          value={cancelReason}
+          onChange={(e) => setCancelReason(e.target.value)}
+          placeholder="Enter reason"
+        />
+        <label>Upload image:</label>
+        <Input
+          type="file"
+          accept="image/*"
+          onChange={(e) => setImage(e.target.files[0])}
+        />
+      </Modal>
 
       <MapContainer
         center={[mapLocation.latitude, mapLocation.longitude]}
@@ -290,22 +308,24 @@ function MapView({ location }) {
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <NumberedMarker
-          position={[mapLocation.latitude, mapLocation.longitude]}
+          position={mapLocation.latitude && mapLocation.longitude ? [mapLocation.latitude, mapLocation.longitude] : [0, 0]}
           number={1}
         />
-        {stopCoordinates.map((stop, index) => (
-          <Marker
-            key={index}
-            position={[stop.latitude, stop.longitude]}
-            icon={L.divIcon({
-              className: styles.numberedMarker,
-              html: `<div class='marker-number'>${stop.stopOrder}</div>`,
-            })}
-          >
-            <Popup>
-              <div>{stop.address}</div>
-            </Popup>
-          </Marker>
+        {stopCoordinates.length > 0 && stopCoordinates.map((stop, index) => (
+          stop.latitude && stop.longitude ? (
+            <Marker
+              key={index}
+              position={[stop.latitude, stop.longitude]}
+              icon={L.divIcon({
+                className: styles.numberedMarker,
+                html: `<div class='marker-number'>${stop.stopOrder}</div>`,
+              })}
+            >
+              <Popup>
+                <div>{stop.address}</div>
+              </Popup>
+            </Marker>
+          ) : null
         ))}
       </MapContainer>
     </div>
